@@ -1,0 +1,215 @@
+HUMAN LAYER COMPLETION ROADMAP
+==============================
+
+Release Contract
+----------------
+
+- [ ] Finish the first release using public data only.
+- [ ] Publish model-ready products at weekly H3 resolution 6 while retaining
+      native H3 resolution 7 processing where it preserves nearshore detail.
+- [ ] Validate SRKW first, then run the identical feature and evaluation
+      contract for Transients.
+- [x] Keep reporting opportunity and human disturbance as separate products.
+- [ ] Keep vessel pressure research-only until held-out evaluation supports
+      promotion; do not alter production forecasts in the first release.
+- [x] Preserve observed zero, unknown, estimated, partial, fallback, and
+      unavailable as distinct states. Never convert unavailable coverage to
+      zero.
+
+Production Data Sources
+-----------------------
+
+- [ ] Replace the unresolved legacy AIS aggregates with raw U.S. positions
+      from the official NOAA/USCG AccessAIS source:
+      https://www.coast.noaa.gov/digitalcoast/tools/ais.html
+- [ ] Reconstruct AIS tracks at H3 R7 and publish daily and weekly H3 R6
+      vessel-hours, vessel-kilometres, speed bands, vessel classes, observed
+      hours, and source-coverage fields.
+- [ ] Mark Canadian raw AIS coverage unavailable under the public-data-only
+      policy; do not infer Canadian traffic from U.S. coverage.
+- [ ] Evaluate the public DFO commercial whale-watching data as a bounded
+      trip/platform activity source:
+      https://open.canada.ca/data/en/dataset/8a80c6f7-86a7-49e8-97c2-5229068e64cd
+- [x] Quarantine whale locations, viewing events, and other sighting outcomes
+      from every effort or reporting-opportunity predictor.
+- [ ] Complete relevant BC ferry route mappings and explicit duration
+      assumptions.
+- [ ] Backfill Washington State Ferries vessel history and ridership using:
+      https://public.tableau.com/app/profile/wsferries/viz/WSF-Public/Index
+      https://www.wsdot.wa.gov/ferries/api/vessels/documentation/
+- [ ] Refresh BC Ferries traffic inputs from official reports and retain daily
+      allocations as estimated:
+      https://www.bcferries.com/in-the-community/resources
+- [ ] Strict-build ferry route, rider-hour, vessel-hour, vessel-kilometre, and
+      H3 products without incomplete-route allowances; verify conservation.
+- [ ] Keep British Columbia public-shore coverage unavailable until an
+      authoritative public source is adopted; retain the legacy BC launch
+      inventory as incomplete evidence.
+- [ ] Add the public DFO passive-acoustic effort and detection data as limited
+      independent validation:
+      https://open.canada.ca/data/en/dataset/9dab95ae-9fc1-4996-a56e-ce4b98377978
+- [ ] Keep direct visual-survey hours and tracks unavailable unless a public,
+      provenance-complete source is found.
+- [ ] Require download, build, inspect, source documentation, licensing,
+      temporal/spatial coverage, manifests, and fixture tests for each enabled
+      source family.
+
+Viewshed Rebuild
+----------------
+
+- [ ] Run the complete canonical viewshed workflow from
+      config/modeling/effort/viewshed.yaml against the active configuration.
+- [x] Retain exactly the compact H3 R7 durable products:
+      data/processed/domain/human/viewshed/RES7/LAND_STATIC_WEIGHTS_R7.parquet
+      data/processed/domain/human/viewshed/RES7/WATER_STATIC_WEIGHTS_R7.parquet
+- [x] Require a matching run manifest, configuration hash, checksums, maps,
+      unique source-target keys, bounded weights, and source/target coverage.
+- [x] Keep physical visibility, distance, vegetation, clear-sky support, and
+      effective static viewability components distinct.
+- [ ] Extend dynamic viewability to use land and water weights with weather,
+      daylight, and lunar context.
+- [x] Weight land sources with mapped access and population/calendar evidence.
+- [x] Weight water sources with class-separated AIS activity and ferry
+      rider/platform effort.
+- [x] Do not use unweighted sums over arbitrary land or water source cells and
+      do not normalize raw viewshed sums directly into probabilities.
+
+Reporting-Opportunity Proxy
+---------------------------
+
+- [x] Build land and water reporting-opportunity components separately.
+- [ ] Combine static viewshed support with source activity, weather, daylight,
+      calendar, access, and source-coverage evidence.
+- [ ] Publish a reporting-opportunity index without presenting it as true whale
+      presence or guaranteed detection probability.
+- [ ] Calibrate P_REPORTING_OPPORTUNITY only within public independent-detection
+      support; leave it null outside calibration support.
+- [ ] Publish uncertainty, calibration scope, measurement status, and source
+      availability beside the probability.
+- [x] Prevent reporting adoption, sightings, viewing events, and held-out whale
+      outcomes from entering the proxy.
+
+Negative Vessel-Pressure Proxy
+------------------------------
+
+- [ ] Deduplicate ferry vessels from AIS using explicit MMSI/vessel mappings
+      before adding route-derived ferry activity.
+- [ ] Publish total and class-specific vessel-hours, vessel-kilometres, speed
+      bands, ferry pressure, jurisdiction coverage, and measurement status.
+- [ ] Define the general proxy as:
+
+      VESSEL_PRESSURE_INDEX =
+          0.5 * scaled_log_vessel_hours
+        + 0.5 * scaled_log_vessel_km
+
+- [ ] Calculate each scaled component with log1p, cap it at a manifest-pinned
+      q99, and scale it using the first 104 consecutive coverage-complete weeks.
+- [ ] Publish NEGATIVE_VESSEL_PRESSURE = -VESSEL_PRESSURE_INDEX.
+- [ ] Leave the general index unavailable when required AIS coverage or ferry
+      deduplication is incomplete; a separate ferry proxy may remain partial.
+- [ ] Retain speed and vessel-class components separately instead of inventing
+      acoustic source-level weights.
+- [ ] Treat the proxy as vessel-activity pressure, not measured noise exposure
+      or a demonstrated causal effect on whale presence.
+
+Weekly H3 R6 Artifacts
+----------------------
+
+- [ ] Publish observer_effort_components_weekly_r6.parquet keyed uniquely by
+      WEEK_START, H3_INDEX, and H3_RESOLUTION.
+- [ ] Include land/water viewability, access support, observer-capable vessel
+      hours/km, ferry rider/platform effort, weather/daylight, direct-effort
+      availability, and source coverage.
+- [ ] Publish human_vessel_pressure_weekly_r6.parquet with deduplicated vessel
+      activity, the general pressure proxy, its negative representation, and
+      class/speed components.
+- [ ] Publish reporting_opportunity_weekly_r6.parquet with separate land/water
+      components, the reporting-opportunity index, nullable probability,
+      uncertainty, and calibration scope.
+- [x] Conserve additive measures during R7-to-R6 aggregation and use explicit
+      weighted rules for fractions or probabilities.
+- [x] Emit schema version, source dates, as-of timestamp, configuration hash,
+      checksums, coverage, provenance, and QC in manifests/sidecars.
+
+Production-Stack Integration
+----------------------------
+
+- [ ] Make the H3 R6 production overrides the canonical human-feature model
+      path while retaining the existing production baseline until promotion.
+- [ ] Add model_channel metadata to the human feature catalog with allowed
+      values observation, ecological_pressure, both, and metadata.
+- [x] Register current artifact paths and remove stale generic viewshed catalog
+      references.
+- [ ] Require many-to-one feature joins, explicit include lists, unique feature
+      keys, compatible manifests/configuration, as-of dates, and coverage gates.
+- [ ] Never pass provenance, availability, support, or QC fields as predictors
+      merely because they are numeric.
+- [ ] Add one strict human release workflow covering source download, build,
+      inspection, viewshed, proxy assembly, catalog validation, and release
+      audit.
+- [ ] Prohibit production consumers from reading legacy domain/human_layer
+      artifacts after the new products are validated.
+- [ ] Integrate reporting-opportunity components as disabled-by-default
+      production features pending evaluation.
+- [ ] Register NEGATIVE_VESSEL_PRESSURE as research-only and exclude it from
+      published forecast recipes.
+
+SRKW and Transient Evaluation
+-----------------------------
+
+- [ ] Evaluate SRKW first using identical origins, cells, labels, support, and
+      as-of contracts across all comparison arms.
+- [ ] Compare baseline, baseline plus reporting opportunity, baseline plus
+      vessel pressure, and baseline plus both proxies.
+- [ ] Use only lagged observed vessel pressure in forecast experiments.
+- [ ] Allow contemporaneous vessel activity only in a separately labeled
+      retrospective association analysis.
+- [ ] Add future vessel activity as a negative control and run source-dropout
+      and coverage-sensitivity tests.
+- [ ] Report Brier score, log loss, calibration, top-k recall, spatial
+      residuals, uncertainty, and origin-level stability.
+- [ ] Describe vessel-pressure results as associations with reported whale use,
+      not causal presence effects.
+- [ ] Consider future promotion only if the supported association is
+      consistently nonpositive across rolling origins and improves held-out
+      performance without degrading calibration.
+- [ ] After SRKW validation, repeat the unchanged contract for Transients and
+      report ecotype-specific results separately.
+
+Testing and Release Gates
+-------------------------
+
+- [ ] Add fixture and production-contract tests for raw AIS tracks, ferry
+      deduplication, class/speed aggregation, coverage semantics, and
+      R7-to-R6 conservation.
+- [ ] Restore viewshed tests for stage orchestration, deterministic canary
+      pairs, component bounds, exact key uniqueness, compact cleanup, current
+      configuration hashes, maps, and run manifests.
+- [ ] Test proxy scaling, the frozen 104-week reference window, null
+      propagation, ferry/AIS deduplication, and reproducible recomputation.
+- [ ] Prove whale outcomes cannot enter effort features and target-week or
+      future data cannot leak into training features.
+- [ ] Prove external feature joins cannot duplicate or drop model-label rows.
+- [ ] Execute the strict production commands and inspect real artifacts,
+      manifests, Parquet schemas, coverage fields, QC summaries, and maps.
+- [ ] Require all active public-source artifacts, inspectors, catalogs, release
+      audits, and R6 feature joins to pass before declaring the core complete.
+- [ ] Document that Canadian raw AIS, direct visual-survey effort, and complete
+      BC public-shore access remain unavailable in the public-only release.
+
+Deferred Phase 2 Families
+-------------------------
+
+- [ ] Fishing activity, with observed versus inferred fishing state and
+      explicit non-AIS coverage.
+- [ ] Park visitation with observed counts, closures, temporal grain, and
+      missing-report coverage.
+- [ ] Whale-watch activity beyond the bounded public DFO dataset.
+- [ ] Recreational boating with observed and separately labeled climatological
+      components.
+- [ ] Seasonal population and tourism pressure.
+- [ ] Land-transport access and population travel time.
+- [ ] Vessel acoustic exposure with vessel source levels, propagation,
+      ambient-noise context, and hydrophone validation.
+- [ ] Do not synthesize historical coverage for any deferred family; publish
+      only its true supported dates and jurisdictions.

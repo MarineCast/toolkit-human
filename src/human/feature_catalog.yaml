@@ -1,0 +1,3616 @@
+schema_version: 1
+generated_by: scripts/update_human_feature_catalog.py
+measurement_statuses:
+- observed
+- derived
+- estimated
+- fallback
+- unavailable
+roles:
+- predictor
+- state
+- evidence
+- coverage
+- provenance
+- support
+- qc
+default_model_policy:
+  population_cross_border_r7:
+  - POPULATION
+  - POPULATION_DENSITY_PER_KM2
+  - water_weighted_population_25mi
+  - water_weighted_population_50mi
+  - water_weighted_population_75mi
+  - water_weighted_population_100mi
+collections:
+  calendar_daily:
+    category: temporal_context
+    artifact: data/processed/domain/human/temporal_context/calendar/calendar_daily.parquet
+    model_policy: evidence_only
+    features:
+    - name: date
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: date
+    - name: is_weekend
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: is_us_holiday
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: is_ca_holiday
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: calendar_effort_multiplier
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: multiplier
+    - name: calendar_effort_weight
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    model_channel: evidence_only
+  places_catalog:
+    category: demography_and_presence
+    artifact: data/processed/domain/human/demography_and_presence/places/places_of_interest.json
+    model_policy: app_only
+    features:
+    - name: latitude
+      role: support
+      measurement_status: observed
+      model_eligible: false
+      unit: degrees_north
+    - name: longitude
+      role: support
+      measurement_status: observed
+      model_eligible: false
+      unit: degrees_east
+    - name: source
+      role: provenance
+      measurement_status: observed
+      model_eligible: false
+      unit: identifier
+    - name: destination_score
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: heuristic_score
+    model_channel: app_only
+  population_cross_border_r7:
+    category: demography_and_presence
+    artifact: data/processed/domain/human/demography_and_presence/population/cross_border_population_h3_r7.parquet
+    h3_resolution: 7
+    model_policy: eligible_after_temporal_review
+    features:
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: H3_RESOLUTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: resolution
+    - name: COUNTRY_CODE
+      role: provenance
+      measurement_status: observed
+      model_eligible: false
+      unit: code
+    - name: SUBDIVISION_CODE
+      role: provenance
+      measurement_status: observed
+      model_eligible: false
+      unit: code
+    - name: CENSUS_YEAR
+      role: provenance
+      measurement_status: observed
+      model_eligible: false
+      unit: year
+    - name: POPULATION
+      role: predictor
+      measurement_status: derived
+      model_eligible: true
+      unit: people
+    - name: POPULATION_DENSITY_PER_KM2
+      role: predictor
+      measurement_status: derived
+      model_eligible: true
+      unit: people_per_km2
+    - name: water_weighted_population_25mi
+      role: predictor
+      measurement_status: derived
+      model_eligible: true
+      unit: weighted_people
+    - name: water_weighted_population_50mi
+      role: predictor
+      measurement_status: derived
+      model_eligible: true
+      unit: weighted_people
+    - name: water_weighted_population_75mi
+      role: predictor
+      measurement_status: derived
+      model_eligible: true
+      unit: weighted_people
+    - name: water_weighted_population_100mi
+      role: predictor
+      measurement_status: derived
+      model_eligible: true
+      unit: weighted_people
+    model_channel: candidate
+  population_context_r7:
+    category: demography_and_presence
+    artifact: data/processed/domain/human/demography_and_presence/population/population_context_h3_r7.parquet
+    h3_resolution: 7
+    model_policy: evidence_only
+    features:
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: H3_RESOLUTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: resolution
+    - name: POPULATION
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: people
+    - name: POPULATION_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_people
+    - name: POPULATION_US_2020
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: people
+    - name: POPULATION_CA_2021
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: people
+    - name: COUNTRY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: countries
+    - name: COUNTRY_CODES
+      role: provenance
+      measurement_status: observed
+      model_eligible: false
+      unit: codes
+    - name: SUBDIVISION_CODES
+      role: provenance
+      measurement_status: observed
+      model_eligible: false
+      unit: codes
+    - name: CENSUS_YEAR_MIN
+      role: provenance
+      measurement_status: observed
+      model_eligible: false
+      unit: year
+    - name: CENSUS_YEAR_MAX
+      role: provenance
+      measurement_status: observed
+      model_eligible: false
+      unit: year
+    - name: CENSUS_VINTAGE_MIXED_QC
+      role: qc
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: POPULATION_CONTEXT_AVAILABLE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: MARINE_TRANSFER_APPLIED
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: CONTEXT_SCOPE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: MEASUREMENT_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: status
+    model_channel: evidence_only
+  ais_daily_r6:
+    category: activity_and_effort
+    artifact: data/processed/domain/human/activity_and_effort/ais/ais_activity_daily_r6.parquet
+    h3_resolution: 6
+    model_policy: partial_source_research_only
+    features:
+    - name: DATE
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: date
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: H3_RESOLUTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: resolution
+    - name: UNIQUE_VESSELS
+      role: predictor
+      measurement_status: observed
+      model_eligible: false
+      unit: vessels
+    - name: ACTIVE_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: OBSERVER_CAPABLE_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: MEAN_SOG
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: knots
+    - name: UNIQUE_FISHING_VESSELS
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessels
+    - name: FISHING_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: UNIQUE_TOWING_VESSELS
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessels
+    - name: TOWING_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: UNIQUE_RECREATIONAL_VESSELS
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessels
+    - name: RECREATIONAL_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: UNIQUE_PASSENGER_VESSELS
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessels
+    - name: PASSENGER_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: UNIQUE_CARGO_VESSELS
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessels
+    - name: CARGO_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: UNIQUE_TANKER_VESSELS
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessels
+    - name: TANKER_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: UNIQUE_UNKNOWN_VESSELS
+      role: qc
+      measurement_status: derived
+      model_eligible: false
+      unit: vessels
+    - name: UNKNOWN_VESSEL_HOURS_PROXY
+      role: qc
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: VALID_SOG_PING_COUNT
+      role: coverage
+      measurement_status: observed
+      model_eligible: false
+      unit: pings
+    - name: INVALID_SOG_PING_COUNT
+      role: qc
+      measurement_status: derived
+      model_eligible: false
+      unit: pings
+    - name: INVALID_SOG_GROUP_COUNT
+      role: qc
+      measurement_status: derived
+      model_eligible: false
+      unit: groups
+    - name: PING_COUNT
+      role: coverage
+      measurement_status: observed
+      model_eligible: false
+      unit: pings
+    - name: OBSERVED_HOURS
+      role: coverage
+      measurement_status: observed
+      model_eligible: false
+      unit: hours
+    - name: SOURCE_OBSERVED_HOURS
+      role: coverage
+      measurement_status: observed
+      model_eligible: false
+      unit: hours
+    - name: SOURCE_EXPECTED_HOURS
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: hours
+    - name: SOURCE_TEMPORAL_COVERAGE_FRACTION
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: SOURCE_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: SOURCE_COVERAGE_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: UNKNOWN_VESSEL_TYPE_FRACTION
+      role: qc
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: MEASUREMENT_STATUS
+      role: provenance
+      measurement_status: observed
+      model_eligible: false
+      unit: status
+    model_channel: research_only
+  ais_weekly_r6:
+    category: activity_and_effort
+    artifact: data/processed/domain/human/activity_and_effort/ais/ais_activity_weekly_r6.parquet
+    h3_resolution: 6
+    model_policy: partial_source_research_only
+    features:
+    - name: WEEK_START
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: date
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: H3_RESOLUTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: resolution
+    - name: UNIQUE_VESSELS
+      role: predictor
+      measurement_status: observed
+      model_eligible: false
+      unit: vessels
+    - name: ACTIVE_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: OBSERVER_CAPABLE_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: MEAN_SOG
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: knots
+    - name: UNIQUE_FISHING_VESSELS
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessels
+    - name: FISHING_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: UNIQUE_TOWING_VESSELS
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessels
+    - name: TOWING_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: UNIQUE_RECREATIONAL_VESSELS
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessels
+    - name: RECREATIONAL_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: UNIQUE_PASSENGER_VESSELS
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessels
+    - name: PASSENGER_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: UNIQUE_CARGO_VESSELS
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessels
+    - name: CARGO_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: UNIQUE_TANKER_VESSELS
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessels
+    - name: TANKER_VESSEL_HOURS_PROXY
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: UNIQUE_UNKNOWN_VESSELS
+      role: qc
+      measurement_status: derived
+      model_eligible: false
+      unit: vessels
+    - name: UNKNOWN_VESSEL_HOURS_PROXY
+      role: qc
+      measurement_status: derived
+      model_eligible: false
+      unit: unique_vessel_hours
+    - name: VALID_SOG_PING_COUNT
+      role: coverage
+      measurement_status: observed
+      model_eligible: false
+      unit: pings
+    - name: INVALID_SOG_PING_COUNT
+      role: qc
+      measurement_status: derived
+      model_eligible: false
+      unit: pings
+    - name: INVALID_SOG_GROUP_COUNT
+      role: qc
+      measurement_status: derived
+      model_eligible: false
+      unit: groups
+    - name: PING_COUNT
+      role: coverage
+      measurement_status: observed
+      model_eligible: false
+      unit: pings
+    - name: OBSERVED_HOURS
+      role: coverage
+      measurement_status: observed
+      model_eligible: false
+      unit: hours
+    - name: SOURCE_OBSERVED_HOURS
+      role: coverage
+      measurement_status: observed
+      model_eligible: false
+      unit: hours
+    - name: SOURCE_EXPECTED_HOURS
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: hours
+    - name: SOURCE_TEMPORAL_COVERAGE_FRACTION
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: SOURCE_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: SOURCE_COVERAGE_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: UNKNOWN_VESSEL_TYPE_FRACTION
+      role: qc
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: MEASUREMENT_STATUS
+      role: provenance
+      measurement_status: observed
+      model_eligible: false
+      unit: status
+    model_channel: research_only
+  water_ais_reporting_opportunity_weekly_r6:
+    category: activity_and_effort
+    artifact: data/processed/domain/human/activity_and_effort/observer_effort/water_ais_reporting_opportunity_weekly_r6.parquet
+    h3_resolution: 6
+    model_policy: partial_source_research_only
+    product_role: deprecated_compatibility_sensitivity
+    replacement: water_observation_components_weekly_r6
+    features:
+    - name: WEEK_START
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: date
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: H3_RESOLUTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: resolution
+    - name: WATER_AIS_REPORTING_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_weighted_unique_vessel_hours
+    - name: WATER_AIS_REPORTING_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: index_0_1
+    - name: WATER_RECREATIONAL_VIEWABILITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_weighted_unique_vessel_hours
+    - name: WATER_PASSENGER_VIEWABILITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_weighted_unique_vessel_hours
+    - name: WATER_ALL_VESSEL_VIEWABILITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_weighted_unique_vessel_hours
+    - name: AIS_SOURCE_R6_WITH_OBSERVER_ACTIVITY
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cells
+    - name: SOURCE_TEMPORAL_COVERAGE_FRACTION
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: SOURCE_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: SOURCE_COVERAGE_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: WATER_VIEWABILITY_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: MEASUREMENT_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: status
+    model_channel: research_only
+  water_observation_source_components_daily_r7:
+    category: activity_and_effort
+    artifact: data/processed/domain/human/activity_and_effort/water_observation_opportunity/water_observation_source_components_daily_r7.parquet
+    h3_resolution: 7
+    temporal_grain: daily
+    model_policy: partial_source_research_only
+    product_role: canonical_components
+    features:
+    - name: DATE
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: date
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: H3_RESOLUTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: resolution
+    - name: AIS_PARENT_H3_R6
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: AIS_SPATIAL_ALLOCATION_METHOD
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: ALL_VESSEL_AIS_ACTIVITY_HOURS_PROXY
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: PASSENGER_AIS_ACTIVITY_HOURS_PROXY
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: RECREATIONAL_AIS_ACTIVITY_HOURS_PROXY
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: COMMERCIAL_AIS_ACTIVITY_HOURS_PROXY
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: FISHING_AIS_ACTIVITY_HOURS_PROXY
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: FERRY_RIDER_HOURS
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: FERRY_PLATFORM_HOURS
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: WHALE_WATCH_ACTIVITY_HOURS
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: ALL_VESSEL_AIS_ACTIVITY_HOURS_PROXY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PASSENGER_AIS_ACTIVITY_HOURS_PROXY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: RECREATIONAL_AIS_ACTIVITY_HOURS_PROXY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: COMMERCIAL_AIS_ACTIVITY_HOURS_PROXY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: FISHING_AIS_ACTIVITY_HOURS_PROXY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: FERRY_RIDER_HOURS_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: FERRY_PLATFORM_HOURS_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WHALE_WATCH_ACTIVITY_HOURS_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: VISIBILITY_KM
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: kilometres
+    - name: DAYLIGHT_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: WIND_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: PRECIPITATION_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: DYNAMIC_CONDITION_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: SEA_STATE_WEIGHT
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: relative_weight
+    - name: REPORTING_CAPTURE_WEIGHT
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: relative_weight
+    - name: VISIBILITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: DAYLIGHT_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WIND_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PRECIPITATION_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: SEA_STATE_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: REPORTING_CAPTURE_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: AIS_SOURCE_TEMPORAL_COVERAGE_FRACTION
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: AIS_SOURCE_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: AIS_SOURCE_COVERAGE_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_SOURCE_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_TEMPORAL_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: AIS_TEMPORAL_COVERAGE_SCOPE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_SPATIAL_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_RECEIVER_COVERAGE_METHOD
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_ABSENT_POLICY
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: FERRY_SOURCE_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: FERRY_SOURCE_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: ALL_VESSEL_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: PASSENGER_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: RECREATIONAL_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: COMMERCIAL_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: FISHING_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: FERRY_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: WHALE_WATCH_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - &id001
+      name: GENERATION_ID
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - &id002
+      name: CONFIG_HASH
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - &id003
+      name: SOURCE_HASHES_JSON
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - &id004
+      name: KNOWLEDGE_TIME_UTC
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - &id005
+      name: SOURCE_VINTAGES_JSON
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - &id006
+      name: HISTORICAL_RECONSTRUCTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - &id007
+      name: COMPONENT_PROVENANCE_JSON
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - &id008
+      name: DATA_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - &id009
+      name: SOURCE_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    observation_opportunity_schema_version: 3.0.0-research
+    artifact_resolution: manifest_dataset_id_single_generation
+    active_manifest: data/processed/domain/human/activity_and_effort/water_observation_opportunity/manifest.json
+    flat_path_policy: selector_only_do_not_load_flat_path_as_current
+    model_channel: research_only
+  water_observation_source_components_weekly_r7:
+    category: activity_and_effort
+    artifact: data/processed/domain/human/activity_and_effort/water_observation_opportunity/water_observation_source_components_weekly_r7.parquet
+    h3_resolution: 7
+    temporal_grain: weekly
+    model_policy: partial_source_research_only
+    product_role: canonical_components
+    features:
+    - name: WEEK_START
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: date
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: H3_RESOLUTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: resolution
+    - name: AIS_PARENT_H3_R6
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: AIS_SPATIAL_ALLOCATION_METHOD
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: ALL_VESSEL_AIS_ACTIVITY_HOURS_PROXY
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: PASSENGER_AIS_ACTIVITY_HOURS_PROXY
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: RECREATIONAL_AIS_ACTIVITY_HOURS_PROXY
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: COMMERCIAL_AIS_ACTIVITY_HOURS_PROXY
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: FISHING_AIS_ACTIVITY_HOURS_PROXY
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: FERRY_RIDER_HOURS
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: FERRY_PLATFORM_HOURS
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: WHALE_WATCH_ACTIVITY_HOURS
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: activity_hours_proxy
+    - name: ALL_VESSEL_AIS_ACTIVITY_HOURS_PROXY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PASSENGER_AIS_ACTIVITY_HOURS_PROXY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: RECREATIONAL_AIS_ACTIVITY_HOURS_PROXY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: COMMERCIAL_AIS_ACTIVITY_HOURS_PROXY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: FISHING_AIS_ACTIVITY_HOURS_PROXY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: FERRY_RIDER_HOURS_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: FERRY_PLATFORM_HOURS_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WHALE_WATCH_ACTIVITY_HOURS_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: VISIBILITY_KM
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: kilometres
+    - name: DAYLIGHT_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: WIND_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: PRECIPITATION_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: DYNAMIC_CONDITION_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: SEA_STATE_WEIGHT
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: relative_weight
+    - name: REPORTING_CAPTURE_WEIGHT
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: relative_weight
+    - name: VISIBILITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: DAYLIGHT_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WIND_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PRECIPITATION_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: SEA_STATE_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: REPORTING_CAPTURE_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: AIS_SOURCE_TEMPORAL_COVERAGE_FRACTION
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: AIS_SOURCE_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: AIS_SOURCE_COVERAGE_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_SOURCE_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_TEMPORAL_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: AIS_TEMPORAL_COVERAGE_SCOPE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_SPATIAL_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_RECEIVER_COVERAGE_METHOD
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_ABSENT_POLICY
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: FERRY_SOURCE_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: FERRY_SOURCE_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: ALL_VESSEL_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: PASSENGER_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: RECREATIONAL_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: COMMERCIAL_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: FISHING_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: FERRY_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: WHALE_WATCH_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - *id001
+    - *id002
+    - *id003
+    - *id004
+    - *id005
+    - *id006
+    - *id007
+    - *id008
+    - *id009
+    - name: ALL_VESSEL_AIS_ACTIVITY_HOURS_PROXY_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: PASSENGER_AIS_ACTIVITY_HOURS_PROXY_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: RECREATIONAL_AIS_ACTIVITY_HOURS_PROXY_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: COMMERCIAL_AIS_ACTIVITY_HOURS_PROXY_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: FISHING_AIS_ACTIVITY_HOURS_PROXY_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: FERRY_RIDER_HOURS_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: FERRY_PLATFORM_HOURS_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: WHALE_WATCH_ACTIVITY_HOURS_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: PERIOD_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: INCOMPLETE_WEEK
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    observation_opportunity_schema_version: 3.0.0-research
+    artifact_resolution: manifest_dataset_id_single_generation
+    active_manifest: data/processed/domain/human/activity_and_effort/water_observation_opportunity/manifest.json
+    flat_path_policy: selector_only_do_not_load_flat_path_as_current
+    model_channel: research_only
+  water_observation_components_daily_r6:
+    category: activity_and_effort
+    artifact: data/processed/domain/human/activity_and_effort/water_observation_opportunity/water_observation_components_daily_r6.parquet
+    h3_resolution: 6
+    temporal_grain: daily
+    model_policy: partial_source_research_only
+    product_role: canonical_components_no_primary_composite
+    features:
+    - name: DATE
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: date
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: H3_RESOLUTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: resolution
+    - name: LINE_OF_SIGHT_SUPPORT
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: support_fraction
+    - name: PHYSICAL_VIEWABILITY_RAW
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: static_viewability_support
+    - name: DISTANCE_KM_MEAN
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: kilometres
+    - name: DISTANCE_DETECTION_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: DISTANCE_ADJUSTED_VIEWABILITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: legacy_static_viewability_support
+    - name: LINE_OF_SIGHT_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: PHYSICAL_VIEWABILITY_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: DISTANCE_DETECTION_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: DISTANCE_ADJUSTED_VIEWABILITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_ALL_VESSEL_AIS_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_PASSENGER_AIS_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_RECREATIONAL_AIS_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_COMMERCIAL_AIS_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_FISHING_AIS_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_FERRY_RIDER_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_FERRY_PLATFORM_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_WHALE_WATCH_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_ALL_VESSEL_AIS_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_ALL_VESSEL_AIS_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_PASSENGER_AIS_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_PASSENGER_AIS_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_RECREATIONAL_AIS_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_RECREATIONAL_AIS_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_COMMERCIAL_AIS_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_COMMERCIAL_AIS_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_FISHING_AIS_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_FISHING_AIS_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_FERRY_RIDER_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_FERRY_RIDER_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_FERRY_PLATFORM_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_FERRY_PLATFORM_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_WHALE_WATCH_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_WHALE_WATCH_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_ALL_VESSEL_AIS_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_PASSENGER_AIS_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_RECREATIONAL_AIS_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_COMMERCIAL_AIS_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_FISHING_AIS_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_FERRY_RIDER_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_FERRY_PLATFORM_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_WHALE_WATCH_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: ATMOSPHERIC_VISIBILITY_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: DAYLIGHT_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: WIND_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: PRECIPITATION_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: DYNAMIC_CONDITION_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: ATMOSPHERIC_VISIBILITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: DAYLIGHT_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WIND_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PRECIPITATION_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PRIMARY_WATER_COMPOSITE
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: not_applicable
+    - name: PRIMARY_WATER_COMPOSITE_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: SEA_STATE_WEIGHT
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: relative_weight
+    - name: SEA_STATE_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: REPORTING_CAPTURE_WEIGHT
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: relative_weight
+    - name: REPORTING_CAPTURE_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: AIS_SOURCE_TEMPORAL_COVERAGE_FRACTION
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: AIS_SOURCE_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: AIS_SOURCE_COVERAGE_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_SOURCE_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_TEMPORAL_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: AIS_TEMPORAL_COVERAGE_SCOPE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_SPATIAL_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_RECEIVER_COVERAGE_METHOD
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_ABSENT_POLICY
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: FERRY_SOURCE_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: FERRY_SOURCE_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: PRODUCT_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: product_role
+    - name: ALL_VESSEL_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: PASSENGER_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: RECREATIONAL_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: COMMERCIAL_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: FISHING_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: FERRY_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: WHALE_WATCH_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - *id001
+    - *id002
+    - *id003
+    - *id004
+    - *id005
+    - *id006
+    - *id007
+    - *id008
+    - *id009
+    observation_opportunity_schema_version: 3.0.0-research
+    artifact_resolution: manifest_dataset_id_single_generation
+    active_manifest: data/processed/domain/human/activity_and_effort/water_observation_opportunity/manifest.json
+    flat_path_policy: selector_only_do_not_load_flat_path_as_current
+    model_channel: research_only
+  water_observation_components_weekly_r6:
+    category: activity_and_effort
+    artifact: data/processed/domain/human/activity_and_effort/water_observation_opportunity/water_observation_components_weekly_r6.parquet
+    h3_resolution: 6
+    temporal_grain: weekly
+    model_policy: partial_source_research_only
+    product_role: canonical_components_no_primary_composite
+    features:
+    - name: WEEK_START
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: date
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: H3_RESOLUTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: resolution
+    - name: LINE_OF_SIGHT_SUPPORT
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: support_fraction
+    - name: PHYSICAL_VIEWABILITY_RAW
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: static_viewability_support
+    - name: DISTANCE_KM_MEAN
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: kilometres
+    - name: DISTANCE_DETECTION_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: DISTANCE_ADJUSTED_VIEWABILITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: legacy_static_viewability_support
+    - name: LINE_OF_SIGHT_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: PHYSICAL_VIEWABILITY_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: DISTANCE_DETECTION_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: DISTANCE_ADJUSTED_VIEWABILITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_ALL_VESSEL_AIS_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_PASSENGER_AIS_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_RECREATIONAL_AIS_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_COMMERCIAL_AIS_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_FISHING_AIS_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_FERRY_RIDER_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_FERRY_PLATFORM_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_WHALE_WATCH_OBSERVATION_OPPORTUNITY_RAW
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: viewshed_condition_weighted_activity
+    - name: WATER_ALL_VESSEL_AIS_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_ALL_VESSEL_AIS_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_PASSENGER_AIS_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_PASSENGER_AIS_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_RECREATIONAL_AIS_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_RECREATIONAL_AIS_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_COMMERCIAL_AIS_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_COMMERCIAL_AIS_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_FISHING_AIS_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_FISHING_AIS_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_FERRY_RIDER_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_FERRY_RIDER_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_FERRY_PLATFORM_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_FERRY_PLATFORM_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_WHALE_WATCH_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: log1p_viewshed_condition_weighted_activity
+    - name: WATER_WHALE_WATCH_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: spatial_percentile
+    - name: WATER_ALL_VESSEL_AIS_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_PASSENGER_AIS_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_RECREATIONAL_AIS_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_COMMERCIAL_AIS_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_FISHING_AIS_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_FERRY_RIDER_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_FERRY_PLATFORM_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WATER_WHALE_WATCH_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: ATMOSPHERIC_VISIBILITY_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: DAYLIGHT_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: WIND_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: PRECIPITATION_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: DYNAMIC_CONDITION_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: ATMOSPHERIC_VISIBILITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: DAYLIGHT_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WIND_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PRECIPITATION_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PRIMARY_WATER_COMPOSITE
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: not_applicable
+    - name: PRIMARY_WATER_COMPOSITE_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: SEA_STATE_WEIGHT
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: relative_weight
+    - name: SEA_STATE_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: REPORTING_CAPTURE_WEIGHT
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: relative_weight
+    - name: REPORTING_CAPTURE_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: AIS_SOURCE_TEMPORAL_COVERAGE_FRACTION
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: AIS_SOURCE_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: AIS_SOURCE_COVERAGE_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_SOURCE_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_TEMPORAL_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: AIS_TEMPORAL_COVERAGE_SCOPE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_SPATIAL_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_RECEIVER_COVERAGE_METHOD
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: AIS_ABSENT_POLICY
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: FERRY_SOURCE_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: FERRY_SOURCE_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: PRODUCT_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: product_role
+    - name: ALL_VESSEL_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: PASSENGER_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: RECREATIONAL_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: COMMERCIAL_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: FISHING_AIS_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: FERRY_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - name: WHALE_WATCH_CAUSAL_ROLE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: causal_role
+    - *id001
+    - *id002
+    - *id003
+    - *id004
+    - *id005
+    - *id006
+    - *id007
+    - *id008
+    - *id009
+    - name: WATER_ALL_VESSEL_AIS_OBSERVATION_OPPORTUNITY_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: WATER_PASSENGER_AIS_OBSERVATION_OPPORTUNITY_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: WATER_RECREATIONAL_AIS_OBSERVATION_OPPORTUNITY_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: WATER_COMMERCIAL_AIS_OBSERVATION_OPPORTUNITY_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: WATER_FISHING_AIS_OBSERVATION_OPPORTUNITY_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: WATER_FERRY_RIDER_OBSERVATION_OPPORTUNITY_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: WATER_FERRY_PLATFORM_OBSERVATION_OPPORTUNITY_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: WATER_WHALE_WATCH_OBSERVATION_OPPORTUNITY_AVAILABLE_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: PERIOD_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: INCOMPLETE_WEEK
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    observation_opportunity_schema_version: 3.0.0-research
+    artifact_resolution: manifest_dataset_id_single_generation
+    active_manifest: data/processed/domain/human/activity_and_effort/water_observation_opportunity/manifest.json
+    flat_path_policy: selector_only_do_not_load_flat_path_as_current
+    model_channel: research_only
+  ferry_route_daily_r7:
+    category: activity_and_effort
+    artifact: data/processed/domain/human/activity_and_effort/ferry/ferry_effort_daily_by_route_r7.parquet
+    h3_resolution: 7
+    model_policy: evidence_only
+    features:
+    - name: service_date
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: date
+    - name: source_h3
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: route_geometry_id
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier
+    - name: ferry_rider_minutes
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: rider_minutes
+    - name: ferry_vessel_minutes
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: vessel_minutes
+    - name: ferry_vessel_km
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: vessel_km
+    - name: has_observed_ridership
+      role: evidence
+      measurement_status: observed
+      model_eligible: false
+      unit: boolean
+    - name: has_estimated_ridership
+      role: evidence
+      measurement_status: estimated
+      model_eligible: false
+      unit: boolean
+    - name: has_duration_fallback
+      role: qc
+      measurement_status: fallback
+      model_eligible: false
+      unit: boolean
+    - name: platform_effort_coverage_fraction
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: source_coverage_complete
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    model_channel: evidence_only
+  ferry_daily_r7:
+    category: activity_and_effort
+    artifact: data/processed/domain/human/activity_and_effort/ferry/ferry_effort_daily_r7.parquet
+    h3_resolution: 7
+    model_policy: partial_source_research_only
+    features:
+    - name: service_date
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: date
+    - name: source_h3
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: ferry_rider_minutes
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: rider_minutes
+    - name: ferry_vessel_minutes
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessel_minutes
+    - name: ferry_vessel_km
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessel_km
+    - name: ferry_route_count
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: routes
+    - name: has_observed_ridership
+      role: evidence
+      measurement_status: observed
+      model_eligible: false
+      unit: boolean
+    - name: has_estimated_ridership
+      role: evidence
+      measurement_status: estimated
+      model_eligible: false
+      unit: boolean
+    - name: has_duration_fallback
+      role: qc
+      measurement_status: fallback
+      model_eligible: false
+      unit: boolean
+    - name: platform_effort_coverage_fraction
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: source_coverage_complete
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    model_channel: research_only
+  ferry_weekly_r6:
+    category: activity_and_effort
+    artifact: data/processed/domain/human/activity_and_effort/ferry/ferry_effort_weekly_r6.parquet
+    h3_resolution: 6
+    model_policy: partial_source_research_only
+    features:
+    - name: week_start
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: date
+    - name: source_h3
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: ferry_rider_minutes
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: rider_minutes
+    - name: ferry_vessel_minutes
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessel_minutes
+    - name: ferry_vessel_km
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: vessel_km
+    - name: ferry_route_count
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: routes
+    - name: has_observed_ridership
+      role: evidence
+      measurement_status: observed
+      model_eligible: false
+      unit: boolean
+    - name: has_estimated_ridership
+      role: evidence
+      measurement_status: estimated
+      model_eligible: false
+      unit: boolean
+    - name: has_duration_fallback
+      role: qc
+      measurement_status: fallback
+      model_eligible: false
+      unit: boolean
+    - name: has_platform_effort
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: source_coverage_complete
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    model_channel: research_only
+  boat_launch_facilities_r7:
+    category: accessibility
+    artifact: data/processed/domain/human/accessibility/boat_launch_access/boat_launch_facilities_r7.parquet
+    h3_resolution: 7
+    model_policy: partial_source_research_only
+    features:
+    - name: ACCESS_SITE_ID
+      role: support
+      measurement_status: observed
+      model_eligible: false
+      unit: identifier
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: SOURCE_DATASET
+      role: provenance
+      measurement_status: observed
+      model_eligible: false
+      unit: identifier
+    - name: PUBLIC_ACCESS_STATE
+      role: state
+      measurement_status: observed
+      model_eligible: false
+      unit: category
+    - name: RAMP_CAPABILITY_STATE
+      role: evidence
+      measurement_status: observed
+      model_eligible: false
+      unit: category
+    - name: SEASONAL_OPERATION_STATE
+      role: evidence
+      measurement_status: observed
+      model_eligible: false
+      unit: category
+    - name: SOURCE_COVERAGE_STATUS
+      role: coverage
+      measurement_status: observed
+      model_eligible: false
+      unit: category
+    model_channel: research_only
+  boat_launch_access_h3_r7:
+    category: accessibility
+    artifact: data/processed/domain/human/accessibility/boat_launch_access/boat_launch_access_h3_r7.parquet
+    h3_resolution: 7
+    model_policy: partial_source_research_only
+    features:
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: H3_RESOLUTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: resolution
+    - name: BOAT_LAUNCH_COUNT
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: launches
+    - name: VERIFIED_PUBLIC_BOAT_LAUNCH_COUNT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: launches
+    - name: BOAT_LAUNCHES_WITH_KNOWN_RAMP_CAPABILITY
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: launches
+    - name: BOAT_LAUNCHES_WITH_KNOWN_SEASONAL_OPERATION
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: launches
+    - name: SOURCE_DATASET_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: sources
+    - name: SOURCE_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    model_channel: research_only
+  public_shore_facilities_r7:
+    category: accessibility
+    artifact: data/processed/domain/human/accessibility/public_shore_access/public_shore_facilities_r7.parquet
+    h3_resolution: 7
+    model_policy: partial_source_research_only
+    features:
+    - name: ACCESS_SITE_ID
+      role: support
+      measurement_status: observed
+      model_eligible: false
+      unit: identifier
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: SOURCE_DATASET
+      role: provenance
+      measurement_status: observed
+      model_eligible: false
+      unit: identifier
+    - name: PUBLIC_ACCESS_STATE
+      role: state
+      measurement_status: observed
+      model_eligible: false
+      unit: category
+    - name: SOURCE_COVERAGE_STATUS
+      role: coverage
+      measurement_status: observed
+      model_eligible: false
+      unit: category
+    model_channel: research_only
+  public_shore_access_h3_r7:
+    category: accessibility
+    artifact: data/processed/domain/human/accessibility/public_shore_access/public_shore_access_h3_r7.parquet
+    h3_resolution: 7
+    model_policy: partial_source_research_only
+    features:
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: H3_RESOLUTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: resolution
+    - name: TOTAL_MARINE_SHORELINE_M
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: metres
+    - name: PUBLIC_ACCESSIBLE_SHORELINE_M
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: metres
+    - name: ACCESSIBLE_WATERFRONT_FRACTION
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: PUBLIC_ACCESS_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: PUBLIC_ACCESS_EVIDENCE_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: PUBLIC_ACCESS_SITE_COUNT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: sites
+    - name: VERIFIED_PUBLIC_ACCESS_SITE_COUNT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: sites
+    - name: OSM_EXPLICIT_PUBLIC_ACCESS_SITE_COUNT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: sites
+    - name: OSM_SHORE_CANDIDATE_COUNT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: sites
+    - name: MAPPED_ACCESS_UNKNOWN_SITE_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: sites
+    - name: RESTRICTED_ACCESS_SITE_COUNT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: sites
+    - name: CONDITIONAL_ACCESS_SITE_COUNT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: sites
+    - name: SOURCE_COVERAGE_COMPLETE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: ACCESSIBLE_WATERFRONT_RAW_RATIO_QC
+      role: qc
+      measurement_status: derived
+      model_eligible: false
+      unit: ratio
+    - name: FRACTION_DENOMINATOR_MISMATCH_QC
+      role: qc
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    model_channel: research_only
+  land_transport_access_h3_r7:
+    category: accessibility
+    artifact: data/processed/domain/human/accessibility/land_transport_access/land_transport_access_h3_r7.parquet
+    h3_resolution: 7
+    model_policy: prototype_routing_research_only
+    features:
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: H3_RESOLUTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: resolution
+    - name: ROAD_PROXIMITY_COMPONENT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: CITY_TRAVEL_ACCESS_COMPONENT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: LAND_TRANSPORT_ACCESS_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: LAND_TRANSPORT_ACCESS_AVAILABLE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: LAND_TRANSPORT_ACCESS_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    model_channel: candidate
+  population_travel_time_h3_r7:
+    category: accessibility
+    artifact: data/processed/domain/human/accessibility/population_travel_time/population_travel_time_h3_r7.parquet
+    h3_resolution: 7
+    model_policy: prototype_routing_research_only
+    features:
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: H3_RESOLUTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: resolution
+    - name: POPULATION_TRAVEL_DEMAND_COMPONENT_60_MIN
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: POPULATION_TRAVEL_DEMAND_COMPONENT_120_MIN
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: POPULATION_TRAVEL_DEMAND_COMPONENT_240_MIN
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: POPULATION_TRAVEL_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: POPULATION_TRAVEL_OPPORTUNITY_AVAILABLE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    - name: POPULATION_TRAVEL_OPPORTUNITY_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    model_channel: candidate
+  land_reporting_source_h3_r7:
+    category: activity_and_effort
+    artifact: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/land_reporting_source_h3_r7.parquet
+    h3_resolution: 7
+    model_policy: partial_source_research_only
+    features:
+    - name: source_h3
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: LAND_TRANSPORT_TRAVEL_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: VERIFIED_PUBLIC_ACCESS_SUPPORTED_INDEX
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: MAPPED_PUBLIC_ACCESS_SUPPORTED_INDEX
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: PUBLIC_ACCESS_EVIDENCE_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: LAND_REACHABILITY_OPPORTUNITY_AVAILABLE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    observation_opportunity_schema_version: 3.0.0-research
+    artifact_resolution: manifest_dataset_id_single_generation
+    active_manifest: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/manifest.json
+    flat_path_policy: legacy_snapshot_only_do_not_load_as_current
+    model_channel: research_only
+  land_reporting_target_h3_r7:
+    category: activity_and_effort
+    artifact: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/land_reporting_target_h3_r7.parquet
+    h3_resolution: 7
+    model_policy: partial_source_research_only
+    features:
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: LAND_TRANSPORT_TRAVEL_REPORTING_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: LAND_TRANSPORT_TRAVEL_REPORTING_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: VERIFIED_PUBLIC_ACCESS_SUPPORTED_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: MAPPED_PUBLIC_ACCESS_SUPPORTED_RAW
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: TRANSPORT_TRAVEL_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: MAPPED_ACCESS_CONTEXT_FRACTION
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: LAND_REPORTING_OPPORTUNITY_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    observation_opportunity_schema_version: 3.0.0-research
+    artifact_resolution: manifest_dataset_id_single_generation
+    active_manifest: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/manifest.json
+    flat_path_policy: legacy_snapshot_only_do_not_load_as_current
+    model_channel: research_only
+  land_reporting_opportunity_daily_h3_r6:
+    category: activity_and_effort
+    artifact: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/land_reporting_opportunity_daily_h3_r6.parquet
+    h3_resolution: 6
+    temporal_grain: daily
+    model_policy: partial_source_research_only
+    features:
+    - name: DATE
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: date
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: CALENDAR_EFFORT_WEIGHT
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+      deprecated_alias: true
+      replacement: CALENDAR_CONTEXT_WEIGHT
+    - name: CALENDAR_CONTEXT_WEIGHT
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: DISTANCE_KM_MEAN
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: kilometres
+    - name: DISTANCE_DETECTION_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: ATMOSPHERIC_VISIBILITY_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: DAYLIGHT_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: WIND_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: PRECIPITATION_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: PUBLIC_SHORE_ACCESS_MAPPED_STATIC_CONTEXT_FRACTION
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: PUBLIC_SHORE_ACCESS_VERIFIED_STATIC_CONTEXT_FRACTION
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: DISTANCE_DETECTION_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: ATMOSPHERIC_VISIBILITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: DAYLIGHT_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WIND_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PRECIPITATION_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: CALENDAR_CONTEXT_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PUBLIC_SHORE_ACCESS_MAPPED_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PUBLIC_SHORE_ACCESS_VERIFIED_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PHYSICAL_VIEWABILITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: POPULATION_TRAVEL_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: ROAD_ACCESS_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: CITY_ACCESS_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: TRANSPORT_ACCESS_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: LAND_REACHABILITY_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: LAND_EFFORT_PROXY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+      deprecated_alias: true
+      replacement: LAND_OBSERVATION_OPPORTUNITY_RAW
+    - name: VERIFIED_LAND_EFFORT_PROXY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+      deprecated_alias: true
+      replacement: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_RAW
+    - name: LAND_OBSERVATION_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: PHYSICAL_VIEWABILITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: POPULATION_TRAVEL_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: ROAD_ACCESS_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: CITY_ACCESS_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: TRANSPORT_ACCESS_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: LAND_REACHABILITY_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: LAND_EFFORT_PROXY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+      deprecated_alias: true
+      replacement: LAND_OBSERVATION_OPPORTUNITY_INDEX
+    - name: VERIFIED_LAND_EFFORT_PROXY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+      deprecated_alias: true
+      replacement: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_INDEX
+    - name: LAND_OBSERVATION_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: PHYSICAL_VIEWABILITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: POPULATION_TRAVEL_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: ROAD_ACCESS_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: CITY_ACCESS_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: TRANSPORT_ACCESS_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: LAND_REACHABILITY_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: LAND_EFFORT_PROXY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+      deprecated_alias: true
+      replacement: LAND_OBSERVATION_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+    - name: VERIFIED_LAND_EFFORT_PROXY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+      deprecated_alias: true
+      replacement: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+    - name: LAND_OBSERVATION_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: PHYSICAL_VIEWABILITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: POPULATION_TRAVEL_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: ROAD_ACCESS_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: CITY_ACCESS_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: TRANSPORT_ACCESS_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: LAND_REACHABILITY_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: LAND_EFFORT_PROXY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+      deprecated_alias: true
+      replacement: LAND_OBSERVATION_OPPORTUNITY_STATE
+    - name: VERIFIED_LAND_EFFORT_PROXY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+      deprecated_alias: true
+      replacement: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_STATE
+    - name: LAND_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: LAND_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log_relative_opportunity
+    - name: LAND_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log_relative_opportunity
+    - name: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: REPORTING_CAPTURE_WEIGHT
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: relative_weight
+    - name: REPORTING_CAPTURE_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: GENERATION_ID
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: CONFIG_HASH
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: SOURCE_HASHES_JSON
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: KNOWLEDGE_TIME_UTC
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: SOURCE_VINTAGES_JSON
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: HISTORICAL_RECONSTRUCTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: COMPONENT_PROVENANCE_JSON
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: DATA_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: SOURCE_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: LAND_EFFORT_PROXY_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+      deprecated_alias: true
+      replacement: LAND_OBSERVATION_OPPORTUNITY_STATUS
+    - name: MEASUREMENT_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    observation_opportunity_schema_version: 3.0.0-research
+    artifact_resolution: manifest_dataset_id_single_generation
+    active_manifest: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/manifest.json
+    flat_path_policy: legacy_snapshot_only_do_not_load_as_current
+    model_channel: research_only
+  land_reporting_opportunity_weekly_h3_r6:
+    category: activity_and_effort
+    artifact: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/land_reporting_opportunity_weekly_h3_r6.parquet
+    h3_resolution: 6
+    temporal_grain: weekly
+    model_policy: partial_source_research_only
+    features:
+    - name: WEEK_START
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: date
+    - name: H3_INDEX
+      role: support
+      measurement_status: derived
+      model_eligible: false
+      unit: h3_cell
+    - name: CALENDAR_EFFORT_WEIGHT
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+      deprecated_alias: true
+      replacement: CALENDAR_CONTEXT_WEIGHT
+    - name: CALENDAR_CONTEXT_WEIGHT
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: DISTANCE_KM_MEAN
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: kilometres
+    - name: DISTANCE_DETECTION_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: ATMOSPHERIC_VISIBILITY_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: DAYLIGHT_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: WIND_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: PRECIPITATION_WEIGHT
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: PUBLIC_SHORE_ACCESS_MAPPED_STATIC_CONTEXT_FRACTION
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: PUBLIC_SHORE_ACCESS_VERIFIED_STATIC_CONTEXT_FRACTION
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_weight
+    - name: DISTANCE_DETECTION_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: ATMOSPHERIC_VISIBILITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: DAYLIGHT_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: WIND_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PRECIPITATION_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: CALENDAR_CONTEXT_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PUBLIC_SHORE_ACCESS_MAPPED_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PUBLIC_SHORE_ACCESS_VERIFIED_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: PHYSICAL_VIEWABILITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: POPULATION_TRAVEL_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: ROAD_ACCESS_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: CITY_ACCESS_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: TRANSPORT_ACCESS_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: LAND_REACHABILITY_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: LAND_EFFORT_PROXY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+      deprecated_alias: true
+      replacement: LAND_OBSERVATION_OPPORTUNITY_RAW
+    - name: VERIFIED_LAND_EFFORT_PROXY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+      deprecated_alias: true
+      replacement: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_RAW
+    - name: LAND_OBSERVATION_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_RAW
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: weighted_relative_opportunity
+    - name: PHYSICAL_VIEWABILITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: POPULATION_TRAVEL_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: ROAD_ACCESS_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: CITY_ACCESS_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: TRANSPORT_ACCESS_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: LAND_REACHABILITY_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: LAND_EFFORT_PROXY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+      deprecated_alias: true
+      replacement: LAND_OBSERVATION_OPPORTUNITY_INDEX
+    - name: VERIFIED_LAND_EFFORT_PROXY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+      deprecated_alias: true
+      replacement: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_INDEX
+    - name: LAND_OBSERVATION_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_INDEX
+      role: predictor
+      measurement_status: derived
+      model_eligible: false
+      unit: relative_index
+    - name: PHYSICAL_VIEWABILITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: POPULATION_TRAVEL_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: ROAD_ACCESS_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: CITY_ACCESS_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: TRANSPORT_ACCESS_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: LAND_REACHABILITY_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: LAND_EFFORT_PROXY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+      deprecated_alias: true
+      replacement: LAND_OBSERVATION_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+    - name: VERIFIED_LAND_EFFORT_PROXY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+      deprecated_alias: true
+      replacement: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+    - name: LAND_OBSERVATION_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_DYNAMIC_CONTEXT_COVERAGE
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: fraction
+    - name: PHYSICAL_VIEWABILITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: POPULATION_TRAVEL_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: ROAD_ACCESS_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: CITY_ACCESS_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: TRANSPORT_ACCESS_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: LAND_REACHABILITY_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: LAND_EFFORT_PROXY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+      deprecated_alias: true
+      replacement: LAND_OBSERVATION_OPPORTUNITY_STATE
+    - name: VERIFIED_LAND_EFFORT_PROXY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+      deprecated_alias: true
+      replacement: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_STATE
+    - name: LAND_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_STATE
+      role: state
+      measurement_status: derived
+      model_eligible: false
+      unit: controlled_state
+    - name: LAND_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log_relative_opportunity
+    - name: LAND_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_LOG1P
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: log_relative_opportunity
+    - name: VERIFIED_LAND_OBSERVATION_OPPORTUNITY_SPATIAL_RANK
+      role: evidence
+      measurement_status: derived
+      model_eligible: false
+      unit: spatial_percentile
+    - name: REPORTING_CAPTURE_WEIGHT
+      role: evidence
+      measurement_status: unavailable
+      model_eligible: false
+      unit: relative_weight
+    - name: REPORTING_CAPTURE_STATE
+      role: state
+      measurement_status: unavailable
+      model_eligible: false
+      unit: controlled_state
+    - name: GENERATION_ID
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: CONFIG_HASH
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: SOURCE_HASHES_JSON
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: KNOWLEDGE_TIME_UTC
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: SOURCE_VINTAGES_JSON
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: HISTORICAL_RECONSTRUCTION
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: COMPONENT_PROVENANCE_JSON
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: DATA_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: SOURCE_COVERAGE_STATE
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: identifier_or_json
+    - name: LAND_EFFORT_PROXY_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+      deprecated_alias: true
+      replacement: LAND_OBSERVATION_OPPORTUNITY_STATUS
+    - name: MEASUREMENT_STATUS
+      role: provenance
+      measurement_status: derived
+      model_eligible: false
+      unit: category
+    - name: PERIOD_DAY_COUNT
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: days
+    - name: INCOMPLETE_WEEK
+      role: coverage
+      measurement_status: derived
+      model_eligible: false
+      unit: boolean
+    observation_opportunity_schema_version: 3.0.0-research
+    artifact_resolution: manifest_dataset_id_single_generation
+    active_manifest: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/manifest.json
+    flat_path_policy: legacy_snapshot_only_do_not_load_as_current
+    model_channel: research_only

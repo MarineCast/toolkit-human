@@ -1,0 +1,7 @@
+data/
+outputs/
+artifacts/
+build/
+dist/
+notebooks/
+graphify-out/

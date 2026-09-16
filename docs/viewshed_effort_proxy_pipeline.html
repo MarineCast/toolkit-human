@@ -1,0 +1,1481 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>OrcaCast Viewshed &amp; Observation-Opportunity Pipeline</title>
+  <style>
+    :root {
+      --ink: #17233b;
+      --muted: #5f6f85;
+      --page: #f5f7fa;
+      --panel: #ffffff;
+      --panel-2: #edf2f7;
+      --line: #cbd5e1;
+      --navy: #102a43;
+      --blue: #2563a6;
+      --blue-soft: #e8f1fb;
+      --teal: #087f78;
+      --teal-soft: #e4f5f2;
+      --amber: #a65f00;
+      --amber-soft: #fff4d8;
+      --violet: #6d4aa2;
+      --violet-soft: #f1ebfa;
+      --red: #a43d3d;
+      --red-soft: #fbeaea;
+      --green: #23764d;
+      --green-soft: #e7f5ed;
+      --shadow: 0 14px 34px rgba(23, 35, 59, 0.08);
+      --radius: 16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 90% 0, rgba(37, 99, 166, 0.09), transparent 25rem),
+        var(--page);
+      font: 15px/1.55 var(--sans);
+    }
+
+    a { color: var(--blue); text-underline-offset: 0.16em; }
+    a:hover { text-decoration-thickness: 2px; }
+
+    code {
+      font-family: var(--mono);
+      font-size: 0.88em;
+      overflow-wrap: anywhere;
+    }
+
+    .masthead {
+      color: #f8fbff;
+      background:
+        linear-gradient(115deg, rgba(8, 127, 120, 0.8), transparent 44%),
+        linear-gradient(135deg, #0c2740, #173e61 58%, #102a43);
+      border-bottom: 5px solid #20a39a;
+    }
+
+    .masthead-inner,
+    main,
+    .footer-inner {
+      width: min(1480px, calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    .masthead-inner { padding: 48px 0 40px; }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: #bcebe7;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 980px;
+      margin: 0;
+      font-size: clamp(2.1rem, 4.5vw, 4rem);
+      line-height: 1.03;
+      letter-spacing: -0.045em;
+    }
+
+    .dek {
+      max-width: 920px;
+      margin: 18px 0 0;
+      color: #dce9f5;
+      font-size: clamp(1rem, 1.7vw, 1.22rem);
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .meta-pill {
+      padding: 7px 11px;
+      color: #e9f5ff;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 650;
+      backdrop-filter: blur(8px);
+    }
+
+    .jump-nav {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      overflow-x: auto;
+      background: color-mix(in srgb, var(--panel) 94%, transparent);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 4px 14px rgba(23, 35, 59, 0.05);
+      backdrop-filter: blur(10px);
+    }
+
+    .jump-nav-inner {
+      display: flex;
+      width: min(1480px, calc(100% - 40px));
+      min-width: max-content;
+      margin-inline: auto;
+      gap: 2px;
+    }
+
+    .jump-nav a {
+      display: block;
+      padding: 13px 12px;
+      color: var(--ink);
+      font-size: 0.82rem;
+      font-weight: 750;
+      text-decoration: none;
+      border-bottom: 3px solid transparent;
+    }
+
+    .jump-nav a:hover,
+    .jump-nav a:focus-visible {
+      color: var(--teal);
+      border-bottom-color: var(--teal);
+      outline: none;
+    }
+
+    main { padding: 34px 0 80px; }
+
+    section { scroll-margin-top: 64px; }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin: 52px 0 18px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(1.55rem, 2.6vw, 2.3rem);
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+    }
+
+    .section-heading p {
+      max-width: 680px;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .scope-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .scope-card,
+    .contract-card,
+    .status-card {
+      padding: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .scope-card strong,
+    .contract-card strong,
+    .status-card strong { display: block; margin-bottom: 6px; }
+    .scope-card p,
+    .contract-card p,
+    .status-card p { margin: 0; color: var(--muted); }
+
+    .scope-card .metric {
+      margin-bottom: 7px;
+      color: var(--navy);
+      font-size: 1.65rem;
+      font-weight: 850;
+      letter-spacing: -0.04em;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px 16px;
+      margin: 14px 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .legend-item { display: inline-flex; align-items: center; gap: 7px; }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border: 2px solid;
+      border-radius: 3px;
+    }
+
+    .legend-dot.input { background: var(--blue-soft); border-color: var(--blue); }
+    .legend-dot.process { background: var(--teal-soft); border-color: var(--teal); }
+    .legend-dot.output { background: var(--green-soft); border-color: var(--green); }
+    .legend-dot.research { background: var(--amber-soft); border-color: var(--amber); }
+
+    .pipeline {
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .lane {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      min-width: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .lane:first-child { border-top: 0; }
+
+    .lane-label {
+      padding: 22px 18px;
+      color: #fff;
+      background: var(--navy);
+    }
+
+    .lane.land .lane-label { background: #2b6249; }
+    .lane.water .lane-label { background: #1c5e84; }
+    .lane.model .lane-label { background: #624481; }
+
+    .lane-label .lane-number {
+      display: block;
+      margin-bottom: 7px;
+      color: rgba(255, 255, 255, 0.7);
+      font: 750 0.72rem/1 var(--mono);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .lane-label strong { font-size: 1.05rem; }
+    .lane-label p { margin: 7px 0 0; color: rgba(255, 255, 255, 0.78); font-size: 0.8rem; }
+
+    .lane-body { min-width: 0; padding: 20px; }
+
+    .flow {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(190px, 1fr);
+      align-items: stretch;
+      gap: 28px;
+      overflow-x: auto;
+      padding: 3px 4px 14px;
+      scrollbar-color: var(--line) transparent;
+    }
+
+    .node {
+      position: relative;
+      min-height: 172px;
+      padding: 15px;
+      background: var(--panel-2);
+      border: 2px solid var(--line);
+      border-radius: 13px;
+    }
+
+    .node::after {
+      content: "→";
+      position: absolute;
+      top: 50%;
+      left: calc(100% + 8px);
+      width: 18px;
+      color: #8da0b8;
+      font-size: 1.35rem;
+      font-weight: 850;
+      text-align: center;
+      transform: translateY(-50%);
+    }
+
+    .node:last-child::after { display: none; }
+    .node.input { background: var(--blue-soft); border-color: #82add4; }
+    .node.process { background: var(--teal-soft); border-color: #74bdb6; }
+    .node.output { background: var(--green-soft); border-color: #82bd9b; }
+    .node.research { background: var(--amber-soft); border-color: #d5ad62; }
+    .node.modeling { background: var(--violet-soft); border-color: #ad94cf; }
+
+    .node .step {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font: 800 0.69rem/1.1 var(--mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .node h3 {
+      margin: 0 0 8px;
+      font-size: 0.98rem;
+      line-height: 1.25;
+    }
+
+    .node p { margin: 0; color: var(--muted); font-size: 0.79rem; }
+
+    .node .formula {
+      display: block;
+      margin-top: 10px;
+      padding: 7px 8px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.62);
+      border-radius: 7px;
+      font: 700 0.72rem/1.35 var(--mono);
+    }
+
+    .lane-notes {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .lane-note {
+      padding: 10px 12px;
+      color: var(--muted);
+      background: var(--page);
+      border-left: 3px solid var(--line);
+      border-radius: 6px;
+      font-size: 0.78rem;
+    }
+
+    .lane-note strong { color: var(--ink); }
+
+    .contracts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .contract-card { border-top: 4px solid var(--teal); }
+    .contract-card.warning { border-top-color: var(--amber); }
+    .contract-card.boundary { border-top-color: var(--red); }
+
+    .contract-card ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .contract-card li + li { margin-top: 5px; }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      min-width: 1040px;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      position: sticky;
+      top: 45px;
+      z-index: 2;
+      color: #f7fbff;
+      background: var(--navy);
+      font-size: 0.71rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: color-mix(in srgb, var(--blue-soft) 45%, var(--panel)); }
+
+    .group-row td {
+      color: var(--navy);
+      background: var(--panel-2);
+      font-weight: 850;
+      letter-spacing: 0.02em;
+    }
+
+    .badge {
+      display: inline-block;
+      margin: 1px 4px 2px 0;
+      padding: 3px 7px;
+      border-radius: 999px;
+      font-size: 0.69rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .badge.complete { color: var(--green); background: var(--green-soft); }
+    .badge.partial { color: var(--amber); background: var(--amber-soft); }
+    .badge.unverified { color: var(--red); background: var(--red-soft); }
+    .badge.deterministic { color: var(--violet); background: var(--violet-soft); }
+
+    details {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    details + details { margin-top: 9px; }
+
+    summary {
+      padding: 14px 16px;
+      cursor: pointer;
+      font-weight: 780;
+    }
+
+    summary:hover { color: var(--teal); }
+
+    .detail-body {
+      padding: 0 16px 16px;
+      color: var(--muted);
+    }
+
+    .detail-body ul { margin-bottom: 0; }
+
+    .artifact-grid,
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .artifact-card {
+      padding: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .artifact-card h3 { margin: 0 0 9px; }
+    .artifact-card p { margin: 0; color: var(--muted); }
+    .artifact-card dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 12px; margin: 13px 0 0; }
+    .artifact-card dt { color: var(--muted); }
+    .artifact-card dd { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+
+    .callout {
+      margin: 18px 0;
+      padding: 16px 18px;
+      color: #653c00;
+      background: var(--amber-soft);
+      border: 1px solid #e3bd71;
+      border-left-width: 5px;
+      border-radius: 10px;
+    }
+
+    .callout strong { color: #4e2d00; }
+
+    .footer {
+      color: #d7e5f2;
+      background: var(--navy);
+    }
+
+    .footer-inner { padding: 26px 0; }
+    .footer p { margin: 0; }
+    .footer a { color: #a8ded8; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      top: 8px;
+      left: 8px;
+      padding: 9px 12px;
+      color: #fff;
+      background: var(--navy);
+      border-radius: 8px;
+      transform: translateY(-160%);
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    @media (max-width: 1050px) {
+      .scope-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .contracts { grid-template-columns: 1fr; }
+      .lane { grid-template-columns: 150px minmax(0, 1fr); }
+      .lane-notes { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .masthead-inner,
+      main,
+      .footer-inner,
+      .jump-nav-inner { width: min(100% - 24px, 1480px); }
+      .masthead-inner { padding: 34px 0 30px; }
+      main { padding-top: 22px; }
+      .section-heading { display: block; }
+      .section-heading p { margin-top: 8px; }
+      .scope-grid,
+      .artifact-grid,
+      .status-grid { grid-template-columns: 1fr; }
+      .lane { display: block; }
+      .lane-label { padding: 15px 16px; }
+      .lane-body { padding: 14px; }
+      .flow {
+        grid-auto-flow: row;
+        grid-auto-rows: auto;
+        grid-template-columns: 1fr;
+        overflow: visible;
+        gap: 28px;
+      }
+      .node { min-height: 0; }
+      .node::after {
+        content: "↓";
+        top: calc(100% + 4px);
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      th { top: 43px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink: #e6eef7;
+        --muted: #aebdcd;
+        --page: #0d1723;
+        --panel: #132131;
+        --panel-2: #1a2a3b;
+        --line: #32465b;
+        --navy: #0a2135;
+        --blue: #79b7ee;
+        --blue-soft: #172e43;
+        --teal: #5bd2c7;
+        --teal-soft: #163735;
+        --amber: #f0bd62;
+        --amber-soft: #3a2e17;
+        --violet: #c2a6e8;
+        --violet-soft: #302641;
+        --red: #ef9898;
+        --red-soft: #3d2228;
+        --green: #83d3a8;
+        --green-soft: #183629;
+        --shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
+      }
+      .scope-card .metric,
+      .group-row td { color: var(--ink); }
+      .callout { color: #f5d79d; }
+      .callout strong { color: #ffe8bb; }
+      .badge.complete { color: #a0e4bd; }
+      .badge.partial { color: #f3ca7c; }
+      .badge.unverified { color: #f1abab; }
+      .badge.deterministic { color: #d1b8f0; }
+    }
+
+    @media print {
+      :root { color-scheme: light; }
+      body { background: #fff; color: #111; font-size: 10pt; }
+      .jump-nav,
+      .skip-link { display: none; }
+      .masthead { color: #111; background: #fff; border-bottom: 3px solid #111; }
+      .masthead-inner { padding: 20px 0; }
+      .eyebrow,
+      .dek,
+      .meta-pill { color: #222; }
+      .meta-pill { border-color: #aaa; }
+      main { width: 100%; padding: 0; }
+      .pipeline,
+      .scope-card,
+      .contract-card,
+      .artifact-card,
+      .status-card,
+      .table-wrap { box-shadow: none; }
+      .lane { display: block; break-inside: avoid; }
+      .lane-label { color: #111; background: #eee !important; }
+      .lane-label p,
+      .lane-label .lane-number { color: #333; }
+      .flow { grid-auto-flow: row; grid-template-columns: 1fr 1fr; overflow: visible; }
+      .node::after { display: none; }
+      th { position: static; color: #111; background: #ddd; }
+      a { color: #111; text-decoration: none; }
+      .footer { color: #111; background: #fff; border-top: 1px solid #111; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to pipeline</a>
+
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="eyebrow">OrcaCast architecture reference</p>
+      <h1>Viewshed &amp; observation-opportunity pipeline</h1>
+      <p class="dek">
+        A source-to-feature map of the shared physical viewshed, the land reporting-opportunity
+        components, the component-first water observation-opportunity products, validation diagnostics,
+        and the deliberately unchanged modeling boundary.
+      </p>
+      <div class="meta-row" aria-label="Document metadata">
+        <span class="meta-pill">Verified against repository artifacts: 2026-09-02</span>
+        <span class="meta-pill">Shared kernel: H3 R7 source → H3 R7 target</span>
+        <span class="meta-pill">Dynamic products: daily / weekly H3 R6</span>
+        <span class="meta-pill">Status: research inputs; no automatic model promotion</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="jump-nav" aria-label="Pipeline sections">
+    <div class="jump-nav-inner">
+      <a href="#scope">Scope</a>
+      <a href="#diagram">Pipeline diagram</a>
+      <a href="#contracts">Contracts</a>
+      <a href="#inputs">All inputs</a>
+      <a href="#artifacts">Artifacts</a>
+      <a href="#modeling">Modeling handoff</a>
+      <a href="#references">Code references</a>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section id="scope" aria-labelledby="scope-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow" style="color: var(--teal)">What this pipeline measures</p>
+          <h2 id="scope-title">Four connected products, four distinct contracts</h2>
+        </div>
+        <p>
+          Physical viewability is reused by both activity branches. Human accessibility and vessel
+          activity are added later, so they never redefine the underlying line-of-sight surface.
+        </p>
+      </div>
+
+      <div class="scope-grid">
+        <article class="scope-card">
+          <div class="metric">2.08M</div>
+          <strong>Land source–target pairs</strong>
+          <p>Static H3 R7 physical-viewability weights after terrain and canopy LOS.</p>
+        </article>
+        <article class="scope-card">
+          <div class="metric">3.21M</div>
+          <strong>Water source–target pairs</strong>
+          <p>Static H3 R7 small-craft viewability using sampled land-mask LOS.</p>
+        </article>
+        <article class="scope-card">
+          <div class="metric">500,076</div>
+          <strong>Land weekly rows</strong>
+          <p>Monday-keyed H3 R6 physical, access, reachability, and composite streams.</p>
+        </article>
+        <article class="scope-card">
+          <div class="metric">2.62M</div>
+          <strong>Water daily target rows</strong>
+          <p>Class-separated AIS and native-R7 ferry activity propagated through dynamic viewing conditions.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="diagram" aria-labelledby="diagram-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow" style="color: var(--teal)">End-to-end flow</p>
+          <h2 id="diagram-title">Pipeline diagram</h2>
+        </div>
+        <p>
+          Read each lane left to right. The first lane creates the shared static kernel; the land and
+          water lanes branch from it; the final lane shows the existing feature-table handoff.
+        </p>
+      </div>
+
+      <div class="legend" aria-label="Diagram legend">
+        <span class="legend-item"><span class="legend-dot input"></span> data or configuration input</span>
+        <span class="legend-item"><span class="legend-dot process"></span> transformation / validation</span>
+        <span class="legend-item"><span class="legend-dot output"></span> durable artifact</span>
+        <span class="legend-item"><span class="legend-dot research"></span> research or promotion boundary</span>
+      </div>
+
+      <div class="pipeline" role="img" aria-label="Flow diagram from geospatial inputs through static viewshed kernels, land and water observation-opportunity components, diagnostics, and the model promotion boundary">
+        <article class="lane shared">
+          <header class="lane-label">
+            <span class="lane-number">Lane 01</span>
+            <strong>Shared physical viewshed</strong>
+            <p>Canonical nine-stage workflow from raw surfaces to durable pair tables.</p>
+          </header>
+          <div class="lane-body">
+            <div class="flow">
+              <div class="node input">
+                <span class="step">Inputs</span>
+                <h3>Area, support &amp; rasters</h3>
+                <p>Model bbox; territorial water; Natural Earth land; USGS 3DEP DEM; ETH canopy; canonical viewshed config.</p>
+              </div>
+              <div class="node process">
+                <span class="step">Step 1</span>
+                <h3>Download / validate surfaces</h3>
+                <p>Acquire or reuse the regional 30 m DEM and canopy height, retaining checksums and source metadata.</p>
+              </div>
+              <div class="node process">
+                <span class="step">Step 2</span>
+                <h3>Build land source cells</h3>
+                <p>Intersect H3 R7 cells with land/water support and apply configured active-fraction eligibility.</p>
+              </div>
+              <div class="node process">
+                <span class="step">Step 3</span>
+                <h3>Build source–target lookup</h3>
+                <p>Create unique land-source and water-source candidate pairs to water targets within 30 km.</p>
+              </div>
+              <div class="node process">
+                <span class="step">Step 4</span>
+                <h3>Distance diagnostics</h3>
+                <p>Compute centroid distance and the normalized logistic weight for land and water pairs.</p>
+                <span class="formula">d50 = 9 km · slope = 2.7 km · cutoff = 30 km</span>
+              </div>
+              <div class="node process">
+                <span class="step">Step 5 · land</span>
+                <h3>Dual-surface terrain + canopy LOS</h3>
+                <p>Run paired GDAL viewsheds on bare earth and canopy-obstruction surfaces for 1.7 m observers and 1.0 m targets.</p>
+                <span class="formula">vegetation = min(Kcanopy, Kbare) / Kbare</span>
+              </div>
+              <div class="node process">
+                <span class="step">Step 6 · water</span>
+                <h3>Sampled land-mask LOS</h3>
+                <p>Use three deterministic source and target samples, opaque buffered land, a 2.5 m small-craft eye height, and a 1.5 m target.</p>
+              </div>
+              <div class="node process">
+                <span class="step">Step 7 · water</span>
+                <h3>Neutral vegetation factor</h3>
+                <p>Vegetation is not applicable to the water-source land-mask model, so its retained factor is exactly 1.</p>
+              </div>
+              <div class="node process">
+                <span class="step">Step 8</span>
+                <h3>Finalize static lookups</h3>
+                <p>Validate unique keys, factor coverage, bounds, config hashes, and sidecars; materialize land and water tables.</p>
+                <span class="formula">static viewability = terrain × vegetation</span>
+              </div>
+              <div class="node output">
+                <span class="step">Step 9</span>
+                <h3>Export maps &amp; clean workspace</h3>
+                <p>Write aggregate/selected-location HTML maps and run manifest, then remove rebuildable <code>data/tmp/viewshed/h3r7</code> intermediates.</p>
+              </div>
+            </div>
+            <div class="lane-notes">
+              <div class="lane-note"><strong>Final factor:</strong> <code>weight_static_viewability = weight_terrain × weight_vegetation</code>.</div>
+              <div class="lane-note"><strong>Diagnostic only:</strong> <code>weight_distance</code> is retained but is not multiplied into the static score a second time.</div>
+              <div class="lane-note"><strong>Production canopy path:</strong> canopy LOS is active; the optional ESA WorldCover attenuation pipeline is not used.</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="lane land">
+          <header class="lane-label">
+            <span class="lane-number">Lane 02</span>
+            <strong>Land reporting opportunity</strong>
+            <p>Physical viewability combined with accessibility, human context, weather, daylight, and calendar support.</p>
+          </header>
+          <div class="lane-body">
+            <div class="flow">
+              <div class="node input">
+                <span class="step">Inputs</span>
+                <h3>Land kernel + context tables</h3>
+                <p>Land static weights; transport; population travel; public shore access; HRRR weather; daylight; calendar; manifests and inventory.</p>
+              </div>
+              <div class="node process">
+                <span class="step">Step 10</span>
+                <h3>Validate identities &amp; coverage</h3>
+                <p>Check raw inventory and upstream checksums, routing-policy agreement, static scientific hash, and partial-source opt-in.</p>
+              </div>
+              <div class="node process">
+                <span class="step">Step 11</span>
+                <h3>Assemble source components</h3>
+                <p>Require exact H3 R7 source universes for transport and population; left-join shore evidence; retain unavailable and unknown states.</p>
+                <span class="formula">reachability = population travel × road proximity</span>
+              </div>
+              <div class="node process">
+                <span class="step">Step 12</span>
+                <h3>Propagate static components</h3>
+                <p>Multiply each source component by each source→target physical weight and sum by H3 R7 target.</p>
+                <span class="formula">target raw = Σsource(static weight × source component)</span>
+              </div>
+              <div class="node process">
+                <span class="step">Step 13</span>
+                <h3>Prepare dynamic basis</h3>
+                <p>Map sources to weather R5/daylight R4, bin distance every 0.25 km, map targets to H3 R6, and conserve pair mass.</p>
+              </div>
+              <div class="node process">
+                <span class="step">Step 14</span>
+                <h3>Compute daily opportunity</h3>
+                <p>Apply distance-aware meteorological visibility, daylight, wind, precipitation, and—on human streams—the calendar multiplier.</p>
+                <span class="formula">physical daily = static × visibility × daylight × wind × precip</span>
+              </div>
+              <div class="node process">
+                <span class="step">Step 15</span>
+                <h3>Publish component streams</h3>
+                <p>Keep physical, population, road, city, transport, reachability, mapped-access, and verified-access streams separate.</p>
+              </div>
+              <div class="node process">
+                <span class="step">Step 16</span>
+                <h3>Aggregate Monday weeks</h3>
+                <p>Sum daily raw values; retain day counts, status, and context coverage; compute fixed-reference q99 inspection indices.</p>
+              </div>
+              <div class="node output">
+                <span class="step">Step 17</span>
+                <h3>Publish immutable generation</h3>
+                <p>Write source R7, target R7, daily R6, weekly R6, metadata, and supplement; validate; atomically replace the root manifest selector.</p>
+              </div>
+            </div>
+            <div class="lane-notes">
+              <div class="lane-note"><strong>Canonical stream:</strong> <code>LAND_OBSERVATION_OPPORTUNITY_RAW</code> is a partial mapped-public-access lower bound; <code>LAND_EFFORT_PROXY_RAW</code> is its schema-v1 alias.</div>
+              <div class="lane-note"><strong>Strict sensitivity:</strong> <code>VERIFIED_LAND_OBSERVATION_OPPORTUNITY_RAW</code> uses authoritative verified-public evidence only.</div>
+              <div class="lane-note"><strong>Null contract:</strong> missing weather, access, or routing context remains unavailable; it is not assumed to be zero.</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="lane water">
+          <header class="lane-label">
+            <span class="lane-number">Lane 03</span>
+            <strong>Water observation opportunity</strong>
+            <p>Daily and weekly class components; no canonical primary composite.</p>
+          </header>
+          <div class="lane-body">
+            <div class="flow">
+              <div class="node input">
+                <span class="step">Inputs</span>
+                <h3>Water kernel + daily activity + conditions</h3>
+                <p>Water static weights; daily H3 R6 AIS classes; native H3 R7 ferry rider/platform activity; R5 weather; R4 daylight; manifests.</p>
+              </div>
+              <div class="node process">
+                <span class="step">Step 10</span>
+                <h3>Checksum-bind local inputs</h3>
+                <p>Require explicit partial-data opt-in, immutable ferry/AIS manifests, complete weather, deterministic daylight, and the current viewshed scientific hash.</p>
+              </div>
+              <div class="node process">
+                <span class="step">Step 11</span>
+                <h3>Prepare two propagation kernels</h3>
+                <p>Use the documented uniform-within-parent R6 AIS kernel while retaining native-R7 ferry propagation before R6 target aggregation.</p>
+                <span class="formula">R6 kernel = Σ R7 pair weights / (source children × target children)</span>
+              </div>
+              <div class="node process">
+                <span class="step">Step 12</span>
+                <h3>Keep activity classes separate</h3>
+                <p>Publish all-vessel, passenger, recreational, commercial (towing + cargo + tanker), fishing, ferry rider, and ferry platform components.</p>
+              </div>
+              <div class="node process">
+                <span class="step">Step 13</span>
+                <h3>Apply dynamic viewing conditions</h3>
+                <p>Apply distance-aware atmospheric visibility while keeping daylight, wind, precipitation, and coverage as separate fields.</p>
+                <span class="formula">component raw = Σsource(activity × static viewability × visibility × daylight × wind × precipitation)</span>
+              </div>
+              <div class="node process">
+                <span class="step">Step 14</span>
+                <h3>Preserve unavailable states</h3>
+                <p>Retain positive partial contributions; emit zero only under complete coverage. Sea state, whale-watch, and reporting capture remain null / source_unavailable.</p>
+              </div>
+              <div class="node research">
+                <span class="step">Step 15</span>
+                <h3>Transform without probability claims</h3>
+                <p>Publish raw, log1p, and same-period spatial-rank variants. Define no canonical primary water score.</p>
+                <span class="formula">legacy passenger + recreational AIS = compatibility/sensitivity only</span>
+              </div>
+              <div class="node output">
+                <span class="step">Step 16</span>
+                <h3>Publish immutable schema-v2 generation</h3>
+                <p>Write source/target daily and weekly tables, lineage, sightings and WA/BC diagnostics, then validate the HTML report before advancing the selector.</p>
+              </div>
+            </div>
+            <div class="lane-notes">
+              <div class="lane-note"><strong>Activity unit:</strong> AIS remains a unique MMSI-hour proxy; ferry retains rider-hours and platform-hours independently.</div>
+              <div class="lane-note"><strong>Causal metadata:</strong> ferry is generally exogenous; passenger/all AIS are mixed; recreational AIS is potentially endogenous.</div>
+              <div class="lane-note"><strong>Promotion:</strong> every new component is research-only and model-ineligible; the ecological estimator is unchanged.</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="lane model">
+          <header class="lane-label">
+            <span class="lane-number">Lane 04</span>
+            <strong>Modeling feature handoff</strong>
+            <p>The current code path for research features and shadow evaluation.</p>
+          </header>
+          <div class="lane-body">
+            <div class="flow">
+              <div class="node input modeling">
+                <span class="step">Input</span>
+                <h3>Active land weekly generation</h3>
+                <p>Resolve the root manifest, require exactly one weekly artifact, verify upstream checksums and config identity.</p>
+              </div>
+              <div class="node process modeling">
+                <span class="step">Step 18</span>
+                <h3>Validate modeling grain</h3>
+                <p>Require unique Monday + H3 R6 keys, nonnegative raw values, coverage bounds, and seven-day completeness for comparable raw sums.</p>
+              </div>
+              <div class="node process modeling">
+                <span class="step">Step 19</span>
+                <h3>Build fixed-support panel</h3>
+                <p>Reindex the full Monday × model-cell calendar; keep missing cells missing; calculate fixed-denominator regional lower bounds.</p>
+              </div>
+              <div class="node process modeling">
+                <span class="step">Step 20</span>
+                <h3>Create lagged features</h3>
+                <p>Generate previous-week, rolling-4-prior, and rolling-13-prior raw and coverage features with availability counts.</p>
+              </div>
+              <div class="node output modeling">
+                <span class="step">Step 21</span>
+                <h3>Feature blocks / shadow output</h3>
+                <p>Expose baseline, coverage, composite, components, and combined blocks. Served predictions remain incumbent; candidates stay explicit.</p>
+              </div>
+              <div class="node research">
+                <span class="step">Boundary</span>
+                <h3>No automatic promotion</h3>
+                <p>Current results are mixed, historical context is contemporary, and production integration plus coverage gates remain open.</p>
+              </div>
+            </div>
+            <div class="lane-notes">
+              <div class="lane-note"><strong>Model values:</strong> raw opportunity enters the estimator; q99 indices are inspection products.</div>
+              <div class="lane-note"><strong>Leakage control:</strong> all lags use completed prior weeks; no same-week or future-period value is used.</div>
+              <div class="lane-note"><strong>Water handoff:</strong> schema-v2 class components are research-only and have no promoted model consumer or primary composite.</div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="contracts" aria-labelledby="contracts-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow" style="color: var(--teal)">Interpretation</p>
+          <h2 id="contracts-title">Contracts that must survive every join</h2>
+        </div>
+        <p>These boundaries are more important than the convenience names “effort” and “viewshed.”</p>
+      </div>
+
+      <div class="contracts">
+        <article class="contract-card">
+          <strong>Physical viewability</strong>
+          <p>A modeled geometric opportunity to see a water target from a source cell.</p>
+          <ul>
+            <li>Not a calibrated detection probability.</li>
+            <li>Not evidence that an observer was present.</li>
+            <li>Static pair weights remain separate from dynamic weather and activity.</li>
+          </ul>
+        </article>
+        <article class="contract-card warning">
+          <strong>Reporting-opportunity proxies</strong>
+          <p>Relative, partially observed conditions under which reports could be generated.</p>
+          <ul>
+            <li>Land: access/reachability lower bounds × physical/dynamic viewing support.</li>
+            <li>Water: class-specific AIS or ferry activity × physical and dynamic viewing support.</li>
+            <li>Neither is direct observer-hours, vessel pressure, or whale truth.</li>
+          </ul>
+        </article>
+        <article class="contract-card boundary">
+          <strong>Availability semantics</strong>
+          <p>Unknown, unavailable, unmapped, partial, zero, and not-applicable are distinct states.</p>
+          <ul>
+            <li>Unknown access is not zero-filled.</li>
+            <li>Incomplete AIS target-weeks remain null unless a positive contribution is observed.</li>
+            <li>Model features mask partial calendar weeks rather than comparing partial sums.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="inputs" aria-labelledby="inputs-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow" style="color: var(--teal)">Source inventory</p>
+          <h2 id="inputs-title">All pipeline data inputs</h2>
+        </div>
+        <p>
+          This table includes the direct processed inputs and the raw/provider sources declared by
+          their manifests. Paths are repository-relative even when a manifest stores an absolute path.
+        </p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Input</th>
+              <th scope="col">Provider / derivation</th>
+              <th scope="col">Repository path</th>
+              <th scope="col">Grain / role</th>
+              <th scope="col">Coverage contract</th>
+              <th scope="col">Used by</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="group-row"><td colspan="6">Shared physical viewshed</td></tr>
+            <tr>
+              <td>Model area and viewshed parameters</td>
+              <td>OrcaCast configuration</td>
+              <td><a href="../config/common.yaml"><code>config/common.yaml</code></a><br><a href="../config/modeling/effort/viewshed.yaml"><code>config/modeling/effort/viewshed.yaml</code></a></td>
+              <td>Bbox, H3 R7, heights, 30 km limit, formulas, paths</td>
+              <td><span class="badge deterministic">versioned config</span></td>
+              <td>All viewshed stages; both effort branches</td>
+            </tr>
+            <tr>
+              <td>USGS 3DEP elevation</td>
+              <td>USGS 3DEP via <code>py3dep</code>; regional 30 m artifact</td>
+              <td><a href="../data/processed/domain/environmental_layer/landscape/DEM/DEM_30M.tif.source.json"><code>data/processed/.../DEM/DEM_30M.tif</code> + source sidecar</a></td>
+              <td>30 m DEM, WGS84; terrain surface</td>
+              <td><span class="badge unverified">legacy artifact provenance unverified</span></td>
+              <td>Land bare-earth and canopy LOS</td>
+            </tr>
+            <tr>
+              <td>ETH Global Canopy Height 2020</td>
+              <td>Four ETH 10 m tiles; max-resampled and DEM-aligned to 30 m</td>
+              <td><a href="../data/processed/domain/environmental_layer/landscape/CHM/eth_global_canopy_height_2020_10m_metadata.json"><code>data/processed/.../CHM/CHM_30M.tif</code> + metadata</a></td>
+              <td>Canopy-obstruction surface</td>
+              <td><span class="badge complete">checksummed tiles</span></td>
+              <td>Land canopy LOS only</td>
+            </tr>
+            <tr>
+              <td>Natural Earth land polygons</td>
+              <td>Natural Earth 1:10m land</td>
+              <td><code>data/raw/gis/land/ne_10m_land.shp</code></td>
+              <td>Land-source eligibility and opaque water-LOS barrier</td>
+              <td><span class="badge complete">configured local source</span></td>
+              <td>Land cells; source/target support; water LOS</td>
+            </tr>
+            <tr>
+              <td>Canonical territorial water polygon</td>
+              <td>Composite of DFO Canada, WSDOT, NOAA/NWFSC, US Census coastline, MarineRegions 12 nm, and NOAA maritime boundaries</td>
+              <td><a href="../data/processed/domain/environmental_layer/seascape/spatial_support/water_geometry/water_geometry_manifest.json"><code>data/processed/.../water_geometry/TERRITORIAL_WATER_POLYGON.parquet</code></a></td>
+              <td>3 geometries; water support and target mask</td>
+              <td><span class="badge complete">manifested complete</span></td>
+              <td>All viewshed support construction</td>
+            </tr>
+            <tr>
+              <td>Water source: Canadian federal marine bioregions</td>
+              <td>Fisheries and Oceans Canada; Open Government Licence – Canada</td>
+              <td><code>data/raw/gis/marine/FederalMarineBioregions_SHP/FederalMarineBioregions.shp</code></td>
+              <td>Canadian water boundary component</td>
+              <td><span class="badge complete">checksummed in water manifest</span></td>
+              <td>Territorial water polygon</td>
+            </tr>
+            <tr>
+              <td>Water source: World 12 nautical mile boundaries</td>
+              <td>MarineRegions.org; CC BY 4.0</td>
+              <td><code>data/raw/gis/marine/World_12NM_v4_20231025/eez_12nm_v4.shp</code></td>
+              <td>Territorial-zone component</td>
+              <td><span class="badge complete">checksummed in water manifest</span></td>
+              <td>Territorial water polygon</td>
+            </tr>
+            <tr>
+              <td>Water source: US coastline</td>
+              <td>United States Census Bureau; US public domain</td>
+              <td><code>data/raw/gis/marine/tl_2022_us_coastline/tl_2022_us_coastline.shp</code></td>
+              <td>US coastline component</td>
+              <td><span class="badge complete">checksummed in water manifest</span></td>
+              <td>Territorial water polygon</td>
+            </tr>
+            <tr>
+              <td>Water source: US maritime limits</td>
+              <td>NOAA Office of Coast Survey; US Government work</td>
+              <td><code>data/raw/gis/marine/USMaritimeLimitsAndBoundariesSHP/USMaritimeLimitsNBoundaries.shp</code></td>
+              <td>US waters component</td>
+              <td><span class="badge complete">checksummed in water manifest</span></td>
+              <td>Territorial water polygon</td>
+            </tr>
+            <tr>
+              <td>Water source: Puget Sound shoreline typology</td>
+              <td>NOAA Northwest Fisheries Science Center; US Government work</td>
+              <td><code>data/raw/gis/marine/shstmp-ps-marine-shorelines-2018-nwfsc/SHSTMP_PS_Marine_Shorelines_2018.shp</code></td>
+              <td>Washington marine shoreline component</td>
+              <td><span class="badge complete">checksummed in water manifest</span></td>
+              <td>Territorial water polygon</td>
+            </tr>
+            <tr>
+              <td>Water source: WSDOT major shorelines</td>
+              <td>Washington State Department of Transportation; public data</td>
+              <td><code>data/raw/gis/marine/WSDOT_-_Major_Shorelines/WSDOT_-_Major_Shorelines.shp</code></td>
+              <td>Washington shoreline component</td>
+              <td><span class="badge complete">checksummed in water manifest</span></td>
+              <td>Territorial water polygon</td>
+            </tr>
+
+            <tr class="group-row"><td colspan="6">Land reporting-opportunity inputs</td></tr>
+            <tr>
+              <td>Land static viewshed weights</td>
+              <td>Shared viewshed lane</td>
+              <td><a href="../data/processed/domain/human/viewshed/RES7/LAND_STATIC_WEIGHTS_R7_metadata.json"><code>data/processed/domain/human/viewshed/RES7/LAND_STATIC_WEIGHTS_R7.parquet</code></a></td>
+              <td>2,081,219 unique H3 R7 source→target pairs</td>
+              <td><span class="badge complete">validated static artifact</span></td>
+              <td>All land static and dynamic streams</td>
+            </tr>
+            <tr>
+              <td>Land transport access</td>
+              <td>OSRM public demo service using OpenStreetMap; ODbL 1.0</td>
+              <td><a href="../data/processed/domain/human/accessibility/land_transport_access/manifest.json"><code>data/processed/.../land_transport_access_h3_r7.parquet</code></a><br><code>data/raw/.../land_transport_routing_h3_r7.parquet</code></td>
+              <td>H3 R7 road proximity, city travel, transport index</td>
+              <td><span class="badge partial">partial</span><span class="badge unverified">legacy routing unverified</span></td>
+              <td>Road, city, transport, reachability streams</td>
+            </tr>
+            <tr>
+              <td>Population travel opportunity</td>
+              <td>OSRM public demo + OSM; time-decayed potential population, not trips</td>
+              <td><a href="../data/processed/domain/human/accessibility/population_travel_time/manifest.json"><code>data/processed/.../population_travel_time_h3_r7.parquet</code></a><br><code>data/raw/.../population_travel_demand_h3_r7.parquet</code></td>
+              <td>H3 R7 60/120/240-minute decay; 120-minute baseline</td>
+              <td><span class="badge partial">partial</span><span class="badge unverified">legacy routing unverified</span></td>
+              <td>Population and land-reachability streams</td>
+            </tr>
+            <tr>
+              <td>WA public access lines</td>
+              <td>Washington State Department of Ecology</td>
+              <td><code>data/raw/human/accessibility/public_shore_access/wa_public_access_lines.parquet</code></td>
+              <td>Observed line evidence</td>
+              <td><span class="badge partial">partial inventory</span></td>
+              <td>Public-shore source table</td>
+            </tr>
+            <tr>
+              <td>WA public access points</td>
+              <td>Washington State Department of Ecology</td>
+              <td><code>data/raw/human/accessibility/public_shore_access/wa_public_access_points.parquet</code></td>
+              <td>Observed facility evidence</td>
+              <td><span class="badge partial">partial inventory</span></td>
+              <td>Public-shore source table</td>
+            </tr>
+            <tr>
+              <td>WA marine shoreline</td>
+              <td>Washington State Department of Ecology</td>
+              <td><code>data/raw/human/accessibility/public_shore_access/wa_marine_shoreline.parquet</code></td>
+              <td>Shoreline denominator / connection support</td>
+              <td><span class="badge partial">jurisdiction-specific</span></td>
+              <td>Public-shore source table</td>
+            </tr>
+            <tr>
+              <td>BC recreation sites</td>
+              <td>Recreation Sites and Trails BC via DataBC; OGL-BC</td>
+              <td><code>data/raw/human/accessibility/public_shore_access/bc_recreation_sites.parquet</code></td>
+              <td>Candidate access facilities</td>
+              <td><span class="badge partial">candidate, not automatically verified</span></td>
+              <td>Public-shore source table</td>
+            </tr>
+            <tr>
+              <td>BC ShoreZone lines</td>
+              <td>Province of British Columbia via DataBC; OGL-BC</td>
+              <td><code>data/raw/human/accessibility/public_shore_access/bc_shorezone_lines.parquet</code></td>
+              <td>Shoreline context</td>
+              <td><span class="badge partial">no complete authoritative numerator</span></td>
+              <td>Public-shore source table</td>
+            </tr>
+            <tr>
+              <td>OSM shore access</td>
+              <td>OpenStreetMap contributors via Overpass; ODbL 1.0</td>
+              <td><code>data/raw/human/accessibility/public_shore_access/osm_shore_access.parquet</code></td>
+              <td>Explicit public / candidate / restricted / conditional tags</td>
+              <td><span class="badge partial">mapped evidence only</span></td>
+              <td>Public-shore source table</td>
+            </tr>
+            <tr>
+              <td>Processed public-shore access</td>
+              <td>Normalized six-source join</td>
+              <td><a href="../data/processed/domain/human/accessibility/public_shore_access/manifest.json"><code>data/processed/.../public_shore_access_h3_r7.parquet</code></a></td>
+              <td>3,367 H3 R7 cells; verified/mapped/unknown evidence states</td>
+              <td><span class="badge partial">partial; missing is not zero</span></td>
+              <td>Mapped and verified land composites</td>
+            </tr>
+            <tr>
+              <td>NOAA HRRR surface weather</td>
+              <td>NOAA/NCEP surface analysis + one-hour precipitation forecast</td>
+              <td><a href="../data/processed/domain/environmental_layer/meteorological/surface_weather/MANIFEST.json"><code>data/processed/.../surface_weather/H3_SURFACE_WEATHER_DAILY_RES_5</code></a></td>
+              <td>Daily H3 R5 visibility, 10 m wind, precipitation, coverage/QC; 2020-01-01–2026-08-25</td>
+              <td><span class="badge complete">manifest complete</span><span class="badge partial">6 required source parents absent</span></td>
+              <td>Land dynamic physical and human streams</td>
+            </tr>
+            <tr>
+              <td>Daylight</td>
+              <td>Deterministic OrcaCast solar-position approximation</td>
+              <td><a href="../data/processed/domain/environmental_layer/meteorological/daylight/MANIFEST.json"><code>data/processed/.../daylight/H3_DAYLIGHT_DAILY_RES_4</code></a></td>
+              <td>Daily H3 R4 daylight fraction; 2020-01-01–2026-12-31</td>
+              <td><span class="badge deterministic">deterministic</span></td>
+              <td>Land dynamic streams; missing parents get manifested supplement</td>
+            </tr>
+            <tr>
+              <td>Regional calendar</td>
+              <td><code>python-holidays</code> snapshot; MIT</td>
+              <td><a href="../data/processed/domain/human/temporal_context/calendar/manifest.json"><code>data/processed/.../calendar/calendar_daily.parquet</code></a></td>
+              <td>Daily human-availability multiplier; 2020-01-01–2030-12-31</td>
+              <td><span class="badge complete">complete snapshot</span></td>
+              <td>Land human streams only</td>
+            </tr>
+            <tr>
+              <td>Land input inventory + manifests</td>
+              <td>OrcaCast checksums and provenance contracts</td>
+              <td><code>data/raw/human/activity_and_effort/land_reporting_opportunity/input_inventory.json</code><br><code>data/raw/human/activity_and_effort/land_reporting_opportunity/manifest.json</code></td>
+              <td>Configuration identity and source-artifact checksums</td>
+              <td><span class="badge partial">declared partial research inputs</span></td>
+              <td>Land build gate</td>
+            </tr>
+
+            <tr class="group-row"><td colspan="6">Water observation-opportunity inputs</td></tr>
+            <tr>
+              <td>Water static viewshed weights</td>
+              <td>Shared viewshed lane</td>
+              <td><a href="../data/processed/domain/human/viewshed/RES7/WATER_STATIC_WEIGHTS_R7_metadata.json"><code>data/processed/domain/human/viewshed/RES7/WATER_STATIC_WEIGHTS_R7.parquet</code></a></td>
+              <td>3,208,581 unique H3 R7 source→target pairs</td>
+              <td><span class="badge complete">validated static artifact</span></td>
+              <td>R6 water kernel</td>
+            </tr>
+            <tr>
+              <td>Legacy AIS 2020</td>
+              <td>Legacy OrcaCast AIS archive</td>
+              <td><code>data/processed/domain/human_layer/ais/PROCESSED_SIGHTINGS_2020.parquet</code></td>
+              <td>AIS observations for 2020</td>
+              <td><span class="badge partial">partial</span><span class="badge unverified">license unresolved</span></td>
+              <td>AIS daily/weekly activity features</td>
+            </tr>
+            <tr>
+              <td>Legacy AIS 2021</td>
+              <td>Legacy OrcaCast AIS archive</td>
+              <td><code>data/processed/domain/human_layer/ais/PROCESSED_SIGHTINGS_2021.parquet</code></td>
+              <td>AIS observations for 2021</td>
+              <td><span class="badge partial">partial</span><span class="badge unverified">license unresolved</span></td>
+              <td>AIS daily/weekly activity features</td>
+            </tr>
+            <tr>
+              <td>Legacy AIS 2022</td>
+              <td>Legacy OrcaCast AIS archive</td>
+              <td><code>data/processed/domain/human_layer/ais/PROCESSED_SIGHTINGS_2022.parquet</code></td>
+              <td>AIS observations for 2022</td>
+              <td><span class="badge partial">partial</span><span class="badge unverified">license unresolved</span></td>
+              <td>AIS daily/weekly activity features</td>
+            </tr>
+            <tr>
+              <td>Legacy AIS 2023</td>
+              <td>Legacy OrcaCast AIS archive</td>
+              <td><code>data/processed/domain/human_layer/ais/PROCESSED_SIGHTINGS_2023.parquet</code></td>
+              <td>AIS observations for 2023</td>
+              <td><span class="badge partial">partial</span><span class="badge unverified">license unresolved</span></td>
+              <td>AIS daily/weekly activity features</td>
+            </tr>
+            <tr>
+              <td>Legacy AIS 2024</td>
+              <td>Legacy OrcaCast AIS archive</td>
+              <td><code>data/processed/domain/human_layer/ais/PROCESSED_SIGHTINGS_2024.parquet</code></td>
+              <td>AIS observations for 2024</td>
+              <td><span class="badge partial">partial</span><span class="badge unverified">license unresolved</span></td>
+              <td>AIS daily/weekly activity features</td>
+            </tr>
+            <tr>
+              <td>Processed daily AIS activity</td>
+              <td>Derived unique MMSI-hour proxies by vessel class</td>
+              <td><a href="../data/processed/domain/human/activity_and_effort/ais/manifest.json"><code>data/processed/.../ais/ais_activity_daily_r6.parquet</code></a></td>
+              <td>13,370,404 date × H3 R6 rows; class-specific unique-vessel-hour proxies; 2020–2024</td>
+              <td><span class="badge partial">receiver/jurisdiction coverage incomplete</span></td>
+              <td>Class-specific water propagation</td>
+            </tr>
+            <tr>
+              <td>Ferry rider and platform activity</td>
+              <td>WSF observed ridership/history + BC Ferries estimated ridership + route geometry</td>
+              <td><a href="../data/processed/domain/human/activity_and_effort/ferry/manifest.json"><code>data/processed/.../ferry/manifest.json</code></a></td>
+              <td>149,286 native H3 R7 source-day rows in immutable generation <code>20260902T112356Z_8ad8c65a</code></td>
+              <td><span class="badge partial">partial routes and vessel history</span></td>
+              <td>Native-R7 ferry propagation; never merged into passenger AIS</td>
+            </tr>
+            <tr>
+              <td>Surface viewing conditions</td>
+              <td>NOAA/NCEP surface analysis and deterministic solar geometry</td>
+              <td><code>data/processed/.../surface_weather/H3_SURFACE_WEATHER_DAILY_RES_5</code><br><code>data/processed/.../daylight/H3_DAYLIGHT_DAILY_RES_4</code></td>
+              <td>Visibility, wind, precipitation, daylight, and coverage/QC</td>
+              <td><span class="badge complete">weather complete</span><span class="badge deterministic">daylight deterministic</span></td>
+              <td>Distance-aware daily condition support</td>
+            </tr>
+            <tr>
+              <td>Canonical positive sightings</td>
+              <td>Immutable OrcaCast sightings release</td>
+              <td><code>data/processed/domain/whale_layer/sightings/releases/latest.json</code></td>
+              <td>135,618 checksum-bound observed positives in release <code>f9a656…</code></td>
+              <td><span class="badge partial">validation only; public eligibility is a stratum</span></td>
+              <td>Per-sighting contradiction diagnostics; never construction or scaling</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="artifacts" aria-labelledby="artifacts-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow" style="color: var(--teal)">Durable outputs</p>
+          <h2 id="artifacts-title">Artifacts and current coverage</h2>
+        </div>
+        <p>Counts and dates below are from the checked-in manifests and metadata at verification time.</p>
+      </div>
+
+      <div class="artifact-grid">
+        <article class="artifact-card">
+          <h3>Land static viewshed</h3>
+          <p><code>LAND_STATIC_WEIGHTS_R7.parquet</code></p>
+          <dl>
+            <dt>Rows</dt><dd>2,081,219</dd>
+            <dt>Grain</dt><dd>unique source H3 R7 × target H3 R7</dd>
+            <dt>Hash</dt><dd>scientific config <code>77f2f9c6e4f67951</code></dd>
+            <dt>Status</dt><dd>validated static artifact</dd>
+          </dl>
+        </article>
+        <article class="artifact-card">
+          <h3>Water static viewshed</h3>
+          <p><code>WATER_STATIC_WEIGHTS_R7.parquet</code></p>
+          <dl>
+            <dt>Rows</dt><dd>3,208,581</dd>
+            <dt>Grain</dt><dd>unique source H3 R7 × target H3 R7</dd>
+            <dt>Observer</dt><dd>small craft, 2.5 m eye height</dd>
+            <dt>Status</dt><dd>validated static artifact</dd>
+          </dl>
+        </article>
+        <article class="artifact-card">
+          <h3>Active land generation</h3>
+          <p><code>20260902T114458Z_e134a751</code></p>
+          <dl>
+            <dt>Source R7</dt><dd>5,915 rows</dd>
+            <dt>Target R7</dt><dd>8,026 rows</dd>
+            <dt>Daily R6</dt><dd>3,490,473 rows · 2020-01-01–2026-08-25</dd>
+            <dt>Weekly R6</dt><dd>500,076 rows · 1,437 target cells</dd>
+          </dl>
+        </article>
+        <article class="artifact-card">
+          <h3>Schema-v2 water generation</h3>
+          <p><code>20260902T120244Z_d10a3376</code></p>
+          <dl>
+            <dt>Source daily / weekly</dt><dd>2,300,193 / 329,858 rows</dd>
+            <dt>Target daily / weekly</dt><dd>2,621,745 / 375,970 rows</dd>
+            <dt>Validation</dt><dd>135,618 sightings · 89 WA/BC matches</dd>
+            <dt>Status</dt><dd>research-only · model-ineligible · no primary composite</dd>
+          </dl>
+        </article>
+      </div>
+
+      <div class="callout">
+        <strong>Generated HTML maps are diagnostic outputs, not feature tables.</strong>
+        The viewshed map export writes aggregate and selected-location HTML under
+        <code>outputs/effort/viewshed/h3r7/static/</code>. Modeling consumers should read the
+        manifested Parquet products, never scrape those maps.
+      </div>
+    </section>
+
+    <section id="modeling" aria-labelledby="modeling-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow" style="color: var(--teal)">Feature tables</p>
+          <h2 id="modeling-title">What is model-ready today</h2>
+        </div>
+        <p>The repository has feature tables and adapters, but “available” is not the same as “promoted.”</p>
+      </div>
+
+      <div class="status-grid">
+        <article class="status-card">
+          <strong>Land: explicit modeling adapter exists</strong>
+          <p>
+            The active weekly generation feeds <code>modeling.py</code>, which validates the manifest,
+            builds a fixed-support panel, and exposes lagged feature blocks. Only raw opportunity and
+            coverage values are eligible; q99 indices remain for inspection.
+          </p>
+        </article>
+        <article class="status-card">
+          <strong>Water: component tables exist; no model adapter</strong>
+          <p>
+            Daily and weekly tables expose independent AIS classes, ferry rider/platform opportunity,
+            viewing conditions, controlled states, and lineage. Every feature is cataloged as research-only
+            and model-ineligible. The ecological estimator was not changed.
+          </p>
+        </article>
+        <article class="status-card">
+          <strong>Current land feature blocks</strong>
+          <p>
+            <code>baseline</code>, <code>coverage</code>, <code>composite</code>,
+            <code>components</code>, and <code>combined</code>, built from previous-week,
+            rolling-4-prior, and rolling-13-prior values plus availability counts.
+          </p>
+        </article>
+        <article class="status-card">
+          <strong>Promotion remains blocked</strong>
+          <p>
+            Evaluation is mixed; six HRRR source-parent cells are absent; sightings coverage does not
+            support regional non-report calibration; and production champion integration plus prospective
+            shadow monitoring remain open gates.
+          </p>
+        </article>
+      </div>
+
+      <div class="callout">
+        <strong>Knowledge-time warning:</strong> static access, population, routing, and shore evidence are
+        contemporary context applied retrospectively. They support research comparisons, not strict historical
+        operational replay before those inputs existed.
+      </div>
+    </section>
+
+    <section id="references" aria-labelledby="references-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow" style="color: var(--teal)">Implementation map</p>
+          <h2 id="references-title">Configuration, producers, and consumers</h2>
+        </div>
+        <p>Use these entry points when changing a formula, source, artifact contract, or model feature.</p>
+      </div>
+
+      <details open>
+        <summary>Viewshed orchestration and scientific weights</summary>
+        <div class="detail-body">
+          <ul>
+            <li><a href="../config/modeling/effort/viewshed.yaml"><code>config/modeling/effort/viewshed.yaml</code></a> — canonical scientific and path configuration.</li>
+            <li><a href="../src/orcacast/domains/human/viewshed/api/pipeline.py"><code>src/orcacast/domains/human/viewshed/api/pipeline.py</code></a> — ordered nine-stage workflow and cleanup.</li>
+            <li><a href="../src/orcacast/domains/human/viewshed/api/stages.py"><code>src/orcacast/domains/human/viewshed/api/stages.py</code></a> — typed stage adapters.</li>
+            <li><a href="../src/orcacast/domains/human/viewshed/weights/canopy_visibility.py"><code>src/orcacast/domains/human/viewshed/weights/canopy_visibility.py</code></a> — conditional canopy LOS ratio and static formula.</li>
+            <li><a href="../src/orcacast/domains/human/viewshed/finalize/final_artifacts.py"><code>src/orcacast/domains/human/viewshed/finalize/final_artifacts.py</code></a> — durable artifacts, sidecars, and cleanup gate.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details open>
+        <summary>Land reporting opportunity and modeling</summary>
+        <div class="detail-body">
+          <ul>
+            <li><a href="../config/data/human/activity_and_effort/land_reporting_opportunity.yaml"><code>config/data/human/activity_and_effort/land_reporting_opportunity.yaml</code></a> — direct inputs and output contract.</li>
+            <li><a href="../src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/build.py"><code>src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/build.py</code></a> — source components, target aggregation, and generation publication.</li>
+            <li><a href="../src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/dynamic.py"><code>src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/dynamic.py</code></a> — dynamic basis, formulas, daily/weekly outputs, and status semantics.</li>
+            <li><a href="../src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/generations.py"><code>src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/generations.py</code></a> — immutable generation validation and atomic selector.</li>
+            <li><a href="../src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/modeling.py"><code>src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/modeling.py</code></a> — feature-table validation, fixed support, lags, blocks, and shadow routing.</li>
+            <li><a href="architecture/land_effort_modeling.md"><code>docs/architecture/land_effort_modeling.md</code></a> — model contract, evaluation, operational gates, and handoff evidence.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details open>
+        <summary>Water observation opportunity and validation</summary>
+        <div class="detail-body">
+          <ul>
+            <li><a href="../config/data/human/activity_and_effort/water_observation_opportunity.yaml"><code>config/data/human/activity_and_effort/water_observation_opportunity.yaml</code></a> — schema-v2 component, causal-role, diagnostic, and output contract.</li>
+            <li><a href="../src/orcacast/domains/human/activity_and_effort/observation_opportunity_contract.py"><code>src/orcacast/domains/human/activity_and_effort/observation_opportunity_contract.py</code></a> — controlled states, lineage, and static-pair Arrow contract.</li>
+            <li><a href="../src/orcacast/domains/human/activity_and_effort/water_observation_opportunity/build.py"><code>water_observation_opportunity/build.py</code></a> — daily/weekly source and target generation.</li>
+            <li><a href="../src/orcacast/domains/human/activity_and_effort/water_observation_opportunity/pipeline.py"><code>water_observation_opportunity/pipeline.py</code></a> — distance-aware conditions, R6 AIS and native-R7 ferry propagation, aggregation, and missingness.</li>
+            <li><a href="../src/orcacast/domains/human/activity_and_effort/water_observation_opportunity/diagnostics.py"><code>water_observation_opportunity/diagnostics.py</code></a> — checksum-bound sightings and WA/BC matching diagnostics.</li>
+            <li><a href="architecture/observation_opportunity.md"><code>docs/architecture/observation_opportunity.md</code></a> — complete contract, formulas, inputs, artifacts, and open research work.</li>
+            <li><a href="../config/data/human/activity_and_effort/observer_effort.yaml"><code>observer_effort.yaml</code></a> — deprecated passenger-plus-recreational AIS compatibility/sensitivity product.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>
+        Repository documentation · source of truth remains the linked configuration, manifests,
+        sidecars, and producer code. Reverify artifact counts and freshness after any rebuild.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

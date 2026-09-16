@@ -1,0 +1,237 @@
+HUMAN DOMAIN ROADMAP
+====================
+
+Shared Contracts
+----------------
+
+[ ] Require authoritative WA/BC and cross-border source provenance, licensing,
+    attribution, temporal coverage, spatial coverage, and completeness before
+    promoting any planned family from placeholder to production.
+
+[ ] Implement every planned family with download.py, build.py, inspect.py,
+    config.py, DATA_SOURCES.md, fixture tests, manifests, and feature-catalog
+    entries; never replace unknown source coverage with zero.
+
+[ ] Review model eligibility and temporal leakage for every new predictor.
+    Coverage, provenance, QC, support, and reporting-adoption fields remain
+    metadata even when numerically encoded.
+
+Demography and Presence
+-----------------------
+
+Seasonal Population Pressure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Path: `demography_and_presence/seasonal_population_pressure/`
+
+[ ] Identify defensible seasonal-resident, visitor, and urban-demand sources;
+    keep census population observed and seasonal pressure estimated.
+
+[ ] Define temporal grain, cross-border harmonization, uncertainty, and a
+    travel/access mechanism before projecting pressure onto marine cells.
+
+Activity and Effort
+-------------------
+
+Water Observation Opportunity
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Path: `activity_and_effort/water_observation_opportunity/`
+
+[x] Publish schema-v2 daily and weekly H3 R6 source and target component tables
+    with controlled missingness states, row lineage, immutable generations, and
+    research-only catalog registration.
+
+[x] Keep AIS all-vessel, passenger, recreational, commercial, and fishing
+    activity separate; propagate ferry rider/platform measures from native R7;
+    retain the passenger-plus-recreational artifact as compatibility/sensitivity
+    only and define no canonical primary water composite.
+
+[x] Add distance-aware atmospheric visibility plus separate daylight, wind,
+    precipitation, unavailable sea-state, and unavailable reporting-capture
+    fields without changing the physical viewshed algorithm.
+
+[x] Audit all checksum-bound canonical positive sightings and add WA/BC
+    15/30/50 km matching diagnostics without fitting, scaling, or correcting a
+    proxy from whale outcomes.
+
+[ ] Replace partial legacy AIS with authoritative raw positions; complete BC
+    shore access and ferry histories; acquire independent whale-watch and direct
+    observer effort; reconstruct sea state; then evaluate before promotion.
+
+Direct Observer Effort - Highest Priority
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Path: `activity_and_effort/observer_effort/`
+
+[ ] Acquire direct survey and encounter tracks with platform hours, track
+    kilometres, surveyed cells, provider/source availability, and detection
+    coverage.
+
+[ ] Preserve platform effort separately from reporting adoption and sightings;
+    prohibit outcome-derived effort covariates in held-out evaluation periods.
+
+Fishing Activity
+~~~~~~~~~~~~~~~~
+
+Path: `activity_and_effort/fishing_activity/`
+
+[ ] Identify operational fishing-vessel and fishing-effort sources for WA/BC;
+    fishing regulations and closures are outside this repository's scope.
+
+[ ] Define observed activity, inferred fishing state, temporal aggregation,
+    gear/class uncertainty, coverage, and unavailable-source semantics.
+
+AIS Production Gaps
+~~~~~~~~~~~~~~~~~~~
+
+[ ] Replace the unresolved legacy snapshot provenance with an authoritative
+    raw-position acquisition contract and documented redistribution license.
+
+[ ] Add track-derived vessel kilometres, exact duration, transit state, and
+    class/size evidence only after raw-position coverage is validated.
+
+Ferry Production Gaps
+~~~~~~~~~~~~~~~~~~~~~
+
+[ ] Complete relevant BC route mappings and duration assumptions, backfill WSF
+    vessel history, and decide/backfill BC ridership coverage.
+
+[ ] Run the strict build without partial-route allowances and revalidate route,
+    rider-minute, vessel-minute, vessel-kilometre, and H3 conservation.
+
+Accessibility
+-------------
+
+Public Shore Access
+~~~~~~~~~~~~~~~~~~~
+
+Path: `accessibility/public_shore_access/`
+
+[x] Add official B.C. recreation-site point evidence and ShoreZone coastal
+    connectivity/denominator evidence while keeping the collection partial.
+
+[ ] Adopt a complete authoritative B.C. public shoreline-access boundary
+    inventory. Until then, keep B.C. waterfront fractions null and the
+    collection research-only.
+
+[ ] Refresh OSM after the current public-mirror outage, adopt B.C. authoritative
+    coverage, resolve or quantify the 188 Washington numerator/denominator
+    mismatch cells, and establish completeness rules before model eligibility.
+
+Land Transport Access
+~~~~~~~~~~~~~~~~~~~~~
+
+Path: `accessibility/land_transport_access/`
+
+[x] Package the checksum-pinned notebook road and city-routing snapshot as a
+    manifest-validated research component.
+
+[ ] Rebuild against a versioned routing graph and actual parking/trail/access
+    destinations with public/private, ferry, closure, and seasonal states.
+
+Boat Launch Access
+~~~~~~~~~~~~~~~~~~
+
+Path: `accessibility/boat_launch_access/`
+
+[ ] Acquire current authoritative B.C. public status, ramp capability, seasonal
+    operation, and completeness evidence; the circa-2004 inventory and OSM
+    supplement do not satisfy production completeness.
+
+[ ] Refresh OSM after the current public-mirror outage, deduplicate overlapping
+    agency/OSM records without erasing provenance, and complete model eligibility
+    and leakage review.
+
+Population Travel Time
+~~~~~~~~~~~~~~~~~~~~~~
+
+Path: `accessibility/population_travel_time/`
+
+[x] Package the checksum-pinned population travel-demand snapshot and its
+    60/120/240-minute sensitivity components.
+
+[ ] Define a reproducible multimodal travel-time graph from population origins
+    to verified public shore and launch destinations before model promotion.
+
+Land Reporting Opportunity
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Path: `activity_and_effort/land_reporting_opportunity/`
+
+[x] Publish manifest-validated source- and target-level transport/travel
+    components and separate verified/mapped-public access support streams.
+
+[x] Build daily and weekly R6 physical, population-travel, road, city,
+    transport, reachability, mapped-access composite, and verified-access
+    lower-bound streams with explicit missingness and fixed-reference scaling.
+
+[x] Route completed prior-week composite and standalone component indices into
+    the weekly footprint research model with a versioned, leakage-safe cache
+    contract; keep coverage/QC fields out of the predictor allowlist.
+
+[ ] Calibrate component response curves, evaluate composite ablations on
+    spatial and temporal holdouts, version the routing graph and ferry
+    semantics, audit access completeness, and promote only after stability,
+    leakage, and coverage gates pass.
+
+Tourism and Recreation
+----------------------
+
+Park Visitation
+~~~~~~~~~~~~~~~
+
+Path: `tourism_and_recreation/park_visitation/`
+
+[ ] Acquire observed visitation counts with facility, temporal, closure, and
+    missing-report coverage; do not substitute a place score for visitation.
+
+Whale-Watch Activity
+~~~~~~~~~~~~~~~~~~~~
+
+Path: `tourism_and_recreation/whale_watch_activity/`
+
+[ ] Identify operator, departure, route, and seasonal effort sources while
+    preventing sighting outcomes from leaking into effort features.
+
+Recreational Boating
+~~~~~~~~~~~~~~~~~~~~
+
+Path: `tourism_and_recreation/recreational_boating/`
+
+[ ] Build observed activity where available and a separately labeled seasonal
+    climatology elsewhere; retain AIS and non-AIS coverage differences.
+
+Tourism Pressure
+~~~~~~~~~~~~~~~~
+
+Path: `tourism_and_recreation/tourism_pressure/`
+
+[ ] Identify lodging, visitor, and destination-demand sources; keep empirical
+    counts separate from modeled tourism intensity and uncertainty.
+
+Exposure
+--------
+
+Vessel Acoustic Exposure
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Path: `exposure/vessel_acoustic_exposure/`
+
+[ ] Define vessel-source-level, propagation, ambient-noise, and hydrophone
+    validation contracts before producing acoustic exposure features.
+
+[ ] Do not infer acoustic exposure directly from aggregate AIS counts or merge
+    it into an opaque disturbance index.
+
+Ownership Boundaries
+--------------------
+
+[ ] Keep ports, marinas, piers, ferry terminals, and overwater structures in
+    the seascape anthropogenic family rather than duplicating them here.
+
+[ ] Keep regulations, closures, shipping rules, and vessel-management zones outside
+    this repository; this domain owns operational human activity and effort.
+
+[x] The 2026-09-16 package extraction includes the remaining legacy viewshed code.
+    Preserve its independent artifact lifecycle; toolkit-viewshed equivalence is unverified.

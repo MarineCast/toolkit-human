@@ -1,0 +1,5 @@
+# Mapped-site physical reference for the access-conditioned land data product.
+# Shares the regional geometry and physical parameters with the core viewshed.
+extends: viewshed.yaml
+viewshed:
+  surface_model: canopy

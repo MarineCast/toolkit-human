@@ -1,0 +1,2180 @@
+[
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/components.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/components.py",
+    "sha256_before": "ae3d7c31fbcde39ca830b319cfbaf186d876144ff16a6346826512e40ebc6f75",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/accessibility/boat_launch_access.yaml",
+    "destination": "config/data/human/accessibility/boat_launch_access.yaml",
+    "sha256_before": "399037efb7bb1d0de9ee6867dde31ce50cf0e13cbb952ec39d8b73cae48c7d94",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/accessibility/land_transport_access.yaml",
+    "destination": "config/data/human/accessibility/land_transport_access.yaml",
+    "sha256_before": "78b1499db09a31082a47c34284e62434b423a50ef9432e9fc2f0d4bec3f3e2d6",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/accessibility/land_transport_access_road_only.yaml",
+    "destination": "config/data/human/accessibility/land_transport_access_road_only.yaml",
+    "sha256_before": "71334134e77d2fd3bd625bba554fb331a691baad6c8c4df88b6d6445da4478d7",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/accessibility/population_travel_time.yaml",
+    "destination": "config/data/human/accessibility/population_travel_time.yaml",
+    "sha256_before": "adc818afaa93a5661926eb75534084a5c9a16ac8f61abaeaf74994099e618269",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/accessibility/population_travel_time_road_only.yaml",
+    "destination": "config/data/human/accessibility/population_travel_time_road_only.yaml",
+    "sha256_before": "1831f7de7a3840cddfb1d395f2d99c4e7b56c9d468ddb347e36e757510168f52",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/accessibility/population_travel_time_road_only_240.yaml",
+    "destination": "config/data/human/accessibility/population_travel_time_road_only_240.yaml",
+    "sha256_before": "0c9db8ed0926454c3944525a08bd9b1e5d20585099f8ecf3f0f6f5adce247a59",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/accessibility/population_travel_time_road_only_60.yaml",
+    "destination": "config/data/human/accessibility/population_travel_time_road_only_60.yaml",
+    "sha256_before": "01ae85e4af30912db8180e123462a9067015c93db9b2e38c58c8940d2169e1af",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/accessibility/public_shore_access.yaml",
+    "destination": "config/data/human/accessibility/public_shore_access.yaml",
+    "sha256_before": "87d693b03203ee445a4163f5a3aa803e02552474ebbd75fbb713d767e3d5f0cf",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/activity_and_effort/ais.yaml",
+    "destination": "config/data/human/activity_and_effort/ais.yaml",
+    "sha256_before": "c0e05fba391f77778a0563de2e4bb4eba119cf50f45739e1275471c317a3f886",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/activity_and_effort/ferry.yaml",
+    "destination": "config/data/human/activity_and_effort/ferry.yaml",
+    "sha256_before": "b52b4a57a6cc624257b8106f79e8cdd58bbef791a5cf3e3ead781dc7f20f6568",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/activity_and_effort/land_reporting_opportunity.yaml",
+    "destination": "config/data/human/activity_and_effort/land_reporting_opportunity.yaml",
+    "sha256_before": "f73be3d984f84c9ea88f6c9ffc609a7018c63a287790c7dce5238b63a527a1be",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/activity_and_effort/land_reporting_opportunity_road_only.yaml",
+    "destination": "config/data/human/activity_and_effort/land_reporting_opportunity_road_only.yaml",
+    "sha256_before": "8b33f6450eda728fe0b13e6ca802a5cbf5c693a11082c3724d7d756a107f3fc1",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/activity_and_effort/land_reporting_opportunity_road_only_240.yaml",
+    "destination": "config/data/human/activity_and_effort/land_reporting_opportunity_road_only_240.yaml",
+    "sha256_before": "f36155e107254b0b826fc643965dabb238044a40742c8c99e217355514308b98",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/activity_and_effort/land_reporting_opportunity_road_only_60.yaml",
+    "destination": "config/data/human/activity_and_effort/land_reporting_opportunity_road_only_60.yaml",
+    "sha256_before": "ca964d9a1444da09d01669fd4fe31e6b371d6b297f088c29f4e4a18f03aebcb3",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/activity_and_effort/observer_effort.yaml",
+    "destination": "config/data/human/activity_and_effort/observer_effort.yaml",
+    "sha256_before": "2e111c5078c59c63b94d965d4059dffb5c478d4eb2662a30ac8d7928378dffd5",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/activity_and_effort/water_observation_opportunity.yaml",
+    "destination": "config/data/human/activity_and_effort/water_observation_opportunity.yaml",
+    "sha256_before": "44b22807bc3937256d1bbd559573b43b25c7a317a6782d4fb2d309e5bd6e3e75",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/demography_and_presence/places.yaml",
+    "destination": "config/data/human/demography_and_presence/places.yaml",
+    "sha256_before": "6e9b1dbb3405fb275c33a84ec48461b8b988101950e79d196aa2696924a58358",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/demography_and_presence/population.yaml",
+    "destination": "config/data/human/demography_and_presence/population.yaml",
+    "sha256_before": "7a84a9e68212d982dc15fa7474f6ebaf9d318ba179f259b79dc4283e80289647",
+    "remove_source": true
+  },
+  {
+    "source": "config/data/human/temporal_context/calendar.yaml",
+    "destination": "config/data/human/temporal_context/calendar.yaml",
+    "sha256_before": "31215b5de08454ee6f8e0a27eff520e4564d5d4b4f715a94d01b3fbca903a7f6",
+    "remove_source": true
+  },
+  {
+    "source": "config/modeling/effort/viewshed.yaml",
+    "destination": "config/modeling/effort/viewshed.yaml",
+    "sha256_before": "d683f71adf8d6f0189398ec8c5c35778a672b00d73f37ba8c603490973bec229",
+    "remove_source": true
+  },
+  {
+    "source": "notebooks/data/ferry_ridership.ipynb",
+    "destination": "notebooks/data/ferry_ridership.ipynb",
+    "sha256_before": "d36c868292f53d05fdda163d8b913511fd10755926dfd4c4b8f8118898991cec",
+    "remove_source": true
+  },
+  {
+    "source": "notebooks/data/ferry_utils/build_ferry_daily_source_weights.py",
+    "destination": "notebooks/data/ferry_utils/build_ferry_daily_source_weights.py",
+    "sha256_before": "cc2fdd4aaf83529bf824282caa0b3a8970e278eb38a7f564f0c1a2c72cd9477a",
+    "remove_source": true
+  },
+  {
+    "source": "notebooks/exploration/02_AIS.ipynb",
+    "destination": "notebooks/exploration/02_AIS.ipynb",
+    "sha256_before": "04e0ea36ce5b96a187509341f1b123c16a89a6f3bb5aae681c97c4fe0984541f",
+    "remove_source": true
+  },
+  {
+    "source": "scripts/update_human_feature_catalog.py",
+    "destination": "scripts/update_human_feature_catalog.py",
+    "sha256_before": "a464229694f0514aabfc6df324b38ede483c79291245fbe3fb06098b097d701f",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/README.md",
+    "destination": "src/human/README.md",
+    "sha256_before": "b850c60b30c17387fb72935ea3a1b2f65b82137931669837b6e50b879684d950",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/TODO.txt",
+    "destination": "src/human/TODO.txt",
+    "sha256_before": "eee1cb214112609fec0f8741dfe5a9e54127a136af15d82f80bbaeecda63b00a",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/__init__.py",
+    "destination": "src/human/__init__.py",
+    "sha256_before": "decb8dc8ddb6b139d07defa5cd253308c1168b01a58c3d4cc17206c358296f53",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/__init__.py",
+    "destination": "src/human/accessibility/__init__.py",
+    "sha256_before": "9539cbb02871b6e4ac9c0487769657bb394cd10a2ce54abfcd0d6b4eeb2b5754",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/boat_launch_access/DATA_SOURCES.md",
+    "destination": "src/human/accessibility/boat_launch_access/DATA_SOURCES.md",
+    "sha256_before": "2e8d4c2c01069912886bb2fb463fb14006e5a49485b793005579933836a66c6c",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/boat_launch_access/__init__.py",
+    "destination": "src/human/accessibility/boat_launch_access/__init__.py",
+    "sha256_before": "9e8703653605972004eafde07643758c303334b8acd9cc6a529decd4e0f386fc",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/boat_launch_access/build.py",
+    "destination": "src/human/accessibility/boat_launch_access/build.py",
+    "sha256_before": "adae5965a0171f596e2022a78c3dd8a8677b43495df9679e81154d43c2633aac",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/boat_launch_access/config.py",
+    "destination": "src/human/accessibility/boat_launch_access/config.py",
+    "sha256_before": "6e53aa125203462677460b53ffb70f00f4aea77b03bd9e0118ff4f60ec5dfdf9",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/boat_launch_access/download.py",
+    "destination": "src/human/accessibility/boat_launch_access/download.py",
+    "sha256_before": "3fd6a5d20bce6d335b0ff3c93869db4a888af34c3c533c65271294756c511010",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/boat_launch_access/inspect.py",
+    "destination": "src/human/accessibility/boat_launch_access/inspect.py",
+    "sha256_before": "3c134d653b082696081eb0bb633e4d30a5567aa74a4b3ef584a80826341b74a3",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/land_transport_access/DATA_SOURCES.md",
+    "destination": "src/human/accessibility/land_transport_access/DATA_SOURCES.md",
+    "sha256_before": "da48f3266d22f9588a287df53e79bc6074f08bfb0830ea9d7d9e514535b7643a",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/land_transport_access/__init__.py",
+    "destination": "src/human/accessibility/land_transport_access/__init__.py",
+    "sha256_before": "b36ce3a8df64b35e59fcc5fd37042da9e535b14d6af916e5a427e83f22bcbeec",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/land_transport_access/build.py",
+    "destination": "src/human/accessibility/land_transport_access/build.py",
+    "sha256_before": "40c9c47e41b506273f81c9f45ed0bf526e9c5d930f126f3d2a9daaac980f20ae",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/land_transport_access/config.py",
+    "destination": "src/human/accessibility/land_transport_access/config.py",
+    "sha256_before": "1326b9d8f987a4fcead38e4cb205de00a77c8fbeacc1d911406102d5c4b19fc8",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/land_transport_access/context_snapshot.py",
+    "destination": "src/human/accessibility/land_transport_access/context_snapshot.py",
+    "sha256_before": "6dfb3006148b9598153e68deb9210fc220cfc60281996c6be5ac56a7fb02e446",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/land_transport_access/download.py",
+    "destination": "src/human/accessibility/land_transport_access/download.py",
+    "sha256_before": "c5194e7a2129536b0377218038e258dd62e8995abe10c9196748c310873fa908",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/land_transport_access/inspect.py",
+    "destination": "src/human/accessibility/land_transport_access/inspect.py",
+    "sha256_before": "e773d8808a007bf4c56a5ddbb19df80a9a174e76cdfa9ad8b8d9bcbbdfcd307c",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/land_transport_access/road_only.lua",
+    "destination": "src/human/accessibility/land_transport_access/road_only.lua",
+    "sha256_before": "4241442cbefd92a49eba5332f1d4506ff2a1187677484767267971e52a6cb16e",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/land_transport_access/route_demand.py",
+    "destination": "src/human/accessibility/land_transport_access/route_demand.py",
+    "sha256_before": "e183b712cf0cd3e12021a6544424ed149fa4dbebf258de5c28eb01c8d2715191",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/land_transport_access/routing.py",
+    "destination": "src/human/accessibility/land_transport_access/routing.py",
+    "sha256_before": "d09d4abd73320e9a5863633a43e0d903f0e812515d2c665f4720a117803f791e",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/population_travel_time/DATA_SOURCES.md",
+    "destination": "src/human/accessibility/population_travel_time/DATA_SOURCES.md",
+    "sha256_before": "a198ff916d2112b41cba373f4a679b758d2bb009a554d47be84a50059286b7d3",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/population_travel_time/__init__.py",
+    "destination": "src/human/accessibility/population_travel_time/__init__.py",
+    "sha256_before": "f994b51c369feaf30a9c12d5befd71446741450f7f5f28f2784c45d4f6554d96",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/population_travel_time/build.py",
+    "destination": "src/human/accessibility/population_travel_time/build.py",
+    "sha256_before": "05784ac65e783cf0dd1ddc3cb051ba1a774545fcc2a7190cbf36ffb44f560473",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/population_travel_time/config.py",
+    "destination": "src/human/accessibility/population_travel_time/config.py",
+    "sha256_before": "c84af3cba9c7ee28443ef0d9f7e68937824f36b843ef5be8717367cd9243d394",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/population_travel_time/download.py",
+    "destination": "src/human/accessibility/population_travel_time/download.py",
+    "sha256_before": "136a646eb39f01137cc65318896f34ddefade8075d78a983f591f1714d9d327b",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/population_travel_time/inspect.py",
+    "destination": "src/human/accessibility/population_travel_time/inspect.py",
+    "sha256_before": "f8dc8237d5b4f0f7964f71cb7fa9c8f2c1f95d50e513d89dbd2347f507fc1e93",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/public_shore_access/DATA_SOURCES.md",
+    "destination": "src/human/accessibility/public_shore_access/DATA_SOURCES.md",
+    "sha256_before": "bbfc70d7a6eab5ae7d8013f133898d7b11e2313bfdfc54e0ce397b4c9117bb0c",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/public_shore_access/__init__.py",
+    "destination": "src/human/accessibility/public_shore_access/__init__.py",
+    "sha256_before": "33b54c7caa106025dea8019093bdc0c1798dd6ed9112f2891d840454edf60092",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/public_shore_access/build.py",
+    "destination": "src/human/accessibility/public_shore_access/build.py",
+    "sha256_before": "158759c1b8317aff079112f15d654fb9d48a7079a111740a7a4087ff338634ee",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/public_shore_access/config.py",
+    "destination": "src/human/accessibility/public_shore_access/config.py",
+    "sha256_before": "8afa49522f35dce786188b42a8a40d165b71c789b5d1c8855e7b73bcbdea74d5",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/public_shore_access/download.py",
+    "destination": "src/human/accessibility/public_shore_access/download.py",
+    "sha256_before": "25284fd082418a495d11d2030e0935b60c6040c48674e4a3581ac1303f7e958f",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/accessibility/public_shore_access/inspect.py",
+    "destination": "src/human/accessibility/public_shore_access/inspect.py",
+    "sha256_before": "eb9bcfad32139e91c12c4cc1c237622d7c12f2c9d67ae85baf18880ffdb9869a",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/__init__.py",
+    "destination": "src/human/activity_and_effort/__init__.py",
+    "sha256_before": "4affe0d1d54e3564603343678486792af0ba24e17b376f99b24e53719c198d47",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ais/DATA_SOURCES.md",
+    "destination": "src/human/activity_and_effort/ais/DATA_SOURCES.md",
+    "sha256_before": "47637aab64c84b33376f5a19db517482c7d576f3af4400409932c23e2dc297b6",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ais/__init__.py",
+    "destination": "src/human/activity_and_effort/ais/__init__.py",
+    "sha256_before": "69b261b2a94b80a7a5d8de23f17e08ffa2f36aeb382238910a5f8deea48d5740",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ais/build.py",
+    "destination": "src/human/activity_and_effort/ais/build.py",
+    "sha256_before": "1c3ac621ff7f2c25ceffd0829fc81ca1bba644f6a80b191b4cda67da356114b0",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ais/config.py",
+    "destination": "src/human/activity_and_effort/ais/config.py",
+    "sha256_before": "901b986cc68130c9f3076e3c88623c61a0a63843e715ab59de41ab9b46aa2b0e",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ais/download.py",
+    "destination": "src/human/activity_and_effort/ais/download.py",
+    "sha256_before": "a69e21ff05561debe383754fbae646a5fc837fde88bda8d8d0a8d9999a2bcdab",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ais/inspect.py",
+    "destination": "src/human/activity_and_effort/ais/inspect.py",
+    "sha256_before": "fcbd9aa1fce8dd23c5a25d83e78c36607609c86a08cef6504310efc76e42060e",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ferry/DATA_SOURCES.md",
+    "destination": "src/human/activity_and_effort/ferry/DATA_SOURCES.md",
+    "sha256_before": "6a1a80d2ebd2ea77c986301a5fbc359e6b92aaaf5c9e0c610f6da32363b5902a",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ferry/__init__.py",
+    "destination": "src/human/activity_and_effort/ferry/__init__.py",
+    "sha256_before": "b14c4d6fe26790d3ec147859a20f7d307f75a4c352df90cff9492366a3e506b2",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ferry/build.py",
+    "destination": "src/human/activity_and_effort/ferry/build.py",
+    "sha256_before": "af312dcc30fe072e702c5955432eae6ab1f5612854948b4a49c346a701f973d6",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ferry/config.py",
+    "destination": "src/human/activity_and_effort/ferry/config.py",
+    "sha256_before": "807fc8e2ff1eb13f98facd6ea5f9019b8c34d48a88b09d30b210ae6ded2f9b44",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ferry/download.py",
+    "destination": "src/human/activity_and_effort/ferry/download.py",
+    "sha256_before": "e0d92cc99a15415bd16b1ebb7aa655e2d089a96d0a96e3689b6d4c3c4c97e49a",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ferry/generations.py",
+    "destination": "src/human/activity_and_effort/ferry/generations.py",
+    "sha256_before": "9062312dc0d7532a6f2b8cd0ab220c62ffa2234325651f37566419e9e6f7a41d",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ferry/inspect.py",
+    "destination": "src/human/activity_and_effort/ferry/inspect.py",
+    "sha256_before": "519be2d3292a1774feb54aa20e55e74f2aac209018f515e8a2e6dfb41e20565a",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ferry/map.py",
+    "destination": "src/human/activity_and_effort/ferry/map.py",
+    "sha256_before": "3f74e522c60acd7a06c85f4c3243f1f099d45c74b28b5b4259d304e110982a94",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ferry/pipeline.py",
+    "destination": "src/human/activity_and_effort/ferry/pipeline.py",
+    "sha256_before": "3079f2ef702694d2843c2613cb32701a7b61927773f9ac5bc0fcc7c751ec0003",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ferry/sources.py",
+    "destination": "src/human/activity_and_effort/ferry/sources.py",
+    "sha256_before": "39364f7817b5ae294622c8da1fbc8f5016b368c4c964d23e5e09023cab195901",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/ferry/wsf_vessel_history.py",
+    "destination": "src/human/activity_and_effort/ferry/wsf_vessel_history.py",
+    "sha256_before": "22bad45bbe130f15c6a619f757b44f7876fa194a43e7d3620a54f79e8b428d56",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/fishing_activity/.gitkeep",
+    "destination": "src/human/activity_and_effort/fishing_activity/.gitkeep",
+    "sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/DATA_SOURCES.md",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/DATA_SOURCES.md",
+    "sha256_before": "89376bc501f507833049bec796788aa4bd0b287b0e36a8b7c09f7c1a1b0a01a4",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/__init__.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/__init__.py",
+    "sha256_before": "38851ccc8ce1e9a46ea5944c1f58d97278ab5bad22540f3bbbd9d1380f8f5b2b",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/access_kernel.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/access_kernel.py",
+    "sha256_before": "542a72453411438b7915d99fee361be409301dd6b162b0afb6d012f8418c7eae",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/build.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/build.py",
+    "sha256_before": "e9f2a1c06eb8db8dd1e93fb23a13d0541866ee04a2003a63b94e0380b3fb6c01",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/conditioned_basis.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/conditioned_basis.py",
+    "sha256_before": "fb2e0f8c1216a21c4993f14ff119cc24b78418b71c457361699b13062fcf9459",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/config.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/config.py",
+    "sha256_before": "9b5a78b6fd4dfa59520e6d69a45fbdf98f9a6c160afa735b82ef7471611dd794",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/download.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/download.py",
+    "sha256_before": "2cb2c4d03a50cfb667bbbcacf1ff527951f561ee10317ac7c5e37806fb9c6aba",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/dynamic.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/dynamic.py",
+    "sha256_before": "43b3b5c4cd2a84bc2383e60c1e5d573e7322683478ae7c4dbd8687e6ab702c64",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/evaluate.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/evaluate.py",
+    "sha256_before": "c76359136e6c045252b4e02905334fa313fe29ec6f8e31153ca9189f50954884",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/generations.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/generations.py",
+    "sha256_before": "7e2914b2ed41eb5b427db06a0307e63bc227ce38989cd0595dcedf9762eca1d2",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/health.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/health.py",
+    "sha256_before": "3d2e17067b4dadb2e9fbdb526dbc0ce6beab808631fdcc3f269a2c8968c66c0b",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/inputs.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/inputs.py",
+    "sha256_before": "720f403c9b1ddf8b862e038ec655345f2fec5afd8d8173ffb477fc6ef516b793",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/inspect.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/inspect.py",
+    "sha256_before": "fd6283629289b222e96faa946c3fe1c2956aa4037f64f93d00b60cce8041d46f",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/modeling.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/modeling.py",
+    "sha256_before": "259d477a11bb9a34e95d6ae7487a2cc194a35617cb432a6b8d90a4616d800785",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/pilot.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/pilot.py",
+    "sha256_before": "6712eae7fd0dfa39691e4407e84598f704ed353a2ac770c07578e7332e69ea77",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/report.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/report.py",
+    "sha256_before": "779e0699575759666feb5626ace96a1de335ca707ef75a932251b2728bee9a79",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/schema.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/schema.py",
+    "sha256_before": "c5fcaf841a0dd44ff1913594878a16e2189f9aac2a7781d0eba21e3e93240990",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/sites.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/sites.py",
+    "sha256_before": "faa742e7f786c5235d0a2396322c6ce779341fd310c6c14a755eda2452da3a58",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/smoke.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/smoke.py",
+    "sha256_before": "ebea8660cab739d6044fd06d61b0099e24684a435f7c526ce5f3dbb40b30fc89",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/strata.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/strata.py",
+    "sha256_before": "27c30ec1e3455799b8d11e541c21fc5262f2a4f6a4b07b9c50268fe977adee43",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/land_reporting_opportunity/support.py",
+    "destination": "src/human/activity_and_effort/land_reporting_opportunity/support.py",
+    "sha256_before": "da9c6c7eb4227d01f392c8f33680f756b0f3f452a4710892dff361389a502a7f",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/observation_opportunity_contract.py",
+    "destination": "src/human/activity_and_effort/observation_opportunity_contract.py",
+    "sha256_before": "a15fe2c9e8a09d41a423c4f17f8f4661102b809038692a48e3388a7cab8db6c5",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/observer_effort/__init__.py",
+    "destination": "src/human/activity_and_effort/observer_effort/__init__.py",
+    "sha256_before": "ab3cfc005fa1a0c360842ad4116f13fc4add198910c3ecef4b4e59cb9af50378",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/observer_effort/build.py",
+    "destination": "src/human/activity_and_effort/observer_effort/build.py",
+    "sha256_before": "60662743a85d08cbaa18ec3b2235c570c2bb3d284f18f60469a9fab55da10a3b",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/observer_effort/config.py",
+    "destination": "src/human/activity_and_effort/observer_effort/config.py",
+    "sha256_before": "85c3f0cca2f79843073d79c5731b02df1aea72971c6d395aed195cc41eb510d6",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/observer_effort/inspect.py",
+    "destination": "src/human/activity_and_effort/observer_effort/inspect.py",
+    "sha256_before": "9bb7d5d03d2dea58d7e96a3f7205a684a2170ac0a186cfbe47a17a569640603b",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/water_observation_opportunity/DATA_SOURCES.md",
+    "destination": "src/human/activity_and_effort/water_observation_opportunity/DATA_SOURCES.md",
+    "sha256_before": "d59e51c461e08bc6f41540d9aef7bcdec3ece684ba3890805107f9e1f80ae9b3",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/water_observation_opportunity/__init__.py",
+    "destination": "src/human/activity_and_effort/water_observation_opportunity/__init__.py",
+    "sha256_before": "74017217f0a512e8085c534ac70b66879dbab22a852ef183442a91f8c3c7bc84",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/water_observation_opportunity/build.py",
+    "destination": "src/human/activity_and_effort/water_observation_opportunity/build.py",
+    "sha256_before": "d7ccd6c15c6ac7405fe0342f1fc19834f07ef6bc3d4346fe53d5cda742558818",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/water_observation_opportunity/config.py",
+    "destination": "src/human/activity_and_effort/water_observation_opportunity/config.py",
+    "sha256_before": "58030aa2c0257a1d3d8a9b427bbae2887973d9747d1753318107ee02df9501ba",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/water_observation_opportunity/diagnostics.py",
+    "destination": "src/human/activity_and_effort/water_observation_opportunity/diagnostics.py",
+    "sha256_before": "426ecae7f519431f7f1b08500b1a75ac07fc96eb4ccf108bdcf06e3bcfbadd00",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/water_observation_opportunity/download.py",
+    "destination": "src/human/activity_and_effort/water_observation_opportunity/download.py",
+    "sha256_before": "0a9bcb383e25af10da3b9ed0753e4aea8a07fb38cd7e75e81e2b76525b4cccac",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/water_observation_opportunity/generations.py",
+    "destination": "src/human/activity_and_effort/water_observation_opportunity/generations.py",
+    "sha256_before": "ab13391c5512a96ef5efadff965588d8bfb258946e164ede12600fc21bf8d1c5",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/water_observation_opportunity/inspect.py",
+    "destination": "src/human/activity_and_effort/water_observation_opportunity/inspect.py",
+    "sha256_before": "769a1c6b68cadba84e3343f6912eba13eecaa0a003530acca48e02c0b2a30625",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/activity_and_effort/water_observation_opportunity/pipeline.py",
+    "destination": "src/human/activity_and_effort/water_observation_opportunity/pipeline.py",
+    "sha256_before": "435e579d04127427fd546e10df32ad6a059add5c2d41978eb0d2be73d06a2875",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/__init__.py",
+    "destination": "src/human/demography_and_presence/__init__.py",
+    "sha256_before": "8e754b153848d6f9c14be42996a047d9343a80fa85bd441fd4fa42837a5b2034",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/places/DATA_SOURCES.md",
+    "destination": "src/human/demography_and_presence/places/DATA_SOURCES.md",
+    "sha256_before": "142db185ad3fa18ff7e7bfb44d249d677d68f5392d783952e9640e3622b4c60f",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/places/__init__.py",
+    "destination": "src/human/demography_and_presence/places/__init__.py",
+    "sha256_before": "c457473f5b97bd5e70f60d7f83c7b27b89d626ffa9c0c3bb8d1cc76da7da168f",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/places/build.py",
+    "destination": "src/human/demography_and_presence/places/build.py",
+    "sha256_before": "304d0c3f1a3a9cb5507e9e770f3ec7434f9e1c3d96b5ce38bda6b10546a8252b",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/places/config.py",
+    "destination": "src/human/demography_and_presence/places/config.py",
+    "sha256_before": "1cc3ea3386e9fec532d7d95970cba71ac020dab5ade444de3440973314a608d6",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/places/download.py",
+    "destination": "src/human/demography_and_presence/places/download.py",
+    "sha256_before": "25f2506672f468605fa17ca6717e31ce01e4416da71d70e87baae76e889195b2",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/places/inspect.py",
+    "destination": "src/human/demography_and_presence/places/inspect.py",
+    "sha256_before": "39d822d1b6aac574f0b8fea6d1ecbb643f308679a3920ba82a3d040d7d0a3b48",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/places/schema.py",
+    "destination": "src/human/demography_and_presence/places/schema.py",
+    "sha256_before": "25214ad795dcd59aff386da92f7469fbbdb06586ccb042bf16b14ca4ec9d038f",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/places/utils.py",
+    "destination": "src/human/demography_and_presence/places/utils.py",
+    "sha256_before": "ae785b09bc4371ced7def4fe3f432d12f3602aa114206a6091e4a0cfc16656cb",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/DATA_SOURCES.md",
+    "destination": "src/human/demography_and_presence/population/DATA_SOURCES.md",
+    "sha256_before": "afa0028ca7a9216d29e8718cc68d22826374268849884e4de2dc2081b318147f",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/__init__.py",
+    "destination": "src/human/demography_and_presence/population/__init__.py",
+    "sha256_before": "536565f733fa35c5035e2b4dc36a23296895995353e71a65893f8fdb9c1d46ee",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/build.py",
+    "destination": "src/human/demography_and_presence/population/build.py",
+    "sha256_before": "d84c0563db684dbaafffc356f4877ffe7b076b38cee729bbdb3c0415f499a734",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/canada/__init__.py",
+    "destination": "src/human/demography_and_presence/population/canada/__init__.py",
+    "sha256_before": "a36372a0d308446f9d39cb7e550464f4e363264c67e4aa410b1a32b95fbe9056",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/canada/allocation.py",
+    "destination": "src/human/demography_and_presence/population/canada/allocation.py",
+    "sha256_before": "414b2d7d89b27b0775a24c86eacc233ac35e3f340dca88fffa3a9e497ae3885d",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/canada/config.py",
+    "destination": "src/human/demography_and_presence/population/canada/config.py",
+    "sha256_before": "a723c0cf2d9a995ef107bf249c20a349f6519375f1557007cc136f3fe90fb77b",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/canada/geography.py",
+    "destination": "src/human/demography_and_presence/population/canada/geography.py",
+    "sha256_before": "b0bb938278b972b04afe79c5774a4b2982f745f3bce8b6ffd13fcb32909bfbcd",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/canada/output.py",
+    "destination": "src/human/demography_and_presence/population/canada/output.py",
+    "sha256_before": "573b3635caab4fef6a5bf737f243af2bc4f6252da78cfbc909f13e741c49e678",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/canada/pipeline.py",
+    "destination": "src/human/demography_and_presence/population/canada/pipeline.py",
+    "sha256_before": "d80e537f89bf580606132d1e51b09a25dbdb1105b036b32236f0a052ad5ac0c1",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/canada/statcan.py",
+    "destination": "src/human/demography_and_presence/population/canada/statcan.py",
+    "sha256_before": "743f958956ffd173fc5dff6322993308296b3938b3ed945011c31647f66ab93c",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/cli.py",
+    "destination": "src/human/demography_and_presence/population/cli.py",
+    "sha256_before": "6d2bda4cb928e89e4e8e925e569d6f01b2b00b8876e5a1c53a071c0ee004be40",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/common/__init__.py",
+    "destination": "src/human/demography_and_presence/population/common/__init__.py",
+    "sha256_before": "e0bd391626c7a296a977f3ebc23ebc95aa9626e54c50a6edfacc96e60b4f09d4",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/common/config.py",
+    "destination": "src/human/demography_and_presence/population/common/config.py",
+    "sha256_before": "ec02126201730ae9757d3d805ffc25cedf996c5af2dad1afa59023781b1b253d",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/common/contracts.py",
+    "destination": "src/human/demography_and_presence/population/common/contracts.py",
+    "sha256_before": "d4076a7cc2d643ccb7fb368d4896b4137afb540a2f7a82a2404eda72e0d8c80d",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/common/errors.py",
+    "destination": "src/human/demography_and_presence/population/common/errors.py",
+    "sha256_before": "9a77c436eb7b057e2423afb71fe306ca2d25c93826f255f09bd11a0b9d8d2d4a",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/common/exceptions.py",
+    "destination": "src/human/demography_and_presence/population/common/exceptions.py",
+    "sha256_before": "18e70dde5d81334e92f6ecdd65dabbf232b6841438458a198847a397c1142410",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/common/geo.py",
+    "destination": "src/human/demography_and_presence/population/common/geo.py",
+    "sha256_before": "51536c72cf1a4232f6bb655956d4d0fe95ee73ee0d3fe94ab194c1a919f89ac6",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/common/h3_grid.py",
+    "destination": "src/human/demography_and_presence/population/common/h3_grid.py",
+    "sha256_before": "52ad395063a8b20da85f1a108448786a21327b88a4c6494e489eb6059109ee8d",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/common/io.py",
+    "destination": "src/human/demography_and_presence/population/common/io.py",
+    "sha256_before": "954bfa0a10e118d8b528ba0786939a9669e04566d59abfcf7485b6e316e7c9dd",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/common/pipeline.py",
+    "destination": "src/human/demography_and_presence/population/common/pipeline.py",
+    "sha256_before": "b0a0532a991af9c51422b1995206062d49e04d8a1cf2f100baf8fbb5f773cc18",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/common/validation.py",
+    "destination": "src/human/demography_and_presence/population/common/validation.py",
+    "sha256_before": "e5c4d75cb01e9259fe6e3f2b18f0c562f5989b587aa4e3ee714549d037dadc84",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/common/water_distance.py",
+    "destination": "src/human/demography_and_presence/population/common/water_distance.py",
+    "sha256_before": "c45f45733bed8aa2e8e96bf00322298f7037f97d454ef43235d6ee88daadfcde",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/config.py",
+    "destination": "src/human/demography_and_presence/population/config.py",
+    "sha256_before": "d099ec1aef0d90541965971c538c7c082379faa0bcc092af908b4841f87cc572",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/context.py",
+    "destination": "src/human/demography_and_presence/population/context.py",
+    "sha256_before": "7ca3419349e9241c4c96fb59a05553826a6c621cebd23b5ced6c866c16448b3b",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/download.py",
+    "destination": "src/human/demography_and_presence/population/download.py",
+    "sha256_before": "7dbed9f500fcfa946ebd1235498d5137c469e9003f368e6fd32d4eae54975e00",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/inspect.py",
+    "destination": "src/human/demography_and_presence/population/inspect.py",
+    "sha256_before": "57c9d2204ebcb8598451f3e72a3c3b3cdbb9c04c3d31fa63de2380266768ada1",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/py.typed",
+    "destination": "src/human/demography_and_presence/population/py.typed",
+    "sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/us/__init__.py",
+    "destination": "src/human/demography_and_presence/population/us/__init__.py",
+    "sha256_before": "b8d37236cb5a1d46817f1b2455348c385a86be99aa7f46f20996f9c637921982",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/us/allocation.py",
+    "destination": "src/human/demography_and_presence/population/us/allocation.py",
+    "sha256_before": "0011318438fc700d67a65648ce3cd0d2e9fe8b72cddc779615dd0d7ea3fde07e",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/us/census.py",
+    "destination": "src/human/demography_and_presence/population/us/census.py",
+    "sha256_before": "10fd98c6991575540a9e4b6c1fd424e4635c773c6e5ba4ed73c56211d9673c38",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/us/config.py",
+    "destination": "src/human/demography_and_presence/population/us/config.py",
+    "sha256_before": "37dccd04eaad5cc34e10894b658069e2504feead18260ba700b5665f4dcda0cc",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/us/geography.py",
+    "destination": "src/human/demography_and_presence/population/us/geography.py",
+    "sha256_before": "211e3f4d1f9ae9f915ce98d47802dcde27471ee1203741a99fd4fa45bbded63e",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/us/output.py",
+    "destination": "src/human/demography_and_presence/population/us/output.py",
+    "sha256_before": "25359f63b69296546d999f87fbe674ee65e8066d69bd7e9fbff2e2243f8ea717",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/us/pipeline.py",
+    "destination": "src/human/demography_and_presence/population/us/pipeline.py",
+    "sha256_before": "0f5ebe1bd1a450ebed7baa3e5aa4d0d19f6c5fd491df423b8976eefe128c161a",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/population/us/water.py",
+    "destination": "src/human/demography_and_presence/population/us/water.py",
+    "sha256_before": "3b1650eaa32485f0984344698415877079b22feb2e0fdf6cf1b48609eb6b1b0b",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/demography_and_presence/seasonal_population_pressure/.gitkeep",
+    "destination": "src/human/demography_and_presence/seasonal_population_pressure/.gitkeep",
+    "sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/exposure/__init__.py",
+    "destination": "src/human/exposure/__init__.py",
+    "sha256_before": "1d8b6f489ef26b70be0634c9788165dc91db19b17228a6d48c5b4b5d7176a501",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/exposure/vessel_acoustic_exposure/.gitkeep",
+    "destination": "src/human/exposure/vessel_acoustic_exposure/.gitkeep",
+    "sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/feature_catalog.yaml",
+    "destination": "src/human/feature_catalog.yaml",
+    "sha256_before": "c326a04c07eb21f7da2a982bf863d38d2e762cffb6f7393bfe046c881bb74811",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/human_layer_todo.txt",
+    "destination": "src/human/human_layer_todo.txt",
+    "sha256_before": "efd6d5061bc66503de03732cd329d95d00fbf1c6c930a8a5c0f7f54e3cde9bac",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/temporal_context/__init__.py",
+    "destination": "src/human/temporal_context/__init__.py",
+    "sha256_before": "d46c166c3e60748d1eed8a637cc2ec74853eb77b6caa74e3e8bd62d3856f4758",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/temporal_context/calendar/DATA_SOURCES.md",
+    "destination": "src/human/temporal_context/calendar/DATA_SOURCES.md",
+    "sha256_before": "db623a75ee26561151abe35b2c8fcee0260a266567fdae8dc5e1542fbc1be0ae",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/temporal_context/calendar/__init__.py",
+    "destination": "src/human/temporal_context/calendar/__init__.py",
+    "sha256_before": "e6d809515ad56aaa11c15c93a105d1538b1d699920be789b0781590ab7327720",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/temporal_context/calendar/build.py",
+    "destination": "src/human/temporal_context/calendar/build.py",
+    "sha256_before": "03526305df8ad687411282da797f58dd5636f42e16cf3f4d3808cdc844515d00",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/temporal_context/calendar/cli.py",
+    "destination": "src/human/temporal_context/calendar/cli.py",
+    "sha256_before": "c086ce8b85ff08ca924d9035409f11d0ae88e92be954efb618121c708a671415",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/temporal_context/calendar/config.py",
+    "destination": "src/human/temporal_context/calendar/config.py",
+    "sha256_before": "d073ab678f2fe23d83fc72005659ff3115ff4afecc350d561e80d26bb9378aee",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/temporal_context/calendar/download.py",
+    "destination": "src/human/temporal_context/calendar/download.py",
+    "sha256_before": "8ec8eba7e13bec0fd37355c2ae78bb6108712ba761e60bc987f725685220cc5f",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/temporal_context/calendar/features.py",
+    "destination": "src/human/temporal_context/calendar/features.py",
+    "sha256_before": "4f1032cf7e711a4a89ea1428b8e169f71034fa06f7fcc21255d9ae8ea1499f25",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/temporal_context/calendar/holidays.py",
+    "destination": "src/human/temporal_context/calendar/holidays.py",
+    "sha256_before": "57a48c75a4c38e5294962094f8d4c21c26182b1e2ce029b004be7deeb1d1e428",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/temporal_context/calendar/inspect.py",
+    "destination": "src/human/temporal_context/calendar/inspect.py",
+    "sha256_before": "a233f8b644829a43551e59403902a89273d2e0618d6c4c9722a29956c5ab9df4",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/temporal_context/calendar/validation.py",
+    "destination": "src/human/temporal_context/calendar/validation.py",
+    "sha256_before": "07a18f757c3b70947108a1d2a2cfff03138c973a180ac64fda272cbb4447c2ce",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/tourism_and_recreation/__init__.py",
+    "destination": "src/human/tourism_and_recreation/__init__.py",
+    "sha256_before": "b4ae3876a134edc86c0a2ff03b2d0b1e704da8a89c534f716053659c44d584a5",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/tourism_and_recreation/park_visitation/.gitkeep",
+    "destination": "src/human/tourism_and_recreation/park_visitation/.gitkeep",
+    "sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/tourism_and_recreation/recreational_boating/.gitkeep",
+    "destination": "src/human/tourism_and_recreation/recreational_boating/.gitkeep",
+    "sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/tourism_and_recreation/tourism_pressure/.gitkeep",
+    "destination": "src/human/tourism_and_recreation/tourism_pressure/.gitkeep",
+    "sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/tourism_and_recreation/whale_watch_activity/.gitkeep",
+    "destination": "src/human/tourism_and_recreation/whale_watch_activity/.gitkeep",
+    "sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/utils/__init__.py",
+    "destination": "src/human/utils/__init__.py",
+    "sha256_before": "5a48a4d92e0467380d1dd8bff10861787785542d495cec47193c25ffda22d304",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/utils/acquisition.py",
+    "destination": "src/human/utils/acquisition.py",
+    "sha256_before": "6b4d35c87fb70941caf883fa12f47a57f7b54f35a6493b1a07df282a24b25444",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/utils/arcgis.py",
+    "destination": "src/human/utils/arcgis.py",
+    "sha256_before": "e8a2ec749f52ba4caba701af99635aab65f54bf895a07506344788eacce691fb",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/utils/artifacts.py",
+    "destination": "src/human/utils/artifacts.py",
+    "sha256_before": "f42aa18251a354813d566d1c2e91811cada156a9343636c815b7158e8c44b424",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/utils/config.py",
+    "destination": "src/human/utils/config.py",
+    "sha256_before": "ff2c7b72be8f650b2dd67b25a3d7e3b6bdda2d3ea986a3e422a3dab2079e8d3d",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/utils/inspection.py",
+    "destination": "src/human/utils/inspection.py",
+    "sha256_before": "d91817077b514ab9b18c2c159b6c05a24cacdf092293bf1e889614b291e8c9bb",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/utils/osm.py",
+    "destination": "src/human/utils/osm.py",
+    "sha256_before": "5ec75605f0410a26162639af58ad65f280ac22d28eff74538b122385fbf00712",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/utils/publication.py",
+    "destination": "src/human/utils/publication.py",
+    "sha256_before": "da68d57cc8c853eb9bfbf69d65dc41970059c67cbabfecab99ad1c54e5399ad0",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/utils/wfs.py",
+    "destination": "src/human/utils/wfs.py",
+    "sha256_before": "8dbe748af096fabe2e168a297488823d846c54aeebfa6192e4c5a5fabe04a245",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/__init__.py",
+    "destination": "src/human/viewshed/__init__.py",
+    "sha256_before": "51fcd29d93345abd21913c5cfb075a863f9adc71427fdc639a1465671cb556cb",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/api/__init__.py",
+    "destination": "src/human/viewshed/api/__init__.py",
+    "sha256_before": "9602abba9cf30e7423989957c5ac18ca18bb4c912da5eff147fd755bbecaa8c7",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/api/pipeline.py",
+    "destination": "src/human/viewshed/api/pipeline.py",
+    "sha256_before": "ef2fe4d11e5a4a09d5da4ae4c206a4708f81a4451841e33ff905ec0d8d72e62e",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/api/service.py",
+    "destination": "src/human/viewshed/api/service.py",
+    "sha256_before": "dfa706e3639e521ed8590bdbe85fc28b93241e251d3ad455311f95f2120ac847",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/api/stages.py",
+    "destination": "src/human/viewshed/api/stages.py",
+    "sha256_before": "cdb5408e734dfee54e3775cc3215574bfbed599a267dcbf4d14de5d575535c92",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/cli/__init__.py",
+    "destination": "src/human/viewshed/cli/__init__.py",
+    "sha256_before": "d4a8a9719d6af2a2f6f32fcd51551a72bcfbbf4b19a60db0cc181ae7733f17f4",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/cli/compute.py",
+    "destination": "src/human/viewshed/cli/compute.py",
+    "sha256_before": "fadabe04a521e094ce84f053533ce3f104b18291a1dc96b99a647e9d45469f9a",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/cli/finalize.py",
+    "destination": "src/human/viewshed/cli/finalize.py",
+    "sha256_before": "ce6b99891f20f02f84c3332273e34f4164671dbfc71a50ec2cc6b62f19d9c5be",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/cli/main.py",
+    "destination": "src/human/viewshed/cli/main.py",
+    "sha256_before": "3dba32c375653df23aa881968af152b7c72ed7c51c278b056dc71a8184f56ea5",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/cli/prepare.py",
+    "destination": "src/human/viewshed/cli/prepare.py",
+    "sha256_before": "e99ee74f31a3605ba6e0ed3c0c4f2fc6ae27261d2bc23e2ba86e5f1b88f4c18b",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/cli/visualize.py",
+    "destination": "src/human/viewshed/cli/visualize.py",
+    "sha256_before": "a41fac4d811b3794c5f7aa7538bcbae52ee319427e2d7c844f24cf4fd6ebddcb",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/config/__init__.py",
+    "destination": "src/human/viewshed/config/__init__.py",
+    "sha256_before": "15b052aa68cd4cf9bfc01addf472a4a3d1edef3fa060be3b477a987e48cb1ec9",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/config/distance.py",
+    "destination": "src/human/viewshed/config/distance.py",
+    "sha256_before": "19691601a471d5e57332f2931706f66139aa1032a5a358bf43b07bbe181cd41d",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/config/loader.py",
+    "destination": "src/human/viewshed/config/loader.py",
+    "sha256_before": "979844fbe1b7db5427fb6b466503e59d2f2611496db540c797b58e21b03137ab",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/config/paths.py",
+    "destination": "src/human/viewshed/config/paths.py",
+    "sha256_before": "46f389214c6bdb115b561c2fec6410e70ffc8e0e38c2bd82ee1c77365c128580",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/config/schema.py",
+    "destination": "src/human/viewshed/config/schema.py",
+    "sha256_before": "aedac0cae1cc0d4aa16d21a82ed3a65218aa6ba5ca638692cf94f5e88b80b17c",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/diagnostics/__init__.py",
+    "destination": "src/human/viewshed/diagnostics/__init__.py",
+    "sha256_before": "a8892ee4618ebdeadd5f340dd8caba555a52a29c5b1ced0403390b589663d0a2",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/diagnostics/source_cells.py",
+    "destination": "src/human/viewshed/diagnostics/source_cells.py",
+    "sha256_before": "50820762daa8d1cb5b2092dd7d55de916e136b21970b1f34ab498768761655fc",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/finalize/__init__.py",
+    "destination": "src/human/viewshed/finalize/__init__.py",
+    "sha256_before": "d9ed246f9677ce96c2e875d87c9990faeaf0f5d30b83f6c2f1d13bf6fb0f7797",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/finalize/cleanup.py",
+    "destination": "src/human/viewshed/finalize/cleanup.py",
+    "sha256_before": "f049a5650cb1c0c3d464b894cc8a58dec5f3879201fdbea89d20de60e65c7c53",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/finalize/final_artifacts.py",
+    "destination": "src/human/viewshed/finalize/final_artifacts.py",
+    "sha256_before": "2cbbde1d38838616ff467c7b15cfa98291c41016061ac67ad5c581439df23422",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/__init__.py",
+    "destination": "src/human/viewshed/prepare/__init__.py",
+    "sha256_before": "345377c0b50c773ba02ca22e4957f86fe1edc99b1ea28d670e997c9d7abd1bf5",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/__init__.py",
+    "destination": "src/human/viewshed/prepare/area/__init__.py",
+    "sha256_before": "0e9f649a18b3f9fc6f6586562ea8f8e82edc4c14b4ca229ef7276a1f1e06a58e",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/batching.py",
+    "destination": "src/human/viewshed/prepare/area/batching.py",
+    "sha256_before": "28fbb6ae3c3fdccc0faad5ad6a559efccd5941025d2783f0ad546641692a2790",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/cli.py",
+    "destination": "src/human/viewshed/prepare/area/cli.py",
+    "sha256_before": "589cff8901a846aaca2d1a668739ba9748f2815d24236e4c089eb1f28eeb806a",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/config.py",
+    "destination": "src/human/viewshed/prepare/area/config.py",
+    "sha256_before": "6eb7dbed7c0b8f1c5fd3f8539d40b6ccf39f2457fd8fadffc36357458acfa235",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/context.py",
+    "destination": "src/human/viewshed/prepare/area/context.py",
+    "sha256_before": "695aed66707bd427938f2a7fe71bdafd1927e0d1d2db1e11c7a0eacaf5ea1668",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/domains.py",
+    "destination": "src/human/viewshed/prepare/area/domains.py",
+    "sha256_before": "78aebbe1c9b0f59f4f6e13217c3cf4d49939af500cd8021d198ac2425db83525",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/geometry.py",
+    "destination": "src/human/viewshed/prepare/area/geometry.py",
+    "sha256_before": "e73f8cbcdf4720ae25675ff807edee7d2d35da59a94e074dae5fa70ca12a8d72",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/inputs.py",
+    "destination": "src/human/viewshed/prepare/area/inputs.py",
+    "sha256_before": "6548ef191bbd2d6c0d34ecc2279fb030c3b2f255ed3ef227a54cc8d1e91788c2",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/land.py",
+    "destination": "src/human/viewshed/prepare/area/land.py",
+    "sha256_before": "cbeecb49f7f977467de18fb28402db1a1e4c3de71aa228547190c79e0bc424ae",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/lookup.py",
+    "destination": "src/human/viewshed/prepare/area/lookup.py",
+    "sha256_before": "583a132cbe6b93512efeec784a38f2bc191357a3aa506f7c053639cd1499eb57",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/observers.py",
+    "destination": "src/human/viewshed/prepare/area/observers.py",
+    "sha256_before": "af3ffd7d4ed298473aee9fa5dbc6555139651ab642fb226f17da5d1d4e597953",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/raster_stack.py",
+    "destination": "src/human/viewshed/prepare/area/raster_stack.py",
+    "sha256_before": "97aa936f65b96fd3484745078746c6d0cb183364f2c3722c6c119d9abba9db1d",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/sampling.py",
+    "destination": "src/human/viewshed/prepare/area/sampling.py",
+    "sha256_before": "b32f0d18a36478e5bcb79a6fa112bda692bd4ae85187e87cfa752c9f76c2dd13",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/universe.py",
+    "destination": "src/human/viewshed/prepare/area/universe.py",
+    "sha256_before": "6b0bd595226a3566889b39e69b9dc6b5bee8a368148195b90f2ee78714fa9dd3",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/area/validation.py",
+    "destination": "src/human/viewshed/prepare/area/validation.py",
+    "sha256_before": "3440044031b31a70fe37604c0f90238b9229388a86747f43b6aa51ce58c43189",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/elevation/__init__.py",
+    "destination": "src/human/viewshed/prepare/elevation/__init__.py",
+    "sha256_before": "8c203e986deb38bdcb2004d49d1db7422f9c5f1e664f1131f0fd5c5aff6beed8",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/elevation/acquire.py",
+    "destination": "src/human/viewshed/prepare/elevation/acquire.py",
+    "sha256_before": "9b0bf3fa4b053951a428da50a2d0ae41b68f30f228ad7b1b52f6861875667eb1",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/elevation/cache.py",
+    "destination": "src/human/viewshed/prepare/elevation/cache.py",
+    "sha256_before": "bbbc11b46effb999dd495cb54ad5e1079a1287ef3ed8e4f4a215f4f5f1753ecd",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/elevation/canopy.py",
+    "destination": "src/human/viewshed/prepare/elevation/canopy.py",
+    "sha256_before": "a96f61530afbf75d5cd721520abf6a70ad75688dd14bb24dbb22a11dd4a21ad2",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/elevation/terrain.py",
+    "destination": "src/human/viewshed/prepare/elevation/terrain.py",
+    "sha256_before": "8a3345bce685a67373ab51ee9e482494128ba332d8fd19d5469284b169794737",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/vegetation/__init__.py",
+    "destination": "src/human/viewshed/prepare/vegetation/__init__.py",
+    "sha256_before": "6c4ec73bf6cf75abdf4a9d7730f9938be4ca50c4fcbad891c0a64a7d68ec9b25",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/vegetation/assets.py",
+    "destination": "src/human/viewshed/prepare/vegetation/assets.py",
+    "sha256_before": "bc82638b2bb64955c1437dd95a7facc2b68c009a15d9d5023104a9fd86eb39b1",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/vegetation/cli.py",
+    "destination": "src/human/viewshed/prepare/vegetation/cli.py",
+    "sha256_before": "6e31c46a1d7e487bebb0251b2440c944dd47a9e7e60b0422eaa0ccf9962d433f",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/vegetation/rasters.py",
+    "destination": "src/human/viewshed/prepare/vegetation/rasters.py",
+    "sha256_before": "6cf31f89aa7681e76a1eb5007e2a02dcb641051634a8461694c399aaf0bba332",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/prepare/vegetation/sources.py",
+    "destination": "src/human/viewshed/prepare/vegetation/sources.py",
+    "sha256_before": "438ba1d9bcf4a7f50a29eada5ad9bc1c993d98b2a91b81e9954fc3cc6bcb7045",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/visualization/__init__.py",
+    "destination": "src/human/viewshed/visualization/__init__.py",
+    "sha256_before": "4b3f01b72279a0467df958d0d2afd3ae59c68453201bc53bbba7afb876ebd4e6",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/visualization/data.py",
+    "destination": "src/human/viewshed/visualization/data.py",
+    "sha256_before": "163a34a7226018e0965f16323509f186466715e49e622cf690c63475559a7631",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/visualization/exports.py",
+    "destination": "src/human/viewshed/visualization/exports.py",
+    "sha256_before": "292a5fa7ef32259052e6585a09e673dbc37758a15bdd8b77551b28e1d20bf864",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/visualization/interactive_maps.py",
+    "destination": "src/human/viewshed/visualization/interactive_maps.py",
+    "sha256_before": "aade6fe03ae11666fa93ddc8e7b79c6b7bdf77779b68906f236e678ad68ee881",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/visualization/static_maps.py",
+    "destination": "src/human/viewshed/visualization/static_maps.py",
+    "sha256_before": "4c9eed07422667e5cd5bcc590d49c70c7e3310da066aa47538caa141145d775c",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/visualization/styling.py",
+    "destination": "src/human/viewshed/visualization/styling.py",
+    "sha256_before": "fd69d828b1bc262c987e8574274716c00c2b4f69b45373ab4ffaddc2ef422f6d",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/canopy_visibility.py",
+    "destination": "src/human/viewshed/weights/canopy_visibility.py",
+    "sha256_before": "d180153f845461e000ba893524dd46ed2eca5fc3ca1a2ba4c46c2da5e0aca90b",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/distance/__init__.py",
+    "destination": "src/human/viewshed/weights/distance/__init__.py",
+    "sha256_before": "f001b4f9121664fd4077421d67ddd6f6d7ce8c49a1326d8455663a7f686cc4f8",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/distance/__main__.py",
+    "destination": "src/human/viewshed/weights/distance/__main__.py",
+    "sha256_before": "57e260bd52f3d0684798466510d2b35945394be20298da5a3d742faa26b7797e",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/distance/cli.py",
+    "destination": "src/human/viewshed/weights/distance/cli.py",
+    "sha256_before": "2c956169827adf3ebcaee0e4fde02c87b7f308cc8344e3fb15a3eefde7775c9d",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/distance/compute.py",
+    "destination": "src/human/viewshed/weights/distance/compute.py",
+    "sha256_before": "181b14923a6a3697d0645959f4964694a25e1ddf947d56520d225692d7801ae2",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/terrain/__init__.py",
+    "destination": "src/human/viewshed/weights/terrain/__init__.py",
+    "sha256_before": "630faca5fb3048e21f892d291786a7c6bb88073763cc49215ed60bfdc3d126cd",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/terrain/__main__.py",
+    "destination": "src/human/viewshed/weights/terrain/__main__.py",
+    "sha256_before": "1ffef7102970028a9ca31cade8c59de332c4da3a7a90f3d8c747caf475593a6b",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/terrain/accumulators.py",
+    "destination": "src/human/viewshed/weights/terrain/accumulators.py",
+    "sha256_before": "e78fdb9fd19e1ebf68ba535bbcf53296c2e1d389af09f02256ab373f7449ce89",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/terrain/batches.py",
+    "destination": "src/human/viewshed/weights/terrain/batches.py",
+    "sha256_before": "eaf208b340d51e83f953af130fca34b184b9cd6a8f5d283dcc2459f9d62a3079",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/terrain/cleanup.py",
+    "destination": "src/human/viewshed/weights/terrain/cleanup.py",
+    "sha256_before": "caf3c00b57c11aad2ba7689069b154ae81c6b2c0f899226f8f014e032878766f",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/terrain/cli.py",
+    "destination": "src/human/viewshed/weights/terrain/cli.py",
+    "sha256_before": "f29dc5984105b53a93cf0196bdb3028dcbf4f834928b0c0a8a05f5fa75722a00",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/terrain/gdal.py",
+    "destination": "src/human/viewshed/weights/terrain/gdal.py",
+    "sha256_before": "91ef99e0b40300bcd7079f5219bed6b325f596c0897ad665144b5f60dac9581d",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/terrain/los.py",
+    "destination": "src/human/viewshed/weights/terrain/los.py",
+    "sha256_before": "28ae70ec6b743d3e485a177a16b6b94a396b72ece26942972ae7add2ffe3873e",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/terrain/pixel_index.py",
+    "destination": "src/human/viewshed/weights/terrain/pixel_index.py",
+    "sha256_before": "557e3394b9d85f1bb941bc437b623acd37a594629649426e5d30d7aae0ef0b96",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/terrain/runner.py",
+    "destination": "src/human/viewshed/weights/terrain/runner.py",
+    "sha256_before": "ad7edbba7f8fc3dee8b5a0aa75e55bf72fc00c458c6bda0d464fdb6556876596",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/terrain/summarize.py",
+    "destination": "src/human/viewshed/weights/terrain/summarize.py",
+    "sha256_before": "8b53fa84e6121e359be04d6bef26ce1110fe6071ad480e805b78186730d9d654",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/terrain/telemetry.py",
+    "destination": "src/human/viewshed/weights/terrain/telemetry.py",
+    "sha256_before": "1ccf00b71dd8a96e11b58988978fc964fa73c12f27593aab73ba19d470da2887",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/vegetation/__init__.py",
+    "destination": "src/human/viewshed/weights/vegetation/__init__.py",
+    "sha256_before": "43ad71b1a2e0b3cb0e8560711d6b1da727ed6e3964f56104d24eb55a12840a4d",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/vegetation/__main__.py",
+    "destination": "src/human/viewshed/weights/vegetation/__main__.py",
+    "sha256_before": "8e75e5dcd92266934beb580aa2d980ab8f14bf9b58b2990e0512feff19bb8379",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/vegetation/candidate_pairs.py",
+    "destination": "src/human/viewshed/weights/vegetation/candidate_pairs.py",
+    "sha256_before": "de9af0db97846d6ed0b4a5ccdd4e008d060110ddb85e474a11a1ab60098385fa",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/vegetation/cli.py",
+    "destination": "src/human/viewshed/weights/vegetation/cli.py",
+    "sha256_before": "81a2d46e0e64dce51941840a6c953b4eeca7231bad358de6c93d8bf6e9e7e5fb",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/vegetation/defaults.py",
+    "destination": "src/human/viewshed/weights/vegetation/defaults.py",
+    "sha256_before": "a39b838b2a4fa9a65f16c7eb1e8eca39f31d237ffc72b41bfadcd21e4b69f513",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/vegetation/pair_chunks.py",
+    "destination": "src/human/viewshed/weights/vegetation/pair_chunks.py",
+    "sha256_before": "140637081be3091893f215902fc2795b5675e9c48697139acea3f6a0c31e0e47",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/vegetation/path_config.py",
+    "destination": "src/human/viewshed/weights/vegetation/path_config.py",
+    "sha256_before": "ceed74f0b7b587825b6ddf0b4aad5ef503d3f14f1f164df6ef35b9ed2c6df315",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/vegetation/ray_sampling.py",
+    "destination": "src/human/viewshed/weights/vegetation/ray_sampling.py",
+    "sha256_before": "39afb3bbb8b1d89f6f2555b5d0b2ffe6e6f68f3b1e3fb9541d55fcb7afd9f231",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/vegetation/source_h3.py",
+    "destination": "src/human/viewshed/weights/vegetation/source_h3.py",
+    "sha256_before": "6370c04a406258b46cf21fac355753d19aec4066411e89c355d049dfca4514bc",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/vegetation/summarize.py",
+    "destination": "src/human/viewshed/weights/vegetation/summarize.py",
+    "sha256_before": "f8a58f361a2018c24b37b215bc7c6d7edb222b9d1c3ae4f9b10a10257c1b9d22",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/vegetation/support_rasters.py",
+    "destination": "src/human/viewshed/weights/vegetation/support_rasters.py",
+    "sha256_before": "1e3fa1bda2134f0f6ff03fe4f930403bf88325344384394da7ae635d959e4a3c",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/domains/human/viewshed/weights/view_score.py",
+    "destination": "src/human/viewshed/weights/view_score.py",
+    "sha256_before": "a661421f3a2608854f167c832554646240e86af7b03ea075b818a408d9dd366b",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/accessibility/test_accessibility_pipelines.py",
+    "destination": "tests/human/accessibility/test_accessibility_pipelines.py",
+    "sha256_before": "e41148bd0eb613d47924a346db80cfd343eec7a4337507f0933ac19a82cdc3f7",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/accessibility/test_land_travel_access.py",
+    "destination": "tests/human/accessibility/test_land_travel_access.py",
+    "sha256_before": "980809457d9cab11826560482fb6ffc092fac302b8ef0437f66afbe99e7696f1",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/accessibility/test_osm_acquisition.py",
+    "destination": "tests/human/accessibility/test_osm_acquisition.py",
+    "sha256_before": "45fded3ba6f7408f08c83fd0c50dd5c7663a9c02b6a438ee6d29b7f8c5a75edd",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/accessibility/test_road_only_routing.py",
+    "destination": "tests/human/accessibility/test_road_only_routing.py",
+    "sha256_before": "e2f430dce5c16e3fb805830b7318ceee7dfdfc6bcc9ff41916c2f885af752386",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/activity_and_effort/test_ais_pipeline.py",
+    "destination": "tests/human/activity_and_effort/test_ais_pipeline.py",
+    "sha256_before": "38ba901da6d49c63ccce37804b68bcc0f7c65e697520d7bfda7ecfefdc4e4da2",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/activity_and_effort/test_ferry_pipeline.py",
+    "destination": "tests/human/activity_and_effort/test_ferry_pipeline.py",
+    "sha256_before": "9145b7aa128c00f0a0c2454912c8eade7c2d7c54a8938b932c3789e0cbed50dc",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/activity_and_effort/test_ferry_sources.py",
+    "destination": "tests/human/activity_and_effort/test_ferry_sources.py",
+    "sha256_before": "d902239a564e73f4565933bd4327d4a1095b4de94427a58e555a3127c3822a24",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/activity_and_effort/test_ferry_weekly.py",
+    "destination": "tests/human/activity_and_effort/test_ferry_weekly.py",
+    "sha256_before": "9c85edff2f3a0103cdaac974d155842d0d82633755f1525b748f1165d46775a6",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/activity_and_effort/test_land_access_conditioning.py",
+    "destination": "tests/human/activity_and_effort/test_land_access_conditioning.py",
+    "sha256_before": "b18ab725135d30667d6bac5a8268dee75ec65171dc189f77beac341ab969f7d5",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/activity_and_effort/test_land_date_window.py",
+    "destination": "tests/human/activity_and_effort/test_land_date_window.py",
+    "sha256_before": "df4028060f87ce4ef8f7c7437b24344cd264949a937eef3f71517b9875957754",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/activity_and_effort/test_land_generations.py",
+    "destination": "tests/human/activity_and_effort/test_land_generations.py",
+    "sha256_before": "53d77dbda68d88b761b3abf2ca46f3cea0a95d75835ec66040bd152e9d43593f",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/activity_and_effort/test_land_opportunity_smoke.py",
+    "destination": "tests/human/activity_and_effort/test_land_opportunity_smoke.py",
+    "sha256_before": "07df4c0211a20c71afaeb25fd039649576af98cf99051052205042adc0cc1459",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/activity_and_effort/test_land_reporting_dynamic.py",
+    "destination": "tests/human/activity_and_effort/test_land_reporting_dynamic.py",
+    "sha256_before": "b990428574a578970e2e4a8c36d70734e2553078515b52560354911b73fc5981",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/activity_and_effort/test_land_reporting_evaluation.py",
+    "destination": "tests/human/activity_and_effort/test_land_reporting_evaluation.py",
+    "sha256_before": "b22e79436d3e3f62c2f74010d026d7e33eca2f60e29e18d4755e3d6f78caae92",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/activity_and_effort/test_observation_opportunity_contract.py",
+    "destination": "tests/human/activity_and_effort/test_observation_opportunity_contract.py",
+    "sha256_before": "a020a20ae7b4fa5039b7e3fb9e510784c6909a7cd41d67be06de8a5ba83ff48b",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/activity_and_effort/test_observation_opportunity_diagnostics.py",
+    "destination": "tests/human/activity_and_effort/test_observation_opportunity_diagnostics.py",
+    "sha256_before": "33ae4c4f7142f0be80a2178cb6eea7e1bdee61306c973f6546bb9caff5dafead",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/activity_and_effort/test_observer_effort.py",
+    "destination": "tests/human/activity_and_effort/test_observer_effort.py",
+    "sha256_before": "b435cefedef816c3b735f9037670d690496c480b8763504385123e7333add841",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/activity_and_effort/test_water_observation_opportunity.py",
+    "destination": "tests/human/activity_and_effort/test_water_observation_opportunity.py",
+    "sha256_before": "df0522eaad84291d190a8d07cf6c219852cc8871f3fc0bbb800848cc7d4c7593",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/demography_and_presence/test_population_harmonization.py",
+    "destination": "tests/human/demography_and_presence/test_population_harmonization.py",
+    "sha256_before": "7a296783eb7e1aa7c38314c10b630aa5093a317b7d1555a9d1f8beba51e3558b",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/demography_and_presence/test_population_statcan.py",
+    "destination": "tests/human/demography_and_presence/test_population_statcan.py",
+    "sha256_before": "724c1cb9d9656e0e55919f62f0f3b6184a6626f89a4cd3286dc296a94967cd5d",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/test_artifacts.py",
+    "destination": "tests/human/test_artifacts.py",
+    "sha256_before": "83aab91b88c6c53f2e756461e302c66afc61e93adb416bebd87f7b95d516b9a1",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/test_calendar_pipeline.py",
+    "destination": "tests/human/test_calendar_pipeline.py",
+    "sha256_before": "a84e5e093453b6bbe9d1df6116691d5063c4bf186e786f99db9397ff15ac5a80",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/test_feature_catalog.py",
+    "destination": "tests/human/test_feature_catalog.py",
+    "sha256_before": "b6eb2a20d034d63022abee8fe01a9d9e533185264700b967cad4b6b3113e6956",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/test_standardized_pipeline_fixtures.py",
+    "destination": "tests/human/test_standardized_pipeline_fixtures.py",
+    "sha256_before": "710d6f4980f3a7d141e6d411445eec35e0c88c71f4203f4636559a9a789c9e87",
+    "remove_source": true
+  },
+  {
+    "source": "tests/domains/human/test_structure.py",
+    "destination": "tests/human/test_structure.py",
+    "sha256_before": "1f1a3014dae9657a655814e38c0e8b6d939a3c39810c05a005c18af28caf2596",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_aggregation_accuracy.py",
+    "destination": "tests/viewshed/test_aggregation_accuracy.py",
+    "sha256_before": "dc97d04d9c7371fc2f4f1092168ea0e1e5bdf89d76744831a130695906b14cf8",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_architecture.py",
+    "destination": "tests/viewshed/test_architecture.py",
+    "sha256_before": "d71ee4581e7fd9094470855d745ec1034a7735b8887e236dd86e766d4b9e45a6",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_area_lookup_pairs.py",
+    "destination": "tests/viewshed/test_area_lookup_pairs.py",
+    "sha256_before": "b2fc618be05a34da1edabe74723d05b8d17f17f5f1990d2f251606bc71ea035f",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_canonical_raster_stack.py",
+    "destination": "tests/viewshed/test_canonical_raster_stack.py",
+    "sha256_before": "fe284ce2cf153dae092bcdebabf854147f6bbbb5589bc97be3f7a882190e7859",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_canonical_viewshed_config.py",
+    "destination": "tests/viewshed/test_canonical_viewshed_config.py",
+    "sha256_before": "5b9d0d5899fb061f1a7a9a32e5ed5a4bea3a708e45ff978e9060ad4944a27748",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_canopy_input_reuse.py",
+    "destination": "tests/viewshed/test_canopy_input_reuse.py",
+    "sha256_before": "75fa4531e640e1009a0b895f92318406bf45944c61d058f1ac35ed899e89392b",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_canopy_surface.py",
+    "destination": "tests/viewshed/test_canopy_surface.py",
+    "sha256_before": "aac0308b118b107791b599b430a3d671870402ff37422398dd935329ddda0374",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_cleanup_safety.py",
+    "destination": "tests/viewshed/test_cleanup_safety.py",
+    "sha256_before": "4d13d8a811b3f2a04af2c3ebd69eedea8324007da92d37983e00abcae8e31901",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_config_contract.py",
+    "destination": "tests/viewshed/test_config_contract.py",
+    "sha256_before": "965ec4e96fe434be1bbb7b7cc8dfd1c1d3726ba834af69777779b9d7ce58d001",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_distance_weight_values.py",
+    "destination": "tests/viewshed/test_distance_weight_values.py",
+    "sha256_before": "b6cad2b64496682cd4b5d6db0c50d61c9eaad5e2dceb99b115b22323dfb22b5e",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_endpoint_repair_window.py",
+    "destination": "tests/viewshed/test_endpoint_repair_window.py",
+    "sha256_before": "b18db8a7098fc9bd14d55e252645c4231995890ddf140f0f4eb540907eb520f7",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_gdal_inprocess_viewshed.py",
+    "destination": "tests/viewshed/test_gdal_inprocess_viewshed.py",
+    "sha256_before": "a28054c97de6b317cf261a87ae4729b4d35d19874a34fa16f2918ce62ae74ed5",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_geometry_normalization.py",
+    "destination": "tests/viewshed/test_geometry_normalization.py",
+    "sha256_before": "5711a4967c97addb7d0c09b0b0b3076333e9c4404bc3c532f2b90ef362340892",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_h3_geometry_cache.py",
+    "destination": "tests/viewshed/test_h3_geometry_cache.py",
+    "sha256_before": "b8be45ed1070fbe50973945f0276d6a162cd7347e39e2b526f7ab9860bea33b9",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_map_artifacts.py",
+    "destination": "tests/viewshed/test_map_artifacts.py",
+    "sha256_before": "6bbb34378f026668d2029c73e401796ae45190db4191ad79aa40defe39a7f585",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_open_water_kernel.py",
+    "destination": "tests/viewshed/test_open_water_kernel.py",
+    "sha256_before": "75878683aece033642319f46c5ceae61f2ebfd73a3bb83615e5316c5465bcca1",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_raster_cache_fingerprints.py",
+    "destination": "tests/viewshed/test_raster_cache_fingerprints.py",
+    "sha256_before": "4d3256f0e47600ee1dcd4fa2722180dc6c9de965eacfa4dc161dab9ef745e092",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_raster_clip_bounds.py",
+    "destination": "tests/viewshed/test_raster_clip_bounds.py",
+    "sha256_before": "5a1ac1df8060360f0feefbb416f14213bd3939b71f53baf21023e2e5f6633673",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_service_stage_contract.py",
+    "destination": "tests/viewshed/test_service_stage_contract.py",
+    "sha256_before": "308c65388313fdd98057575fa1c293f4a8a390d56716ad6e9b6c7ce6d8193930",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_source_sampling.py",
+    "destination": "tests/viewshed/test_source_sampling.py",
+    "sha256_before": "61f0cc4f92d09dc31b3615edfc61b3233863d8e7d2be8e5f123b6d199b3678b1",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_static_maps.py",
+    "destination": "tests/viewshed/test_static_maps.py",
+    "sha256_before": "4fe108fc748d7b2624454a5adeb7e60a8f438d36b57859c6a51591acef52011c",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_static_pair_universe.py",
+    "destination": "tests/viewshed/test_static_pair_universe.py",
+    "sha256_before": "83a5676e682d606759c728ca4c78cbcc020aa16e3c2b8ff3e533ee602a953146",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_terrain_batch_scheduling.py",
+    "destination": "tests/viewshed/test_terrain_batch_scheduling.py",
+    "sha256_before": "2327ffa37879b46eea56b23b8c213b73d5a19970e448bbb15cb13fe23f281d04",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_terrain_combine_clear_sky_schema.py",
+    "destination": "tests/viewshed/test_terrain_combine_clear_sky_schema.py",
+    "sha256_before": "d40d9e7491e5c5b16737cdcb44740d83b3433a4c5ee40135c0ffa174ecf1d82c",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_terrain_factor_composition.py",
+    "destination": "tests/viewshed/test_terrain_factor_composition.py",
+    "sha256_before": "7435d8333dcacfb8981be179f664c2c42d8f3eb12ff6570946833fb79f43ebbb",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_terrain_partition_schema.py",
+    "destination": "tests/viewshed/test_terrain_partition_schema.py",
+    "sha256_before": "38d7ca99ea2a2c6e60704ae32e67bcef4b7d6ed726d4958acfdf55219d8cca7c",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_terrain_visibility_support.py",
+    "destination": "tests/viewshed/test_terrain_visibility_support.py",
+    "sha256_before": "9d25bfc5704b8f1ae78777575ddbc915c89009514bcd344fd4e77cca4f342868",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_vegetation_candidate_pairs.py",
+    "destination": "tests/viewshed/test_vegetation_candidate_pairs.py",
+    "sha256_before": "072bc5720076bb4213781d3b6553079e67648b9562e5131eb0deae84ed911730",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_vegetation_cli.py",
+    "destination": "tests/viewshed/test_vegetation_cli.py",
+    "sha256_before": "185c804722a00a9114d1cf2196fd1b215aae1bf97275c1893c764f1cebfd7115",
+    "remove_source": true
+  },
+  {
+    "source": "tests/viewshed/test_viewability_import_contract.py",
+    "destination": "tests/viewshed/test_viewability_import_contract.py",
+    "sha256_before": "f47e4ca97a746ecd31d249b803fb131b068a1bf98bcd3e060120f7f1ff7f666c",
+    "remove_source": true
+  },
+  {
+    "source": "src/orcacast/core/artifacts/paths.py",
+    "destination": "src/human/core/artifacts/paths.py",
+    "sha256_before": "73dc325db8663099f9345779b9b5974b6f4b47d658b6640beb3d81a5b25db423",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/artifacts/discovery.py",
+    "destination": "src/human/core/artifacts/discovery.py",
+    "sha256_before": "35b50eb09e7d15d91fe01a3abdb6c47e34baa2b29959419429e7b7ac4e807078",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/artifacts/__init__.py",
+    "destination": "src/human/core/artifacts/__init__.py",
+    "sha256_before": "facc27eda62c5925c079d4d9885a883c295e59ee50cef79ec9118f6dd7c99a26",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/artifacts/publication.py",
+    "destination": "src/human/core/artifacts/publication.py",
+    "sha256_before": "8ed326d360cf1d1d4bcffc174effe806290ed2707a8aa393e92bae068e05103d",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/artifacts/contracts.py",
+    "destination": "src/human/core/artifacts/contracts.py",
+    "sha256_before": "85e0044f966d9504ef00f041459ffccc6179643972c1c2bb33f2030b5e1c6155",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/artifacts/checksums.py",
+    "destination": "src/human/core/artifacts/checksums.py",
+    "sha256_before": "07323b1a86dd54af727ffd914dd6420347ad4fa8663b35e505ceef1bae5d2935",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/config/common_areas.py",
+    "destination": "src/human/core/config/common_areas.py",
+    "sha256_before": "3814045f05a32ee79a30c5f7b7f746c60173e72c9c42f43f87aa4a5113229bb0",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/config/models.py",
+    "destination": "src/human/core/config/models.py",
+    "sha256_before": "0c8c1f7f7bef4ad57a4bfc15c972f31415e43ccc42dff43fccaa0cd3e528456d",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/config/paths.py",
+    "destination": "src/human/core/config/paths.py",
+    "sha256_before": "e13801efea5baaa399498c138e2eba449a5a23447182cccf716b622d58f13f54",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/config/__init__.py",
+    "destination": "src/human/core/config/__init__.py",
+    "sha256_before": "d26896bca0fa88a3e3ea05aa42f52dfc457194f9b1a1b1915986ed485a101a35",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/config/presentation.py",
+    "destination": "src/human/core/config/presentation.py",
+    "sha256_before": "2b9470fd6e6351bc3ce89b9e7eebcac84bce78cd684a4c321579ea469b48f6dc",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/config/document.py",
+    "destination": "src/human/core/config/document.py",
+    "sha256_before": "bc4973072f5473d54b596928895cc248fac26a0d15e19250a6689ae2c3e73726",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/config/data.py",
+    "destination": "src/human/core/config/data.py",
+    "sha256_before": "f09c87ae89a5d8bd3373d4cd2269f1d65918c729e5a839d94d45b084b51cf9eb",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/geo/h3.py",
+    "destination": "src/human/core/geo/h3.py",
+    "sha256_before": "8accef3d9db2f9482e0745902130408b029e947f7ad940cdda01c14be4a113c4",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/geo/water_universe.py",
+    "destination": "src/human/core/geo/water_universe.py",
+    "sha256_before": "8aa9deb0d9df48e0be417c6ac5f87f0e2a332903130a56f110cd79471a773380",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/geo/__init__.py",
+    "destination": "src/human/core/geo/__init__.py",
+    "sha256_before": "44628cf53ee487ff22354086be74d61b02ee9806c17d4d4198ad6ce1f8d51586",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/geo/distance.py",
+    "destination": "src/human/core/geo/distance.py",
+    "sha256_before": "3e3c834ff6af68c40fa0b567b7e9857994dfef928063b9fb3e862828d7a34e47",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/geo/crs.py",
+    "destination": "src/human/core/geo/crs.py",
+    "sha256_before": "38319534918b1e47703b6298eb893050e9ebf3e47543ff058d2dda1c5e30bdd2",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/geo/geometry.py",
+    "destination": "src/human/core/geo/geometry.py",
+    "sha256_before": "ffb767f65e5010587caefa0d9f37e6719a31e229c099eeda7c65fefc9dec4a92",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/geo/spatial_join.py",
+    "destination": "src/human/core/geo/spatial_join.py",
+    "sha256_before": "2ba59941790baa8baf4c01188d7b1e51349cc50bb475c8915f437802759f2f4e",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/geo/h3_artifacts.py",
+    "destination": "src/human/core/geo/h3_artifacts.py",
+    "sha256_before": "e84888de8bf75b95b301f1c01f5de5cade4ffd3c9e2655b4c9ea6d906feaed4e",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/geo/raster.py",
+    "destination": "src/human/core/geo/raster.py",
+    "sha256_before": "888342149824b248299183779907924ea0bd60c4a416e705e1dd724bd917b99a",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/data/persistence.py",
+    "destination": "src/human/core/data/persistence.py",
+    "sha256_before": "de72400cf253ec6b728a0fc7c818fa3ae1593aea2bb3726496f2d12d7caa7c39",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/data/registry.py",
+    "destination": "src/human/core/data/registry.py",
+    "sha256_before": "afef0fa7c30d587e39bdacd7d613d7bf81f500ebca049df25c15451ecb824fc7",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/data/dag.py",
+    "destination": "src/human/core/data/dag.py",
+    "sha256_before": "89fa937a65e96ff6d23440b728f95be53d6dbf7f5bc9bc832c121c13e67ef63f",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/data/__init__.py",
+    "destination": "src/human/core/data/__init__.py",
+    "sha256_before": "fb1bc2465850666f13a65a9d3ab51c4a05c1f8fa149a5e460129daf8bd938f25",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/data/contracts.py",
+    "destination": "src/human/core/data/contracts.py",
+    "sha256_before": "07431c650031fec609efc29a2b78779ab5b3aba9c0d74a8e3af455059c735415",
+    "remove_source": false
+  },
+  {
+    "source": "src/orcacast/core/data/validation.py",
+    "destination": "src/human/core/data/validation.py",
+    "sha256_before": "83978cfc79c77f73af8153255bdc47787eab20334d30e49b7f6ce9c8012eb6c4",
+    "remove_source": false
+  },
+  {
+    "source": "config/common.yaml",
+    "destination": "config/common.yaml",
+    "sha256_before": "1b36892849b329f1b58961ab25d0cda6d615e9f01c9411a0e92c2bb9b023f352",
+    "remove_source": false
+  },
+  {
+    "source": "notebooks/viewshed/01_VIEWSHED.ipynb",
+    "destination": "notebooks/viewshed/01_VIEWSHED.ipynb",
+    "sha256_before": "2a75bef168238d6e694a3754d223cc3da4d447eaed2483825d7766924b222fd8",
+    "remove_source": true
+  },
+  {
+    "source": "notebooks/viewshed/02_LAND_BASED_VIEWSHED.ipynb",
+    "destination": "notebooks/viewshed/02_LAND_BASED_VIEWSHED.ipynb",
+    "sha256_before": "65817a1b3a273e19fdab52d0210dbda46c215d60a7a4c2c438193fc8082ebecd",
+    "remove_source": true
+  },
+  {
+    "source": "config/modeling/effort/viewshed_access_reference.yaml",
+    "destination": "config/modeling/effort/viewshed_access_reference.yaml",
+    "sha256_before": "df5bdae9a84f5f5a49203ecd6ebd41188e5844bc0d6bf4ccbeaf9513f9def566",
+    "remove_source": true
+  },
+  {
+    "source": ".flake8-viewshed",
+    "destination": ".flake8-viewshed",
+    "sha256_before": "362ed1f45a4a36a615f8d846c037ff41f63babebec2b8f79e8e7202d7189c355",
+    "remove_source": true
+  },
+  {
+    "source": "docs/viewshed_modeling_review.md",
+    "destination": "docs/viewshed_modeling_review.md",
+    "sha256_before": "09b5f0fdec0fe962e202daafb85ceff0532e8d040ca6c0230cd917bf81630dff",
+    "remove_source": true
+  },
+  {
+    "source": "docs/viewshed_static_maps.md",
+    "destination": "docs/viewshed_static_maps.md",
+    "sha256_before": "1129d397ae7b53803af1ca3dc9dc42854aed66d3b5100b08c7c175dd8e16ffd7",
+    "remove_source": true
+  },
+  {
+    "source": "docs/viewshed_effort_proxy_pipeline.html",
+    "destination": "docs/viewshed_effort_proxy_pipeline.html",
+    "sha256_before": "7ce7a80935ecdf311dba1cbd2003ea56ae549ea72ba56bab0c8c74273a627c9b",
+    "remove_source": true
+  },
+  {
+    "source": "docs/migrations/land_observation_opportunity_v4.md",
+    "destination": "docs/migrations/land_observation_opportunity_v4.md",
+    "sha256_before": "89dbb979aaed8d367b89e07752cd6bdc2ed1855d66dffd4f28d9ab1432a267d1",
+    "remove_source": true
+  },
+  {
+    "source": "docs/migrations/land_observation_opportunity_followup.md",
+    "destination": "docs/migrations/land_observation_opportunity_followup.md",
+    "sha256_before": "408b123f5d2074f484b415c15d88a71b7c593e0aab3bccc39e4535bd5f9d9e0b",
+    "remove_source": true
+  },
+  {
+    "source": "docs/migrations/land_water_reliability_20260905.md",
+    "destination": "docs/migrations/land_water_reliability_20260905.md",
+    "sha256_before": "b69d2e4117b73de4ce06a60621b0bd7c5b68dc3bfadb818c728fde5267a5ea3c",
+    "remove_source": true
+  },
+  {
+    "source": "notebooks/exploration/04_HUMAN_POPULATION.ipynb",
+    "destination": "notebooks/exploration/04_HUMAN_POPULATION.ipynb",
+    "sha256_before": "1be04a2ae29e6879880ddc4f90af1fad3dbad3fa56295bb55924f85d15088a17",
+    "remove_source": true
+  },
+  {
+    "source": "notebooks/data/ferry_utils/ferry_route_effort.yaml",
+    "destination": "notebooks/data/ferry_utils/ferry_route_effort.yaml",
+    "sha256_before": "cbdc0836de65d704e7e0586ccb3107b30b78305df24657d302a323dc6a2c8838",
+    "remove_source": true
+  }
+]
