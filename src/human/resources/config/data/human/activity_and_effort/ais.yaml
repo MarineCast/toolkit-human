@@ -1,0 +1,31 @@
+schema_version: 1
+product: ais
+category: activity_and_effort
+source:
+  provider: Legacy OrcaCast AIS archive
+  license: unresolved
+  attribution: unresolved
+  source_completeness: partial
+  measurement_status: observed
+  materialization_mode: reference_existing
+  supplied_paths:
+    - data/processed/domain/human_layer/ais/PROCESSED_SIGHTINGS_2020.parquet
+    - data/processed/domain/human_layer/ais/PROCESSED_SIGHTINGS_2021.parquet
+    - data/processed/domain/human_layer/ais/PROCESSED_SIGHTINGS_2022.parquet
+    - data/processed/domain/human_layer/ais/PROCESSED_SIGHTINGS_2023.parquet
+    - data/processed/domain/human_layer/ais/PROCESSED_SIGHTINGS_2024.parquet
+parameters:
+  h3_resolution: 6
+  output_grains: [daily, weekly]
+  sog_not_available_min_knots: 102.0
+  observer_capable_classes: [recreational, passenger]
+raw:
+  snapshot_dir: data/raw/human/activity_and_effort/ais/yearly
+  manifest_path: data/raw/human/activity_and_effort/ais/manifest.json
+output:
+  daily_path: data/processed/domain/human/activity_and_effort/ais/ais_activity_daily_r6.parquet
+  weekly_path: data/processed/domain/human/activity_and_effort/ais/ais_activity_weekly_r6.parquet
+  qc_path: data/processed/domain/human/activity_and_effort/ais/ais_activity_qc.json
+  manifest_path: data/processed/domain/human/activity_and_effort/ais/manifest.json
+inspection:
+  report_path: outputs/domains/human/activity_and_effort/ais/ais_activity.html

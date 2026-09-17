@@ -1,0 +1,23 @@
+schema_version: 1
+product: land_transport_access
+category: accessibility
+source:
+  path: outputs/effort/land_source_context/transport_access/land_source_transport_access_h3_r7_prototype.parquet
+  metadata_path: outputs/effort/land_source_context/transport_access/land_source_transport_access_h3_r7_prototype.metadata.json
+  provider: OSRM public demo service using OpenStreetMap data
+  license: Open Data Commons Open Database License (ODbL) 1.0
+  attribution: © OpenStreetMap contributors
+parameters:
+  h3_resolution: 7
+  source_completeness: partial
+  road_distance_decay_km: 5
+  city_travel_time_decay_minutes: 120
+raw:
+  snapshot_path: data/raw/human/accessibility/land_transport_access/land_transport_routing_h3_r7.parquet
+  snapshot_metadata_path: data/raw/human/accessibility/land_transport_access/land_transport_routing_h3_r7.metadata.json
+  manifest_path: data/raw/human/accessibility/land_transport_access/manifest.json
+output:
+  h3_path: data/processed/domain/human/accessibility/land_transport_access/land_transport_access_h3_r7.parquet
+  manifest_path: data/processed/domain/human/accessibility/land_transport_access/manifest.json
+inspection:
+  report_path: outputs/domains/human/accessibility/land_transport_access/land_transport_access.html

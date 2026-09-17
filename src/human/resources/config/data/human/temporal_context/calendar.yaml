@@ -1,0 +1,28 @@
+schema_version: 1
+product: calendar
+category: temporal_context
+time:
+  start_date: "2020-01-01"
+  end_date: "2030-12-31"
+  timezone: UTC
+jurisdictions:
+  - country: US
+    subdivision: WA
+  - country: CA
+    subdivision: BC
+features:
+  peak_months: [6, 7, 8, 9]
+  shoulder_months: [4, 5, 10]
+  summer_months: [6, 7, 8]
+raw:
+  holiday_snapshot: data/raw/human/temporal_context/calendar/holiday_snapshot.parquet
+  manifest_path: data/raw/human/temporal_context/calendar/manifest.json
+output:
+  daily_path: data/processed/domain/human/temporal_context/calendar/calendar_daily.parquet
+  manifest_path: data/processed/domain/human/temporal_context/calendar/manifest.json
+inspection:
+  report_path: outputs/domains/human/temporal_context/calendar/calendar_daily.html
+sources:
+  provider: python-holidays
+  license: MIT
+  attribution: python-holidays contributors and official US/Canada holiday definitions

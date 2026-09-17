@@ -1,0 +1,30 @@
+schema_version: 1
+product: observer_effort
+category: activity_and_effort
+source:
+  source_completeness: partial
+  measurement_status: derived
+parameters:
+  product_role: deprecated_compatibility_sensitivity
+  canonical_primary_composite: false
+  source_h3_resolution: 6
+  viewshed_h3_resolution: 7
+  output_h3_resolution: 6
+  primary_activity_column: OBSERVER_CAPABLE_VESSEL_HOURS_PROXY
+  component_activity_columns:
+    - RECREATIONAL_VESSEL_HOURS_PROXY
+    - PASSENGER_VESSEL_HOURS_PROXY
+    - ACTIVE_VESSEL_HOURS_PROXY
+  scaling_quantile: 0.99
+  scaling_reference_weeks: 104
+pipeline:
+  ais_weekly_path: data/processed/domain/human/activity_and_effort/ais/ais_activity_weekly_r6.parquet
+  ais_manifest_path: data/processed/domain/human/activity_and_effort/ais/manifest.json
+  water_static_weights_path: data/processed/domain/human/viewshed/RES7/WATER_STATIC_WEIGHTS_R7.parquet
+  viewshed_config_path: config/modeling/effort/viewshed.yaml
+output:
+  weekly_path: data/processed/domain/human/activity_and_effort/observer_effort/water_ais_reporting_opportunity_weekly_r6.parquet
+  metadata_path: data/processed/domain/human/activity_and_effort/observer_effort/water_ais_reporting_opportunity_weekly_r6.metadata.json
+  manifest_path: data/processed/domain/human/activity_and_effort/observer_effort/manifest.json
+inspection:
+  report_path: outputs/domains/human/activity_and_effort/observer_effort/water_ais_reporting_opportunity.html

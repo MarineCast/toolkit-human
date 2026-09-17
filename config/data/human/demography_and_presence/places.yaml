@@ -1,0 +1,68 @@
+schema_version: 1
+product: places
+category: demography_and_presence
+bbox:
+  west: -125.8
+  south: 45.4
+  east: -116.7
+  north: 49.2
+parameters:
+  distance_crs: EPSG:5070
+  nearshore_miles: 10.0
+  destination_nearshore_miles: 2.0
+  destination_score_threshold: 5.0
+  include_osm: true
+  include_ferries: true
+  include_marinas: true
+  require_named_marinas: true
+raw:
+  cache_dir: data/raw/human/demography_and_presence/places
+  inventory_path: data/raw/human/demography_and_presence/places/source_inventory.json
+  manifest_path: data/raw/human/demography_and_presence/places/manifest.json
+output:
+  catalog_path: data/processed/domain/human/demography_and_presence/places/places_of_interest.json
+  manifest_path: data/processed/domain/human/demography_and_presence/places/manifest.json
+inspection:
+  report_path: outputs/domains/human/demography_and_presence/places/places_of_interest.html
+app_export:
+  output_path: ../OrcaCast_Public/public/data/places_of_interest.json
+  version: "1.0"
+sources:
+  wsdot_ferry_terminals:
+    type: arcgis_feature_layer
+    url: https://data.wsdot.wa.gov/arcgis/rest/services/Shared/FerryRoutes/MapServer/0
+    provider: Washington State Department of Transportation
+    license: Washington State open data terms
+    attribution: Washington State Department of Transportation
+  wa_state_parks:
+    type: arcgis_feature_layer
+    url: https://services2.arcgis.com/6Miy5NqQWjMYTGFY/ArcGIS/rest/services/WA_State_Parks_WFL1/FeatureServer/3
+    provider: Washington State Parks
+    license: Washington State open data terms
+    attribution: Washington State Parks
+  ecology_marinas:
+    type: arcgis_feature_layer
+    url: https://gis.ecology.wa.gov/serverext/rest/services/GIS/CoastalAtlas/MapServer/116
+    provider: Washington Department of Ecology
+    license: Washington State open data terms
+    attribution: Washington Department of Ecology
+  openstreetmap_overpass:
+    type: overpass_api
+    url: https://overpass-api.de/api/interpreter
+    provider: OpenStreetMap contributors
+    license: ODbL-1.0
+    attribution: OpenStreetMap contributors
+  natural_earth_ocean:
+    type: zip_shapefile
+    url: https://naturalearth.s3.amazonaws.com/10m_physical/ne_10m_ocean.zip
+    version: 10m
+    provider: Natural Earth
+    license: Public domain
+    attribution: Natural Earth
+  natural_earth_marine_polys:
+    type: zip_shapefile
+    url: https://naturalearth.s3.amazonaws.com/10m_physical/ne_10m_geography_marine_polys.zip
+    version: 10m
+    provider: Natural Earth
+    license: Public domain
+    attribution: Natural Earth

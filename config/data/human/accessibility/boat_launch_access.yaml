@@ -1,0 +1,50 @@
+schema_version: 1
+product: boat_launch_access
+category: accessibility
+bbox:
+  west: -125.8
+  south: 46.85
+  east: -121.6
+  north: 50.0
+sources:
+  wa_public_access_points:
+    type: arcgis
+    url: https://gis.ecology.wa.gov/serverext/rest/services/Authoritative/SEA/FeatureServer/4
+    provider: Washington State Department of Ecology
+    license: Washington State Department of Ecology data disclaimer
+    attribution: Washington State Department of Ecology Shorelands and Environmental Assistance Program
+    jurisdiction: WA
+  bc_coastal_boat_launches:
+    type: arcgis
+    url: https://delivery.maps.gov.bc.ca/arcgis/rest/services/mpcm/bcgwpub/MapServer/290
+    provider: Province of British Columbia
+    license: Open Government Licence - British Columbia
+    attribution: Province of British Columbia
+    jurisdiction: BC
+  osm_slipways:
+    type: overpass
+    required: false
+    url: https://overpass-api.de/api/interpreter
+    fallback_urls:
+      - https://overpass.kumi.systems/api/interpreter
+      - https://overpass.private.coffee/api/interpreter
+    provider: OpenStreetMap contributors via Overpass API
+    license: Open Data Commons Open Database License (ODbL) 1.0
+    attribution: © OpenStreetMap contributors
+    jurisdiction: cross_border
+parameters:
+  h3_resolution: 7
+  source_completeness: partial
+  overpass_tile_span_degrees: 1.5
+  overpass_query_timeout_seconds: 25
+  overpass_request_timeout_seconds: 30
+raw:
+  snapshot_dir: data/raw/human/accessibility/boat_launch_access
+  source_availability_path: data/raw/human/accessibility/boat_launch_access/source_availability.json
+  manifest_path: data/raw/human/accessibility/boat_launch_access/manifest.json
+output:
+  facilities_path: data/processed/domain/human/accessibility/boat_launch_access/boat_launch_facilities_r7.parquet
+  h3_path: data/processed/domain/human/accessibility/boat_launch_access/boat_launch_access_h3_r7.parquet
+  manifest_path: data/processed/domain/human/accessibility/boat_launch_access/manifest.json
+inspection:
+  report_path: outputs/domains/human/accessibility/boat_launch_access/boat_launch_access.html

@@ -1,0 +1,23 @@
+schema_version: 1
+product: land_transport_access
+category: accessibility
+source:
+  path: data/raw/human/accessibility/road_only_routing/20260825_od_v2/transport.parquet
+  metadata_path: data/raw/human/accessibility/road_only_routing/20260825_od_v2/transport.metadata.json
+  provider: Pinned local OSRM 26.8.0 road-only graph using dated Geofabrik OSM extracts
+  license: Open Data Commons Open Database License (ODbL) 1.0
+  attribution: © OpenStreetMap contributors; Geofabrik
+parameters:
+  h3_resolution: 7
+  source_completeness: partial
+  road_distance_decay_km: 5
+  city_travel_time_decay_minutes: 120
+raw:
+  snapshot_path: data/raw/human/accessibility/land_transport_access/road_only/routing.parquet
+  snapshot_metadata_path: data/raw/human/accessibility/land_transport_access/road_only/metadata.json
+  manifest_path: data/raw/human/accessibility/land_transport_access/road_only/manifest.json
+output:
+  h3_path: data/processed/domain/human/accessibility/land_transport_access/road_only/land_transport_access_h3_r7.parquet
+  manifest_path: data/processed/domain/human/accessibility/land_transport_access/road_only/manifest.json
+inspection:
+  report_path: outputs/domains/human/accessibility/land_transport_access/road_only.html

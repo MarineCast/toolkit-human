@@ -1,0 +1,82 @@
+schema_version: 1
+product: public_shore_access
+category: accessibility
+bbox:
+  west: -125.8
+  south: 46.85
+  east: -121.6
+  north: 50.0
+sources:
+  wa_public_access_lines:
+    type: arcgis
+    url: https://gis.ecology.wa.gov/serverext/rest/services/Authoritative/SEA/FeatureServer/3
+    provider: Washington State Department of Ecology
+    license: Washington State Department of Ecology data disclaimer
+    attribution: Washington State Department of Ecology Shorelands and Environmental Assistance Program
+    jurisdiction: WA
+  wa_public_access_points:
+    type: arcgis
+    url: https://gis.ecology.wa.gov/serverext/rest/services/Authoritative/SEA/FeatureServer/4
+    provider: Washington State Department of Ecology
+    license: Washington State Department of Ecology data disclaimer
+    attribution: Washington State Department of Ecology Shorelands and Environmental Assistance Program
+    jurisdiction: WA
+  wa_marine_shoreline:
+    type: arcgis
+    url: https://gis.ecology.wa.gov/serverext/rest/services/Authoritative/SEA/FeatureServer/9
+    provider: Washington State Department of Ecology
+    license: Washington State Department of Ecology data disclaimer
+    attribution: Washington State Department of Ecology Shorelands and Environmental Assistance Program
+    jurisdiction: WA
+  bc_recreation_sites:
+    type: wfs
+    required: false
+    url: https://openmaps.gov.bc.ca/geo/pub/WHSE_FOREST_TENURE.FTEN_REC_SITE_POINTS_SVW/wfs
+    feature_type: pub:WHSE_FOREST_TENURE.FTEN_REC_SITE_POINTS_SVW
+    page_size: 10000
+    sort_by: OBJECTID
+    provider: Recreation Sites and Trails BC via DataBC
+    license: Open Government Licence - British Columbia
+    attribution: Province of British Columbia, Recreation Sites and Trails BC
+    jurisdiction: BC
+  bc_shorezone_lines:
+    type: wfs
+    required: false
+    url: https://openmaps.gov.bc.ca/geo/pub/WHSE_ENVIRONMENTAL_MONITORING.SHZN_SHORE_UNIT_CLASS_LINES_SV/wfs
+    feature_type: pub:WHSE_ENVIRONMENTAL_MONITORING.SHZN_SHORE_UNIT_CLASS_LINES_SV
+    page_size: 10000
+    provider: Province of British Columbia via DataBC
+    license: Open Government Licence - British Columbia
+    attribution: Province of British Columbia, ShoreZone Mapping Program
+    jurisdiction: BC
+  osm_shore_access:
+    type: overpass
+    required: false
+    url: https://overpass-api.de/api/interpreter
+    fallback_urls:
+      - https://overpass.kumi.systems/api/interpreter
+      - https://overpass.private.coffee/api/interpreter
+    provider: OpenStreetMap contributors via Overpass API
+    license: Open Data Commons Open Database License (ODbL) 1.0
+    attribution: © OpenStreetMap contributors
+    jurisdiction: cross_border
+parameters:
+  h3_resolution: 7
+  source_completeness: partial
+  length_crs: EPSG:32610
+  sample_spacing_m: 200
+  bc_shore_connection_distance_m: 500
+  osm_shore_connection_distance_m: 500
+  overpass_tile_span_degrees: 5
+  overpass_query_timeout_seconds: 180
+  overpass_request_timeout_seconds: 240
+raw:
+  snapshot_dir: data/raw/human/accessibility/public_shore_access
+  source_availability_path: data/raw/human/accessibility/public_shore_access/source_availability.json
+  manifest_path: data/raw/human/accessibility/public_shore_access/manifest.json
+output:
+  facilities_path: data/processed/domain/human/accessibility/public_shore_access/public_shore_facilities_r7.parquet
+  h3_path: data/processed/domain/human/accessibility/public_shore_access/public_shore_access_h3_r7.parquet
+  manifest_path: data/processed/domain/human/accessibility/public_shore_access/manifest.json
+inspection:
+  report_path: outputs/domains/human/accessibility/public_shore_access/public_shore_access.html

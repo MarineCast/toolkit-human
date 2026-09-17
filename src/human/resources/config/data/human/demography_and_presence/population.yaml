@@ -1,0 +1,101 @@
+schema_version: 1
+product: population
+category: demography_and_presence
+h3_resolution: 7
+output_crs: EPSG:4326
+paths:
+  water_polygons_path: data/processed/domain/environmental_layer/seascape/spatial_support/water_geometry/TERRITORIAL_WATER_POLYGON.parquet
+runtime:
+  overwrite_downloads: false
+  overwrite_raw_cache: false
+  overwrite_output: false
+  write_debug_geo: false
+population:
+  us:
+    state_fips: ["53", "41"]
+    state_abbr: [WA, OR]
+    area_crs: EPSG:5070
+    census:
+      year: 2020
+      dataset: dec/pl
+      total_population_variable: P1_001N
+      api_base_url: https://api.census.gov/data/2020/dec/pl
+      use_api_key: true
+      api_key_env_var: CENSUS_API_KEY
+      sleep_seconds: 0.25
+      max_retries: 3
+      timeout_seconds: 120
+    tiger:
+      blocks_urls:
+        "53": https://www2.census.gov/geo/tiger/TIGER2020/TABBLOCK20/tl_2020_53_tabblock20.zip
+        "41": https://www2.census.gov/geo/tiger/TIGER2020/TABBLOCK20/tl_2020_41_tabblock20.zip
+      states_url: https://www2.census.gov/geo/tiger/TIGER2024/STATE/tl_2024_us_state.zip
+    paths:
+      data_dir: data/population
+      raw_dir: data/raw/human/demography_and_presence/population/us
+      processed_dir: data/processed/domain/human/demography_and_presence/population
+      output_parquet: data/processed/domain/human/demography_and_presence/population/us_population_h3_r7.parquet
+    water_distance:
+      max_distance_miles: 100
+      filter_output_to_water_buffer: false
+      distance_basis: centroid
+      distance_threshold_miles: [25, 50, 75, 100]
+      decay: linear
+    runtime:
+      debug_output_path: data/processed/domain/human/demography_and_presence/population/us_population_h3_r7.geo.parquet
+  canada:
+    canada_area_crs: EPSG:3005
+    canada:
+      enabled: true
+      census_year: 2021
+      province_name: British Columbia
+      province_abbr: BC
+      province_code: "59"
+      geography_level: DA
+      population_variable_candidates: ["Population, 2021", Population, pop_2021]
+      source: statscan
+      api_or_download_mode: local
+      statcan_profile_wds_url: https://www12.statcan.gc.ca/wds-sdw/2021profile-profil2021-eng.cfm
+      statcan_sdmx_base_url: https://api.statcan.gc.ca/census-recensement/profile/sdmx/rest
+      statcan_dataflow: DF_DA
+      statcan_frequency: A5
+      statcan_gender_code: "1"
+      statcan_population_characteristic_code: "1"
+      statcan_statistic_code: "1"
+      statcan_request_chunk_size: 200
+      statcan_timeout_seconds: 120
+      statcan_dguid_prefix: 2021S0512
+      geography_path: null
+      population_table_path: null
+      population_download_url: https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/download-telecharger/comp/GetFile.cfm?Lang=E&FILETYPE=CSV&GEONO=006_BC_CB
+      population_download_filename: bc_census_profile_2021.csv.zip
+      geography_download_url: https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lda_000b21a_e.zip
+      geography_download_filename: lda_000b21a_e.zip
+      geography_join_column_candidates: [DAUID, DGUID, GEOUID, geo_id]
+      population_join_column_candidates: [DAUID, DGUID, GEOUID, geo_id]
+    canada_paths:
+      raw_dir: data/raw/human/demography_and_presence/population/canada
+      processed_dir: data/processed/domain/human/demography_and_presence/population
+      population_api_cache: data/raw/human/demography_and_presence/population/canada/bc_da_population_2021.parquet
+      output_parquet: data/processed/domain/human/demography_and_presence/population/canada_population_h3_r7.parquet
+    canada_water_distance:
+      candidate_distance_miles: 150
+      final_max_distance_miles: 100
+      h3_prefilter_distance_miles: 105
+      filter_h3_to_source_geographies: false
+      distance_basis: centroid
+      distance_threshold_miles: [25, 50, 75, 100]
+      decay: linear
+    runtime:
+      allocation_chunk_parent_resolution: 4
+      debug_output_path: data/processed/domain/human/demography_and_presence/population/canada_population_h3_r7.geo.parquet
+output:
+  us_path: data/processed/domain/human/demography_and_presence/population/us_population_h3_r7.parquet
+  canada_path: data/processed/domain/human/demography_and_presence/population/canada_population_h3_r7.parquet
+  cross_border_path: data/processed/domain/human/demography_and_presence/population/cross_border_population_h3_r7.parquet
+  context_path: data/processed/domain/human/demography_and_presence/population/population_context_h3_r7.parquet
+  manifest_path: data/processed/domain/human/demography_and_presence/population/manifest.json
+raw:
+  manifest_path: data/raw/human/demography_and_presence/population/manifest.json
+inspection:
+  report_path: outputs/domains/human/demography_and_presence/population/population_h3_r7.html

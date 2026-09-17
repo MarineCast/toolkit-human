@@ -1,0 +1,203 @@
+schema_version: 1
+
+# Only accepted, evidence-backed mappings belong here. Unlisted input routes fail
+# unless they are explicitly documented under excluded_routes or the CLI is run
+# with --allow-incomplete-routes.
+routes:
+  - jurisdiction: Washington
+    ridership_route_key: Edmonds__Kingston
+    route_geometry_id: WA_EDMONDS_KINGSTON
+    route_name: Edmonds-Kingston
+    operator: Washington State Ferries
+    route_duration_minutes: 30.0
+    duration_source_url: https://wsdot.com/ferries/schedule/scheduledetailbyroute.aspx?lang=en&route=ed-king
+    segment_ids:
+      - WA-0011-S01
+    enabled: true
+    ridership_scope: adjacent_leg
+    full_route_traversal_assumption: false
+
+  - jurisdiction: Washington
+    ridership_route_key: Bainbridge Island__Seattle
+    route_geometry_id: WA_SEATTLE_BAINBRIDGE
+    route_name: Seattle-Bainbridge Island
+    operator: Washington State Ferries
+    route_duration_minutes: 35.0
+    duration_source_url: https://wsdot.com/ferries/schedule/scheduledetailbyroute.aspx?route=sea-b
+    segment_ids: [WA-0012-S01]
+    enabled: true
+    ridership_scope: adjacent_leg
+    full_route_traversal_assumption: false
+
+  - jurisdiction: Washington
+    ridership_route_key: Bremerton__Seattle
+    route_geometry_id: WA_SEATTLE_BREMERTON
+    route_name: Seattle-Bremerton
+    operator: Washington State Ferries
+    route_duration_minutes: 60.0
+    duration_source_url: https://wsdot.com/Ferries/Schedule/scheduledetail.aspx?arrivingterm=4&departingterm=7&roundtrip=true
+    segment_ids: [WA-0009-S01]
+    enabled: true
+    ridership_scope: adjacent_leg
+    full_route_traversal_assumption: false
+
+  - jurisdiction: Washington
+    ridership_route_key: Clinton__Mukilteo
+    route_geometry_id: WA_MUKILTEO_CLINTON
+    route_name: Mukilteo-Clinton
+    operator: Washington State Ferries
+    route_duration_minutes: 20.0
+    duration_source_url: https://wsdot.com/Ferries/Schedule/ScheduleDetailByRoute.aspx?route=muk-cl
+    segment_ids: [WA-0032-S01]
+    enabled: true
+    ridership_scope: adjacent_leg
+    full_route_traversal_assumption: false
+
+  - jurisdiction: Washington
+    ridership_route_key: Coupeville__Port Townsend
+    route_geometry_id: WA_PORT_TOWNSEND_COUPEVILLE
+    route_name: Port Townsend-Coupeville
+    operator: Washington State Ferries
+    route_duration_minutes: 35.0
+    duration_source_url: https://wsdot.com/Ferries/Schedule/scheduledetailbyroute.aspx?route=pt-key
+    segment_ids: [WA-0010-S01]
+    enabled: true
+    ridership_scope: adjacent_leg
+    full_route_traversal_assumption: false
+
+  - jurisdiction: Washington
+    ridership_route_key: Point Defiance__Tahlequah
+    route_geometry_id: WA_POINT_DEFIANCE_TAHLEQUAH
+    route_name: Point Defiance-Tahlequah
+    operator: Washington State Ferries
+    route_duration_minutes: 15.0
+    duration_source_url: https://wsdot.com/ferries/schedule/scheduledetailbyroute.aspx?route=pd-tal
+    segment_ids: [WA-0002-S01]
+    enabled: true
+    ridership_scope: adjacent_leg
+    full_route_traversal_assumption: false
+
+  # Temporary modeling assumption requested for the multi-stop San Juan service:
+  # every reported rider traverses the complete Anacortes-Lopez-Shaw-Orcas-
+  # Friday Harbor itinerary. All five source keys intentionally share one static
+  # crosswalk, so their rider-minutes add in the collapsed date x H3 product.
+  - &anacortes_full_route
+    jurisdiction: Washington
+    ridership_route_key: Anacortes-San Juan Islands
+    route_geometry_id: WA_ANACORTES_SAN_JUANS_FULL
+    route_name: Anacortes-Lopez-Shaw-Orcas-Friday Harbor
+    operator: Washington State Ferries
+    route_duration_minutes: 135.0
+    duration_source_url: https://wsdot.com/Ferries/Schedule/ScheduleDetailByRoute.aspx?route=ana-sjj
+    segment_ids:
+      - WA-0030-S01
+      - WA-0016-S02
+      - WA-0016-S04
+      - WA-0016-S05
+      - WA-0016-S06
+      - WA-0016-S08
+      - WA-0016-S07
+      - WA-0016-S01
+    enabled: true
+    ridership_scope: multi_stop_full_route_assumption
+    full_route_traversal_assumption: true
+    history_duration_eligible: false
+    traversal_assumption_note: Every reported rider is modeled over the full Anacortes-Lopez-Shaw-Orcas-Friday Harbor itinerary.
+
+  - <<: *anacortes_full_route
+    ridership_route_key: Anacortes__Friday Harbor
+    history_duration_eligible: true
+  - <<: *anacortes_full_route
+    ridership_route_key: Anacortes__Lopez
+  - <<: *anacortes_full_route
+    ridership_route_key: Anacortes__Orcas
+  - <<: *anacortes_full_route
+    ridership_route_key: Anacortes__Shaw
+
+  # Triangle-route records are treated as through riders on the corresponding
+  # multi-stop itinerary rather than only on the source terminal pair.
+  - jurisdiction: Washington
+    ridership_route_key: Fauntleroy__Southworth
+    route_geometry_id: WA_FAUNTLEROY_VASHON_SOUTHWORTH
+    route_name: Fauntleroy-Vashon-Southworth
+    operator: Washington State Ferries
+    route_duration_minutes: 40.0
+    duration_source_url: https://wsdot.com/Ferries/Schedule/ScheduleDetailByRoute.aspx?route=f-s
+    segment_ids: [WA-0017-S01, WA-0018-S01]
+    enabled: true
+    ridership_scope: multi_stop_full_route_assumption
+    full_route_traversal_assumption: true
+    traversal_assumption_note: Fauntleroy-Southworth riders are modeled via Vashon over both legs.
+
+  - jurisdiction: Washington
+    ridership_route_key: Fauntleroy__Vashon
+    route_geometry_id: WA_FAUNTLEROY_SOUTHWORTH_VASHON
+    route_name: Fauntleroy-Southworth-Vashon
+    operator: Washington State Ferries
+    route_duration_minutes: 45.0
+    duration_source_url: https://wsdot.com/Ferries/Schedule/ScheduleDetailByRoute.aspx?route=f-v
+    segment_ids: [WA-0008-S01, WA-0018-S01]
+    enabled: true
+    ridership_scope: multi_stop_full_route_assumption
+    full_route_traversal_assumption: true
+    traversal_assumption_note: Fauntleroy-Vashon riders are modeled via Southworth over both legs.
+
+  - &southworth_via_fauntleroy
+    jurisdiction: Washington
+    ridership_route_key: Southworth__Vashon
+    route_geometry_id: WA_SOUTHWORTH_FAUNTLEROY_VASHON
+    route_name: Southworth-Fauntleroy-Vashon
+    operator: Washington State Ferries
+    route_duration_minutes: 50.0
+    duration_source_url: https://wsdot.com/Ferries/Schedule/ScheduleDetailByRoute.aspx?route=s-v
+    segment_ids: [WA-0008-S01, WA-0017-S01]
+    enabled: true
+    ridership_scope: multi_stop_full_route_assumption
+    full_route_traversal_assumption: true
+    traversal_assumption_note: Southworth-Vashon riders are modeled via Fauntleroy over both legs.
+
+  - <<: *southworth_via_fauntleroy
+    ridership_route_key: Southworth__Southworth
+    traversal_assumption_note: Malformed Southworth self-loop records are provisionally modeled as Southworth-Fauntleroy-Vashon through trips.
+
+  - jurisdiction: British Columbia
+    ridership_route_key: "01"
+    route_geometry_id: BC_TSAWWASSEN_SWARTZ_BAY
+    route_name: Tsawwassen-Swartz Bay
+    operator: BC Ferries
+    route_duration_minutes: 95.0
+    duration_source_url: https://www.bcferries.com/current-conditions/TSA-SWB
+    segment_ids:
+      - BC-0070-S01
+      - BC-0070-S02
+    enabled: true
+    ridership_scope: route_level
+    full_route_traversal_assumption: true
+
+# These routes are outside the currently accepted production mapping scope. This
+# is explicit so they are visible in metadata and never silently fuzzy-matched.
+excluded_routes:
+  - {jurisdiction: British Columbia, ridership_route_key: "02", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "03", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "04", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "05", reason: multi-stop traversal geometry and duration unresolved}
+  - {jurisdiction: British Columbia, ridership_route_key: "06", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "07", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "08", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "09", reason: multi-stop traversal geometry and duration unresolved}
+  - {jurisdiction: British Columbia, ridership_route_key: "10", reason: multi-stop traversal geometry and duration unresolved}
+  - {jurisdiction: British Columbia, ridership_route_key: "11", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "12", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "13", reason: multi-stop traversal geometry and duration unresolved}
+  - {jurisdiction: British Columbia, ridership_route_key: "17", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "18", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "19", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "20", reason: multi-stop traversal geometry and duration unresolved}
+  - {jurisdiction: British Columbia, ridership_route_key: "21", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "22", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "23", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "24", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "25", reason: multi-stop traversal geometry and duration unresolved}
+  - {jurisdiction: British Columbia, ridership_route_key: "26", reason: route duration not yet accepted in configuration}
+  - {jurisdiction: British Columbia, ridership_route_key: "28", reason: multi-stop traversal geometry and duration unresolved}
+  - {jurisdiction: British Columbia, ridership_route_key: "30", reason: route duration not yet accepted in configuration}

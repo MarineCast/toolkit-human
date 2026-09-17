@@ -1,0 +1,49 @@
+schema_version: 1
+product: ferry
+category: activity_and_effort
+source:
+  source_completeness: partial
+  wsf_ridership:
+    supplied_path: data/raw/human/activity_and_effort/ferry/wsf_ridership.parquet
+    provider: Washington State Ferries Tableau Public
+    license: Washington State public records terms
+    attribution: Washington State Ferries
+    measurement_status: observed
+  bc_ridership:
+    supplied_path: data/raw/human/activity_and_effort/ferry/bc_ferries_estimated_ridership.parquet
+    provider: BC Ferries published traffic reports
+    license: BC Ferries terms of use
+    attribution: BC Ferries
+    measurement_status: estimated
+  route_segments:
+    supplied_path: data/raw/human/activity_and_effort/ferry/wa_bc_ferry_route_segments.parquet
+    provider: WSDOT and BC Ferries route geometry
+    license: mixed public data terms
+    attribution: WSDOT and BC Ferries
+    measurement_status: derived
+  route_mapping:
+    supplied_path: data/raw/human/activity_and_effort/ferry/route_mapping.yaml
+    provider: OrcaCast explicit route crosswalk
+    license: project source
+    attribution: OrcaCast
+    measurement_status: derived
+  wsf_vessel_history:
+    supplied_path: data/raw/human/activity_and_effort/ferry/wsf_vessel_history_2025-07-20.parquet
+    provider: WSDOT Vessel History API
+    license: Washington State public records terms
+    attribution: Washington State Department of Transportation
+    measurement_status: observed
+parameters:
+  native_h3_resolution: 7
+  model_h3_resolution: 6
+raw:
+  snapshot_dir: data/raw/human/activity_and_effort/ferry
+  manifest_path: data/raw/human/activity_and_effort/ferry/manifest.json
+output:
+  directory: data/processed/domain/human/activity_and_effort/ferry
+  route_daily_path: data/processed/domain/human/activity_and_effort/ferry/ferry_effort_daily_by_route_r7.parquet
+  daily_path: data/processed/domain/human/activity_and_effort/ferry/ferry_effort_daily_r7.parquet
+  weekly_path: data/processed/domain/human/activity_and_effort/ferry/ferry_effort_weekly_r6.parquet
+  manifest_path: data/processed/domain/human/activity_and_effort/ferry/manifest.json
+inspection:
+  report_path: outputs/domains/human/activity_and_effort/ferry/ferry_effort.html

@@ -1,0 +1,58 @@
+schema_version: 1
+product: land_reporting_opportunity
+category: activity_and_effort
+source:
+  source_completeness: partial
+parameters:
+  h3_resolution: 7
+  scaling_quantile: 0.99
+  dynamic_output_h3_resolution: 6
+  dynamic_distance_bin_km: 0.25
+  dynamic_reference_weeks: 104
+  dynamic_chunk_days: 92
+  visibility_transition_fraction: 0.20
+  visibility_minimum_transition_km: 1.0
+  wind_support_midpoint_ms: 5.5
+  wind_support_slope_ms: 1.5
+  precipitation_support_half_mm_day: 10.0
+  conditions_wind_exponent: 0.70
+  conditions_precipitation_exponent: 0.30
+composite:
+  formula_version: land_reporting_opportunity_v2_access_conditioned
+  primary_stream: LAND_EFFORT_PROXY
+  calendar_applied_streams:
+    - POPULATION_TRAVEL_OPPORTUNITY
+    - ROAD_ACCESS_OPPORTUNITY
+    - CITY_ACCESS_OPPORTUNITY
+    - TRANSPORT_ACCESS_OPPORTUNITY
+    - LAND_REACHABILITY_OPPORTUNITY
+    - LAND_EFFORT_PROXY
+    - VERIFIED_LAND_EFFORT_PROXY
+  include_potentially_endogenous: false
+pipeline:
+  static_weights_path: data/processed/domain/human/viewshed/RES7/LAND_STATIC_WEIGHTS_R7.parquet
+  viewshed_config_path: config/modeling/effort/viewshed.yaml
+  transport_path: data/processed/domain/human/accessibility/land_transport_access/road_only/land_transport_access_h3_r7.parquet
+  transport_manifest_path: data/processed/domain/human/accessibility/land_transport_access/road_only/manifest.json
+  population_travel_path: data/processed/domain/human/accessibility/population_travel_time/road_only_240/population_travel_time_h3_r7.parquet
+  population_travel_manifest_path: data/processed/domain/human/accessibility/population_travel_time/road_only_240/manifest.json
+  public_shore_path: data/processed/domain/human/accessibility/public_shore_access/public_shore_access_h3_r7.parquet
+  public_shore_manifest_path: data/processed/domain/human/accessibility/public_shore_access/manifest.json
+  surface_weather_path: data/processed/domain/environmental_layer/meteorological/surface_weather/H3_SURFACE_WEATHER_DAILY_RES_5
+  surface_weather_manifest_path: data/processed/domain/environmental_layer/meteorological/surface_weather/MANIFEST.json
+  daylight_path: data/processed/domain/environmental_layer/meteorological/daylight/H3_DAYLIGHT_DAILY_RES_4
+  daylight_manifest_path: data/processed/domain/environmental_layer/meteorological/daylight/MANIFEST.json
+  calendar_path: data/processed/domain/human/temporal_context/calendar/calendar_daily.parquet
+  calendar_manifest_path: data/processed/domain/human/temporal_context/calendar/manifest.json
+raw:
+  input_inventory_path: data/raw/human/activity_and_effort/land_reporting_opportunity/road_only_240/input_inventory.json
+  manifest_path: data/raw/human/activity_and_effort/land_reporting_opportunity/road_only_240/manifest.json
+output:
+  source_h3_path: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/road_only_240/land_reporting_source_h3_r7.parquet
+  target_h3_path: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/road_only_240/land_reporting_target_h3_r7.parquet
+  daily_h3_path: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/road_only_240/land_reporting_opportunity_daily_h3_r6.parquet
+  weekly_h3_path: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/road_only_240/land_reporting_opportunity_weekly_h3_r6.parquet
+  dynamic_metadata_path: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/road_only_240/land_reporting_opportunity_dynamic.metadata.json
+  manifest_path: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/road_only_240/manifest.json
+inspection:
+  report_path: outputs/domains/human/activity_and_effort/land_reporting_opportunity/road_only_240.html

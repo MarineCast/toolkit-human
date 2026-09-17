@@ -1,0 +1,91 @@
+schema_version: 1
+product: water_observation_opportunity
+category: activity_and_effort
+source:
+  source_completeness: partial
+parameters:
+  source_h3_resolution: 7
+  viewshed_h3_resolution: 7
+  output_h3_resolution: 6
+  distance_bin_km: 0.5
+  visibility_transition_fraction: 0.20
+  visibility_minimum_transition_km: 1.0
+  wind_support_midpoint_ms: 5.5
+  wind_support_slope_ms: 1.5
+  precipitation_support_half_mm_day: 10.0
+  conditions_wind_exponent: 0.70
+  conditions_precipitation_exponent: 0.30
+  border_distance_bands_km: [15, 30, 50]
+  border_minimum_matches: 20
+  border_calipers:
+    population_travel: 0.35
+    road_access: 0.35
+    transport_access: 0.35
+    shoreline_length: 0.35
+    physical_viewability: 0.35
+  causal_roles:
+    ferry: exogenous
+    passenger_ais: mixed
+    all_vessel_ais: mixed
+    recreational_ais: mixed
+    commercial_ais: exogenous
+    fishing_ais: exogenous
+    whale_watch: potentially_endogenous
+  # Predeclared, diagnostic-only alternatives. Whale sightings are never used
+  # to select among these uncalibrated distance-detection curves.
+  distance_curve_sensitivity:
+    - label: steeper_near_range
+      selected_model: logistic
+      logistic_d50_km: 7.0
+      logistic_slope_km: 2.1
+      normalize_at_zero: true
+      hard_cutoff_km: 30.0
+    - label: configured_reference
+      selected_model: logistic
+      logistic_d50_km: 9.0
+      logistic_slope_km: 2.7
+      normalize_at_zero: true
+      hard_cutoff_km: 30.0
+    - label: broader_range
+      selected_model: logistic
+      logistic_d50_km: 11.0
+      logistic_slope_km: 3.3
+      normalize_at_zero: true
+      hard_cutoff_km: 30.0
+coverage:
+  ais_temporal_scope: source_daily_global
+  ais_spatial_coverage_state: unknown
+  ais_receiver_coverage_method: unavailable
+  absent_ais_policy: unknown_unless_cell_date_complete
+pipeline:
+  ais_daily_path: data/processed/domain/human/activity_and_effort/ais/ais_activity_daily_r6.parquet
+  ais_manifest_path: data/processed/domain/human/activity_and_effort/ais/manifest.json
+  ferry_daily_path: data/processed/domain/human/activity_and_effort/ferry/ferry_effort_daily_r7.parquet
+  ferry_manifest_path: data/processed/domain/human/activity_and_effort/ferry/manifest.json
+  surface_weather_path: data/processed/domain/environmental_layer/meteorological/surface_weather/H3_SURFACE_WEATHER_DAILY_RES_5
+  surface_weather_manifest_path: data/processed/domain/environmental_layer/meteorological/surface_weather/MANIFEST.json
+  daylight_path: data/processed/domain/environmental_layer/meteorological/daylight/H3_DAYLIGHT_DAILY_RES_4
+  daylight_manifest_path: data/processed/domain/environmental_layer/meteorological/daylight/MANIFEST.json
+  water_static_weights_path: data/processed/domain/human/viewshed/RES7/WATER_STATIC_WEIGHTS_R7.parquet
+  viewshed_config_path: config/modeling/effort/viewshed.yaml
+  sightings_release_pointer: data/processed/domain/whale_layer/sightings/releases/latest.json
+  land_manifest_path: data/processed/domain/human/activity_and_effort/land_reporting_opportunity/manifest.json
+  public_shore_path: data/processed/domain/human/accessibility/public_shore_access/public_shore_access_h3_r7.parquet
+raw:
+  input_inventory_path: data/raw/human/activity_and_effort/water_observation_opportunity/input_inventory.json
+  manifest_path: data/raw/human/activity_and_effort/water_observation_opportunity/manifest.json
+output:
+  source_daily_path: data/processed/domain/human/activity_and_effort/water_observation_opportunity/water_observation_source_components_daily_r7.parquet
+  source_weekly_path: data/processed/domain/human/activity_and_effort/water_observation_opportunity/water_observation_source_components_weekly_r7.parquet
+  target_daily_path: data/processed/domain/human/activity_and_effort/water_observation_opportunity/water_observation_components_daily_r6.parquet
+  target_weekly_path: data/processed/domain/human/activity_and_effort/water_observation_opportunity/water_observation_components_weekly_r6.parquet
+  static_contract_path: data/processed/domain/human/activity_and_effort/water_observation_opportunity/static_pair_contract.json
+  metadata_path: data/processed/domain/human/activity_and_effort/water_observation_opportunity/metadata.json
+  sighting_detail_path: data/processed/domain/human/activity_and_effort/water_observation_opportunity/sighting_component_diagnostics.parquet
+  sighting_summary_path: data/processed/domain/human/activity_and_effort/water_observation_opportunity/sighting_component_summary.csv
+  border_matches_path: data/processed/domain/human/activity_and_effort/water_observation_opportunity/wa_bc_border_matches.parquet
+  border_summary_path: data/processed/domain/human/activity_and_effort/water_observation_opportunity/wa_bc_border_summary.csv
+  report_artifact_path: data/processed/domain/human/activity_and_effort/water_observation_opportunity/observation_opportunity_diagnostics.html
+  manifest_path: data/processed/domain/human/activity_and_effort/water_observation_opportunity/manifest.json
+inspection:
+  report_path: outputs/domains/human/activity_and_effort/water_observation_opportunity/observation_opportunity_diagnostics.html

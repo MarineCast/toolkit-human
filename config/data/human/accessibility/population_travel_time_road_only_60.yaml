@@ -1,0 +1,27 @@
+schema_version: 1
+product: population_travel_time
+category: accessibility
+source:
+  path: data/raw/human/accessibility/road_only_routing/20260825_od_v2/population_demand.parquet
+  metadata_path: data/raw/human/accessibility/road_only_routing/20260825_od_v2/population_demand.metadata.json
+  provider: Pinned local OSRM 26.8.0 road-only graph using dated Geofabrik OSM extracts
+  license: Open Data Commons Open Database License (ODbL) 1.0
+  attribution: © OpenStreetMap contributors; Geofabrik
+parameters:
+  h3_resolution: 7
+  source_completeness: partial
+  decay_minutes: [60, 120, 240]
+  primary_decay_minutes: 60
+  cap_quantile: 0.99
+  minimum_routed_population_fraction: 0.99
+  # Explicit research lower bound, not relaxation of the completeness label.
+  allow_partial_evaluated_lower_bound: true
+raw:
+  snapshot_path: data/raw/human/accessibility/population_travel_time/road_only_60/demand.parquet
+  snapshot_metadata_path: data/raw/human/accessibility/population_travel_time/road_only_60/metadata.json
+  manifest_path: data/raw/human/accessibility/population_travel_time/road_only_60/manifest.json
+output:
+  h3_path: data/processed/domain/human/accessibility/population_travel_time/road_only_60/population_travel_time_h3_r7.parquet
+  manifest_path: data/processed/domain/human/accessibility/population_travel_time/road_only_60/manifest.json
+inspection:
+  report_path: outputs/domains/human/accessibility/population_travel_time/road_only_60.html

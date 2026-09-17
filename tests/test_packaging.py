@@ -56,6 +56,15 @@ def test_packaged_configuration_matches_checkout():
             assert path.read_bytes() == (packaged / path.relative_to(source)).read_bytes()
 
 
+def test_viewshed_artifact_api_is_packaged():
+    from human.core.artifacts import ArtifactRef, RunManifest
+    from human.viewshed.finalize import final_artifacts
+
+    assert ArtifactRef
+    assert RunManifest
+    assert final_artifacts
+
+
 def test_observer_effort_rejects_nonexistent_download():
     import pytest
     from human.cli import main
