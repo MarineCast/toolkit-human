@@ -1,0 +1,55 @@
+name: Offline package checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -e '.[test]'
+      - run: python -m pip check
+      - run: python -m pytest -q
+      - run: human --help
+      - run: human families
+      - run: python -m pip wheel . --no-deps --wheel-dir "$RUNNER_TEMP/dist"
+      - name: Installed wheel smoke test
+        run: |
+          wheel_env="$RUNNER_TEMP/wheel-env"
+          python -m venv --system-site-packages "$wheel_env"
+          "$wheel_env/bin/python" -m pip install \
+            --force-reinstall --no-deps "$RUNNER_TEMP"/dist/*.whl
+          outside="$RUNNER_TEMP/wheel-smoke"
+          workspace="$RUNNER_TEMP/human-workspace"
+          mkdir -p "$outside"
+          cd "$outside"
+          "$wheel_env/bin/python" - <<'PY'
+          from importlib.resources import files
+
+          import human
+          import human.core.artifacts
+          import human.viewshed.finalize.final_artifacts
+
+          root = files("human")
+          required = (
+              "core/artifacts/__init__.py",
+              "core/artifacts/checksums.py",
+              "core/artifacts/contracts.py",
+              "resources/config/common.yaml",
+              "resources/config/data/human/activity_and_effort/land_reporting_opportunity.yaml",
+              "resources/config/modeling/effort/viewshed.yaml",
+          )
+          assert all(root.joinpath(*path.split("/")).is_file() for path in required)
+          PY
+          "$wheel_env/bin/human" --help
+          "$wheel_env/bin/human" families
+          "$wheel_env/bin/human" --workspace "$workspace" init
+          test -f "$workspace/config/common.yaml"
+      - run: git diff --check
