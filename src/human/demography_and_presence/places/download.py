@@ -528,8 +528,8 @@ def download(config_path: str | Path = DEFAULT_CONFIG_PATH, overwrite: bool = Fa
     artifacts: list[dict[str, Any]] = []
 
     for name, filename in (
-        ("natural_earth_ocean", "natural_earth_ocean.zip"),
-        ("natural_earth_marine_polys", "natural_earth_marine_polys.zip"),
+        ("natural_earth_ocean", "ne_10m_ocean.zip"),
+        ("natural_earth_marine_polys", "ne_10m_geography_marine_polys.zip"),
     ):
         entry = registry[name]
         path = materialize_source(entry.url, cfg.cache_dir / filename, overwrite=overwrite)

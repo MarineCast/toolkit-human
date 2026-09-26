@@ -49,6 +49,7 @@ states. Research feature availability does not establish fitness for ecological 
 - [Architecture and ownership](docs/ARCHITECTURE.md)
 - [Scientific and input contracts](docs/CONTRACTS.md)
 - [Workflows and validation](docs/WORKFLOWS.md)
+- [Static H3 matrix export](docs/static-matrix.md)
 - [Migration scope and evidence](docs/MIGRATION.md)
 - [Executed checks and limitations](docs/VALIDATION.md)
 - [Domain source notes](src/human/README.md) and [remaining research work](src/human/TODO.txt)

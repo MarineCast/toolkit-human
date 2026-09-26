@@ -37,7 +37,15 @@ def main(argv=None):
         sub.add_argument("family", choices=[family for family in FAMILIES
             if action != "download" or family != "observer-effort"])
         sub.add_argument("arguments", nargs=argparse.REMAINDER)
+    matrix = commands.add_parser("export-static-matrix", help="Export native static H3 R7 components.")
+    matrix.add_argument("--manifest", type=Path, action="append", required=True)
+    matrix.add_argument("--output", type=Path, required=True)
+    matrix.add_argument("--input-manifest", type=Path, help="Checksum-verified supplemental inputs.")
     args = parser.parse_args(argv)
+    if args.command == "export-static-matrix":
+        from human.static_matrix import export
+        print(export(args.manifest, args.output, args.input_manifest))
+        return 0
     if args.workspace:
         os.environ["HUMAN_WORKSPACE"] = str(args.workspace.expanduser().resolve())
     from human.core.config.paths import project_root

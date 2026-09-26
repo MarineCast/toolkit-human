@@ -106,6 +106,9 @@ def test_places_download_build_inspect_fixture(tmp_path, monkeypatch) -> None:
     )
 
     inventory = download_module.download(config)
+    # Acquisition and nearshore build must share filenames for offline replay.
+    assert (raw / "ne_10m_ocean.zip").exists()
+    assert (raw / "ne_10m_geography_marine_polys.zip").exists()
     catalog = build_module.build(config)
     reports = inspect_module.inspect(config)
 

@@ -79,3 +79,7 @@ Keep human activity, access, physical viewability, reporting and disturbance dis
 `human.viewshed` is the migrated legacy observation geometry, not proven interchangeable
 with `viewshed_toolkit`. Preserve metadata schema keys and validate any scientific replacement.
 Species-specific modeling belongs in the consuming application, never an OrcaCast import here.
+
+Static matrix checks: `PYTHONPATH=src python -m pytest tests/test_static_matrix.py -q`;
+`human export-static-matrix --manifest <native-build-manifest> --output <new-parquet>`.
+The contract is documented in `docs/static-matrix.md`.

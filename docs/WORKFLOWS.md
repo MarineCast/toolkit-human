@@ -24,3 +24,10 @@ installation from outside the checkout, including `human init` and shipped resou
 
 Feature catalog maintenance: `python scripts/update_human_feature_catalog.py`.
 Graph navigation and the exact code-only refresh command are documented in `AGENTS.md`.
+
+## Static H3 export
+
+After building the static families, use the explicit [static matrix exporter](static-matrix.md)
+to produce one H3 R7 Parquet from their native build manifests. This retains component
+support and missingness; it does not aggregate time-varying products or transfer land
+population to marine cells.
