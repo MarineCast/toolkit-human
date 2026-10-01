@@ -1,4 +1,4 @@
-# toolkit-human
+# Human Toolkit
 
 <img src="docs/assets/human-toolkit-banner.png" alt="Ink panorama of a coastal harbor with roads, marina, ferries, ships, and navigation lines" width="100%">
 
