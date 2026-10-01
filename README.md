@@ -1,5 +1,7 @@
 # toolkit-human
 
+<img src="docs/assets/human-toolkit-banner.png" alt="Ink panorama of a coastal harbor with roads, marina, ferries, ships, and navigation lines" width="100%">
+
 Python distribution `toolkit-human`, import package `human`, command `human`.
 Extracted from OrcaCast on 2026-09-16 with current local edits preserved. This is a
 research package with offline validation, not a claim of regional or production readiness.
