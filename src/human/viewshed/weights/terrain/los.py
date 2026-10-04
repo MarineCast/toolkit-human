@@ -309,7 +309,7 @@ def run_gdal_viewshed(
     """Run GDAL viewshed quietly and only surface output on hard failure.
 
     GDAL's command-line progress meter is very noisy when many observers are run
-    concurrently. `--quiet` suppresses progress/non-error output, and capturing
+    concurrently. `-q` suppresses progress/non-error output, and capturing
     stdout/stderr prevents interleaved warning/progress text from flooding the
     notebook or terminal. If GDAL exits non-zero, the captured output is included
     in the exception so debugging information is not lost.
@@ -344,7 +344,7 @@ def run_gdal_viewshed(
     out_path.parent.mkdir(parents=True, exist_ok=True)
     cmd = [
         gdal_viewshed,
-        "--quiet",
+        "-q",
         "-b",
         "1",
         "-ox",

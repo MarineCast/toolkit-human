@@ -16,14 +16,16 @@ human --workspace /path/to/human-workspace build calendar --help
 python -m pytest -q
 ```
 
-Python 3.11+ is declared; the migration is validated on Python 3.14. Configuration and data
+Python 3.11+ is declared; CI covers Python 3.11 and 3.14. Configuration and data
 resolve against `HUMAN_WORKSPACE`, or the calling directory when it is unset. `init` copies
 packaged configuration without replacing existing files. A wheel includes configuration,
 source documentation and the road-routing Lua profile. Neither installation nor `init`
 downloads source data. Review configured paths before running a producer.
 
 Install `.[acquisition]` for provider clients. GDAL's Python bindings and native libraries
-are additionally needed for terrain execution; match GDAL to your Rasterio environment.
+and the `gdal_viewshed` CLI are additionally needed for terrain execution and the full
+test suite. Follow the [native setup and validation commands](docs/WORKFLOWS.md#native-validation-environments),
+including the matching-binding preflight, before running tests.
 The optional `.[meteorology]` extra uses the independent `meteorology` daylight API when
 that workflow is selected. These toolkits may need installation from their own checkouts
 or wheels until published; no sibling directory layout is required.

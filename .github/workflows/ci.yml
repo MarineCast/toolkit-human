@@ -4,7 +4,7 @@ permissions:
   contents: read
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -14,7 +14,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
+      - name: Install native GDAL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gdal-bin libgdal-dev
       - run: python -m pip install -e '.[test]'
+      - name: Install matching GDAL Python bindings
+        run: |
+          python -m pip install numpy wheel setuptools
+          python -m pip install --no-build-isolation "GDAL[numpy]==$(gdal-config --version).*"
+          python scripts/check_native_runtime.py gdal
       - run: python -m pip check
       - run: python -m pytest -q
       - run: human --help
@@ -23,33 +32,50 @@ jobs:
       - name: Installed wheel smoke test
         run: |
           wheel_env="$RUNNER_TEMP/wheel-env"
-          python -m venv --system-site-packages "$wheel_env"
-          "$wheel_env/bin/python" -m pip install \
-            --force-reinstall --no-deps "$RUNNER_TEMP"/dist/*.whl
+          python -m venv "$wheel_env"
+          "$wheel_env/bin/python" -m pip install "$RUNNER_TEMP"/dist/*.whl pytest
+          "$wheel_env/bin/python" -m pip check
           outside="$RUNNER_TEMP/wheel-smoke"
           workspace="$RUNNER_TEMP/human-workspace"
-          mkdir -p "$outside"
+          mkdir -p "$outside/native"
+          cp scripts/check_installed_wheel.py "$outside/"
+          cp tests/viewshed/test_viewability_import_contract.py "$outside/"
+          cp tests/viewshed/test_gdal_inprocess_viewshed.py "$outside/native/"
+          cp tests/human/activity_and_effort/test_land_opportunity_smoke.py "$outside/native/"
+          cp tests/conftest.py "$outside/native/"
+          cp scripts/check_native_runtime.py "$outside/"
           cd "$outside"
-          "$wheel_env/bin/python" - <<'PY'
-          from importlib.resources import files
-
-          import human
-          import human.core.artifacts
-          import human.viewshed.finalize.final_artifacts
-
-          root = files("human")
-          required = (
-              "core/artifacts/__init__.py",
-              "core/artifacts/checksums.py",
-              "core/artifacts/contracts.py",
-              "resources/config/common.yaml",
-              "resources/config/data/human/activity_and_effort/land_reporting_opportunity.yaml",
-              "resources/config/modeling/effort/viewshed.yaml",
-          )
-          assert all(root.joinpath(*path.split("/")).is_file() for path in required)
-          PY
+          unset PYTHONPATH HUMAN_WORKSPACE
+          "$wheel_env/bin/python" check_installed_wheel.py
+          "$wheel_env/bin/python" -m pytest -q test_viewability_import_contract.py
           "$wheel_env/bin/human" --help
           "$wheel_env/bin/human" families
           "$wheel_env/bin/human" --workspace "$workspace" init
           test -f "$workspace/config/common.yaml"
+          export HUMAN_WORKSPACE="$workspace"
+          "$wheel_env/bin/python" -m pip install numpy wheel setuptools
+          "$wheel_env/bin/python" -m pip install --no-build-isolation "GDAL[numpy]==$(gdal-config --version).*"
+          "$wheel_env/bin/python" check_native_runtime.py gdal
+          "$wheel_env/bin/python" -m pytest -q native
       - run: git diff --check
+  native-osrm:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Build the required OSRM 26.8.0 runtime
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: '1'
+        run: |
+          brew tap-new marinecast/ci
+          formula="$(brew --repository marinecast/ci)/Formula/osrm-backend.rb"
+          curl --fail --location --retry 3 \
+            https://raw.githubusercontent.com/Homebrew/homebrew-core/a7aabdcb9b02b53a07fb97dbfff592a89c9a954c/Formula/o/osrm-backend.rb \
+            --output "$formula"
+          brew install --build-from-source marinecast/ci/osrm-backend
+      - run: python -m pip install -e '.[test]'
+      - run: python scripts/check_native_runtime.py osrm
+      - name: Road-only native routing and missingness contracts
+        run: python -m pytest -q tests/human/accessibility/test_road_only_routing.py

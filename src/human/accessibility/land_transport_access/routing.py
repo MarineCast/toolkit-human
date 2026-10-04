@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -14,8 +15,19 @@ import requests
 
 from human.utils.artifacts import atomic_write_json, sha256_file
 
-OSRM_ROOT = Path("/opt/homebrew/Cellar/osrm-backend/26.8.0_1")
-OSMIUM = Path("/opt/homebrew/Cellar/osmium-tool/1.19.1_1/bin/osmium")
+
+def resolve_osrm_root() -> Path:
+    """Use an explicit installation prefix or the real executable's prefix."""
+    if configured := os.environ.get("HUMAN_OSRM_ROOT"):
+        return Path(configured).expanduser().resolve()
+    if executable := shutil.which("osrm-extract"):
+        return Path(executable).resolve().parents[1]
+    # Keep non-routing imports usable without a native installation.
+    return Path("/usr/local")
+
+
+OSRM_ROOT = resolve_osrm_root()
+OSMIUM = Path(os.environ.get("HUMAN_OSMIUM") or shutil.which("osmium") or "osmium")
 REGIONS = ("canada/british-columbia", "canada/alberta", "us/washington", "us/oregon", "us/idaho")
 
 
