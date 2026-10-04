@@ -859,7 +859,7 @@ def _build_weekly(cfg: WaterObservationConfig) -> tuple[int, int]:
     target_weekly = aggregate_weekly(
         pl.scan_parquet(cfg.target_daily_path),
         additive_columns=[name for name in target_additive if name in target_schema],
-        mean_columns=[
+        mean_columns=list(dict.fromkeys([
             name
             for name in [
                 *TARGET_CONDITION_COLUMNS,
@@ -875,7 +875,7 @@ def _build_weekly(cfg: WaterObservationConfig) -> tuple[int, int]:
                 "PRIMARY_WATER_COMPOSITE",
             ]
             if name in target_schema
-        ],
+        ])),
         state_columns=[name for name in target_states if name in target_schema],
     )
     _atomic_parquet(target_weekly, cfg.target_weekly_path)

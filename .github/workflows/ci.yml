@@ -40,7 +40,7 @@ jobs:
           mkdir -p "$outside/native"
           cp scripts/check_installed_wheel.py "$outside/"
           cp tests/viewshed/test_viewability_import_contract.py "$outside/"
-          cp tests/test_release.py tests/test_static_matrix.py "$outside/"
+          cp tests/test_release.py tests/test_static_matrix.py tests/test_static_profile.py "$outside/"
           cp tests/viewshed/test_gdal_inprocess_viewshed.py "$outside/native/"
           cp tests/human/activity_and_effort/test_land_opportunity_smoke.py "$outside/native/"
           cp tests/conftest.py "$outside/native/"
@@ -48,7 +48,7 @@ jobs:
           cd "$outside"
           unset PYTHONPATH HUMAN_WORKSPACE
           "$wheel_env/bin/python" check_installed_wheel.py
-          "$wheel_env/bin/python" -m pytest -q test_viewability_import_contract.py test_release.py test_static_matrix.py
+          "$wheel_env/bin/python" -m pytest -q test_viewability_import_contract.py test_release.py test_static_matrix.py test_static_profile.py
           "$wheel_env/bin/human" --help
           "$wheel_env/bin/human" families
           "$wheel_env/bin/human" --workspace "$workspace" init

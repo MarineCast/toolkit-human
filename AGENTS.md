@@ -90,3 +90,6 @@ The contract is documented in `docs/static-matrix.md`.
 Native release checks: `python -m pytest -q tests/test_release.py tests/test_static_matrix.py`.
 See `docs/release-readiness.md` for checksum auditing, immutable research snapshot publication,
 and remaining source/scientific/profile gates. Snapshot integrity is not production eligibility.
+Optional static record-count profile: `python -m pytest -q tests/test_static_profile.py`.
+Ferry UTC normalization: `python -m pytest -q tests/human/activity_and_effort/test_ferry_utc.py`.
+Retain native local service dates; never infer ambiguous DST folds or monthly daily observations.

@@ -48,6 +48,7 @@ def main(argv=None):
         if action == "publish-static-snapshot":
             sub.add_argument("--code-sha", required=True)
             sub.add_argument("--input-manifest", type=Path)
+            sub.add_argument("--record-count-profile", action="store_true", help="Include the narrow retained-record counts application profile.")
     verify = commands.add_parser("verify-static-snapshot")
     verify.add_argument("path", type=Path)
     args = parser.parse_args(argv)
@@ -61,7 +62,7 @@ def main(argv=None):
             return 0 if report["integrity_passed"] else 1
         if args.command == "publish-static-snapshot":
             print(publish_static(args.manifest, args.output, code_sha=args.code_sha,
-                                 input_manifest=args.input_manifest))
+                                 input_manifest=args.input_manifest, record_count_profile=args.record_count_profile))
         else:
             print(verify_static(args.path)["data_release_id"])
         return 0

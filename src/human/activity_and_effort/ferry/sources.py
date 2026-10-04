@@ -38,6 +38,7 @@ import logging
 import re
 import shutil
 import sys
+import subprocess
 import zipfile
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
@@ -679,6 +680,18 @@ def parse_bc_report(pdf_path: Path, report_url: str) -> pd.DataFrame:
 
     reader = PdfReader(pdf_path)
     page_texts = [page.extract_text(extraction_mode="layout") for page in reader.pages]
+    if any(not text.strip() for text in page_texts):
+        # Some official rotated PDFs expose text to normal extraction but return
+        # empty pypdf layout output. Plain extraction concatenates numeric cells.
+        # Poppler preserves their columns; never guess separators or omit pages.
+        executable = shutil.which("pdftotext")
+        if executable is None:
+            raise RuntimeError("Empty PDF layout extraction; install Poppler (pdftotext) to parse this report without dropping numeric columns.")
+        extracted = subprocess.run([executable, "-layout", "-enc", "UTF-8", str(pdf_path), "-"],
+                                   check=True, capture_output=True, text=True, timeout=60)
+        page_texts = [text for text in extracted.stdout.split("\f") if text.strip()]
+        if len(page_texts) != len(reader.pages):
+            raise RuntimeError("PDF fallback did not recover every report page")
     full_text = "\n".join(page_texts)
     title_match = re.search(
         r"Total Vehicle and Passenger Counts by Route for\s+([A-Za-z]+)\s+(20\d{2})",

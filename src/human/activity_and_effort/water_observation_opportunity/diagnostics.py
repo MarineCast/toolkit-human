@@ -19,15 +19,12 @@ import pandas as pd
 import polars as pl
 from scipy.spatial import cKDTree
 
-from human.activity_and_effort.land_reporting_opportunity.config import (
-    load_land_reporting_config,
-)
 from human.activity_and_effort.observation_opportunity_contract import (
     JoinCoverageReason,
     add_lineage_pandas,
     validate_product_contract,
 )
-from human.utils.artifacts import sha256_file
+from human.utils.artifacts import load_manifest, sha256_file
 from human.utils.release_inputs import resolve_sightings_release_artifact
 
 from .config import WaterObservationConfig
@@ -240,9 +237,21 @@ def _nearest_coastal_jurisdiction(
     return shore.iloc[indices]["JURISDICTION"].astype(str).tolist(), distances.tolist()
 
 
-def _land_daily_for_join() -> tuple[Path, dict[str, str], dict[str, str]]:
-    cfg = load_land_reporting_config()
-    schema = pl.scan_parquet(cfg.daily_output_path).collect_schema().names()
+def _land_member(manifest_path: Path, collection: str, dataset_id: str) -> Path:
+    """Read the explicitly selected land generation, never a default workspace path."""
+    manifest = load_manifest(manifest_path)
+    members = [item for item in manifest[collection] if item.get("dataset_id") == dataset_id]
+    if len(members) != 1:
+        raise ValueError(f"Expected one {dataset_id} in selected land manifest")
+    path = Path(members[0]["path"])
+    if sha256_file(path) != members[0]["sha256"]:
+        raise ValueError(f"Land input checksum mismatch: {path}")
+    return path
+
+
+def _land_daily_for_join(manifest_path: Path) -> tuple[Path, dict[str, str], dict[str, str]]:
+    daily_path = _land_member(manifest_path, "artifacts", "human.activity_and_effort.land_reporting_opportunity.daily_h3_r6")
+    schema = pl.scan_parquet(daily_path).collect_schema().names()
     candidates = {
         "LAND_PHYSICAL_VIEWABILITY_RAW": "PHYSICAL_VIEWABILITY_RAW",
         "LAND_DISTANCE_DETECTION_WEIGHT": "DISTANCE_DETECTION_WEIGHT",
@@ -287,7 +296,7 @@ def _land_daily_for_join() -> tuple[Path, dict[str, str], dict[str, str]]:
             states[canonical_state] = state_fallbacks[canonical]
         else:
             raise ValueError(f"Land diagnostic component {source} has no state column.")
-    return cfg.daily_output_path, mapping, states
+    return daily_path, mapping, states
 
 
 def build_sighting_diagnostics(
@@ -389,7 +398,7 @@ def build_sighting_diagnostics(
         .collect(engine="streaming")
         .to_pandas()
     )
-    land_path, land_mapping, land_states = _land_daily_for_join()
+    land_path, land_mapping, land_states = _land_daily_for_join(cfg.land_manifest_path)
     land_schema = pl.scan_parquet(land_path).collect_schema().names()
     land_coverage_sources = [
         column
@@ -539,14 +548,13 @@ def build_border_diagnostics(
     *,
     lineage: dict[str, Any],
 ) -> dict[str, Any]:
-    land_cfg = load_land_reporting_config()
-    source = pd.read_parquet(land_cfg.source_output_path)
+    source = pd.read_parquet(_land_member(cfg.land_manifest_path, "artifacts", "human.activity_and_effort.land_reporting_opportunity.source_h3_r7"))
     shore = pd.read_parquet(
         cfg.public_shore_path,
         columns=["H3_INDEX", "JURISDICTION", "TOTAL_MARINE_SHORELINE_M"],
     )
     static = (
-        pl.scan_parquet("data/processed/domain/human/viewshed/RES7/LAND_STATIC_WEIGHTS_R7.parquet")
+        pl.scan_parquet(_land_member(cfg.land_manifest_path, "inputs", "input.land_static_weights"))
         .group_by("source_h3")
         .agg(pl.col("weight_static_viewability").sum().alias("PHYSICAL_VIEWABILITY"))
         .collect(engine="streaming")

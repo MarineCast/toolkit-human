@@ -90,7 +90,7 @@ def audit(manifests: list[Path]) -> dict:
 
 
 def publish_static(manifests: list[Path], output: Path, *, code_sha: str,
-                   input_manifest: Path | None = None) -> Path:
+                   input_manifest: Path | None = None, record_count_profile: bool = False) -> Path:
     """New-only whole-directory publication; preserve exact native evidence and nulls.
 
     Cooperating publishers serialize on an exclusive sibling lock. A crashed lock is
@@ -184,6 +184,12 @@ def publish_static(manifests: list[Path], output: Path, *, code_sha: str,
                        'Native statuses are preserved; application metric/status/coverage mapping remains pending.',
                        'Raw inputs are verified at publication but remain external; their hashes and original paths are retained.',
                        'This release covers only supplied static families, not all Human products.']}
+        if record_count_profile:
+            from human.static_profile import write_profile
+            for profile_path in write_profile(stage, code_sha=code_sha, data_release_id=output.name):
+                inventory.append({'path': profile_path.name, 'sha256': _checksum(profile_path),
+                                  'bytes': profile_path.stat().st_size})
+            release['profile_products'] = ['human.retained_catalog_record_counts']
         write_json(stage / 'release.json', release)
         verify_static(stage)
         if output.exists() or output.is_symlink():
@@ -226,4 +232,7 @@ def verify_static(root: Path) -> dict:
             raise ValueError(f'Null count mismatch: {name}')
         if 'zero_count' in summary and int(series.eq(0).sum()) != summary['zero_count']:
             raise ValueError(f'Zero count mismatch: {name}')
+    if release.get('profile_products'):
+        from human.static_profile import verify_profile
+        verify_profile(root / 'catalog-record-counts.manifest.json')
     return release
