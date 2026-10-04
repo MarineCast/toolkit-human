@@ -24,15 +24,17 @@ WSDOT_DATE_PATTERN = re.compile(r"/Date\(([-+]?\d+)")
 LOCAL_TIMEZONE = "America/Los_Angeles"
 
 
-def _parse_wsdot_timestamp(value: Any) -> pd.Timestamp:
+def _parse_wsdot_utc(value: Any) -> pd.Timestamp:
+    """Preserve the instant encoded by WSDOT's JSON epoch milliseconds."""
     match = WSDOT_DATE_PATTERN.match(str(value))
     if not match:
         return pd.NaT
-    return (
-        pd.to_datetime(int(match.group(1)), unit="ms", utc=True)
-        .tz_convert(LOCAL_TIMEZONE)
-        .tz_localize(None)
-    )
+    return pd.to_datetime(int(match.group(1)), unit="ms", utc=True, errors="coerce")
+
+
+def _parse_wsdot_timestamp(value: Any) -> pd.Timestamp:
+    instant = _parse_wsdot_utc(value)
+    return instant.tz_convert(LOCAL_TIMEZONE).tz_localize(None) if pd.notna(instant) else pd.NaT
 
 
 def _fetch_vessel(
@@ -97,30 +99,35 @@ def normalize_vessel_history(
             "vessel_name": raw["Vessel"].astype("string"),
             "departing_terminal": raw["Departing"].astype("string"),
             "arriving_terminal": raw["Arriving"].astype("string"),
-            "scheduled_departure_local": raw["ScheduledDepart"].map(_parse_wsdot_timestamp),
-            "actual_departure_local": raw["ActualDepart"].map(_parse_wsdot_timestamp),
-            "estimated_arrival_local": raw["EstArrival"].map(_parse_wsdot_timestamp),
-            "history_record_local": raw["Date"].map(_parse_wsdot_timestamp),
+            "scheduled_departure_local": pd.to_datetime(raw["ScheduledDepart"].map(_parse_wsdot_timestamp)),
+            "actual_departure_local": pd.to_datetime(raw["ActualDepart"].map(_parse_wsdot_timestamp)),
+            "estimated_arrival_local": pd.to_datetime(raw["EstArrival"].map(_parse_wsdot_timestamp)),
+            "history_record_local": pd.to_datetime(raw["Date"].map(_parse_wsdot_timestamp)),
         }
     )
+    for field, source in (("scheduled_departure", "ScheduledDepart"),
+                          ("actual_departure", "ActualDepart"),
+                          ("estimated_arrival", "EstArrival"),
+                          ("history_record", "Date")):
+        result[f"{field}_utc"] = pd.to_datetime(raw[source].map(_parse_wsdot_utc), utc=True)
     result["service_date"] = result["scheduled_departure_local"].dt.normalize()
     result = result[result["service_date"].between(start, end)].copy()
     result["operational_duration_minutes"] = (
-        result["estimated_arrival_local"] - result["actual_departure_local"]
+        result["estimated_arrival_utc"] - result["actual_departure_utc"]
     ).dt.total_seconds() / 60.0
     valid = result["operational_duration_minutes"].between(1.0, 300.0)
     result["operational_duration_is_valid"] = valid.fillna(False)
     result["voyage_duration_source"] = "wsdot_actual_departure_to_estimated_arrival"
     result["retrieved_at_utc"] = datetime.now(timezone.utc)
     result = result.sort_values(
-        ["service_date", "vessel_name", "scheduled_departure_local"]
+        ["service_date", "vessel_name", "scheduled_departure_utc", "history_record_utc"]
     ).drop_duplicates(
         [
             "service_date",
             "vessel_name",
             "departing_terminal",
             "arriving_terminal",
-            "scheduled_departure_local",
+            "scheduled_departure_utc",
         ],
         keep="last",
     )

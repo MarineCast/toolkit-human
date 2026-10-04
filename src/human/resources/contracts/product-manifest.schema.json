@@ -1,0 +1,517 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MarineCast data-product manifest v0.1 (proposed)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "product",
+    "producer",
+    "identity",
+    "spatial",
+    "temporal",
+    "fields",
+    "provenance",
+    "artifact",
+    "limitations"
+  ],
+  "properties": {
+    "contract_version": {
+      "const": "0.1"
+    },
+    "product": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "description",
+        "quantity_kind"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quantity_kind": {
+          "enum": [
+            "environmental_condition",
+            "physical_viewability",
+            "human_activity",
+            "vessel_activity",
+            "reporting",
+            "detection",
+            "species_occurrence",
+            "acoustic_observation"
+          ]
+        }
+      }
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "package",
+        "package_version",
+        "git_sha",
+        "working_tree_dirty"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^toolkit-[a-z][a-z0-9-]*$"
+        },
+        "package": {
+          "type": "string",
+          "minLength": 1
+        },
+        "package_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "git_sha": {
+          "type": "string",
+          "pattern": "^([0-9a-f]{40}|[0-9a-f]{64})$"
+        },
+        "working_tree_dirty": {
+          "type": "boolean"
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "row_description",
+        "primary_key"
+      ],
+      "properties": {
+        "row_description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "primary_key": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          }
+        }
+      }
+    },
+    "spatial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "resolution",
+        "index_fields",
+        "support",
+        "crs",
+        "domain",
+        "method"
+      ],
+      "properties": {
+        "type": {
+          "const": "h3"
+        },
+        "resolution": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "index_fields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          }
+        },
+        "support": {
+          "enum": [
+            "cell",
+            "cell_pair",
+            "cell_centroid",
+            "cell_subset"
+          ]
+        },
+        "crs": {
+          "const": "EPSG:4326"
+        },
+        "domain": {
+          "type": "string",
+          "minLength": 1
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "support": {
+                "const": "cell_pair"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "index_fields": {
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "index_fields": {
+                "maxItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "temporal": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "meaning"
+          ],
+          "properties": {
+            "type": {
+              "const": "static"
+            },
+            "meaning": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "time_field",
+            "timezone"
+          ],
+          "properties": {
+            "type": {
+              "const": "instant"
+            },
+            "time_field": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+            },
+            "timezone": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "start_field",
+            "end_field",
+            "timezone",
+            "closed",
+            "aggregation"
+          ],
+          "properties": {
+            "type": {
+              "const": "interval"
+            },
+            "start_field": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+            },
+            "end_field": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+            },
+            "timezone": {
+              "type": "string",
+              "minLength": 1
+            },
+            "closed": {
+              "const": "left"
+            },
+            "aggregation": {
+              "type": "string",
+              "minLength": 1
+            },
+            "label_field": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+            },
+            "label_definition": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "dependentRequired": {
+            "label_field": [
+              "label_definition"
+            ],
+            "label_definition": [
+              "label_field"
+            ]
+          }
+        }
+      ]
+    },
+    "fields": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/field"
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "created_at",
+        "configuration",
+        "sources",
+        "processing"
+      ],
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "description",
+            "sha256"
+          ],
+          "properties": {
+            "description": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "source_version",
+              "retrieved_at",
+              "spatial_coverage",
+              "temporal_coverage",
+              "license",
+              "attribution",
+              "redistribution"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_version": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1
+              },
+              "retrieved_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "spatial_coverage": {
+                "type": "string",
+                "minLength": 1
+              },
+              "temporal_coverage": {
+                "type": "string",
+                "minLength": 1
+              },
+              "license": {
+                "type": "string",
+                "minLength": 1
+              },
+              "attribution": {
+                "type": "string",
+                "minLength": 1
+              },
+              "redistribution": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "processing": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "format",
+        "sha256",
+        "row_count"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\:]+$"
+        },
+        "format": {
+          "enum": [
+            "parquet",
+            "csv"
+          ]
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "row_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "extensions": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "description",
+        "units",
+        "nullable",
+        "statistic"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "string",
+            "integer",
+            "number",
+            "boolean",
+            "date",
+            "datetime"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "units": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "nullable": {
+          "type": "boolean"
+        },
+        "statistic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "missing_reason_field": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "nullable": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "missing_reason_field"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "missing_reason_field"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

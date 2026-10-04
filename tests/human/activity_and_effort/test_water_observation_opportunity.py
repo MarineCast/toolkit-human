@@ -190,3 +190,51 @@ def test_dominance_excludes_all_missing_available_cases() -> None:
     )
     assert pd.isna(result.iloc[0])
     assert result.iloc[1] == "one"
+
+
+def test_weekly_builder_deduplicates_overlapping_coverage_selectors(tmp_path):
+    """Dynamic coverage is both a condition field and a *_COVERAGE field."""
+    from datetime import date
+    from types import SimpleNamespace
+    from human.activity_and_effort.water_observation_opportunity.build import _build_weekly
+    cfg = SimpleNamespace(source_daily_path=tmp_path / 'source.parquet',
+                          target_daily_path=tmp_path / 'target.parquet',
+                          source_weekly_path=tmp_path / 'source-week.parquet',
+                          target_weekly_path=tmp_path / 'target-week.parquet')
+    daily = pl.DataFrame({'DATE': [date(2024, 1, 1), date(2024, 1, 2)],
+                          'H3_INDEX': ['8628d1067ffffff'] * 2,
+                          'H3_RESOLUTION': [6, 6],
+                          'DYNAMIC_CONDITION_COVERAGE': [0.25, 0.75]})
+    daily.write_parquet(cfg.source_daily_path)
+    daily.write_parquet(cfg.target_daily_path)
+    assert _build_weekly(cfg) == (1, 1)
+    result = pl.read_parquet(cfg.target_weekly_path)
+    assert result['DYNAMIC_CONDITION_COVERAGE'].to_list() == [0.5]
+    assert result['PERIOD_DAY_COUNT'].to_list() == [2]
+
+
+def test_diagnostics_select_pinned_land_generation_without_workspace_defaults(tmp_path, monkeypatch):
+    import json
+    from human.activity_and_effort.water_observation_opportunity.diagnostics import _land_daily_for_join, _land_member
+    from human.utils.artifacts import sha256_file
+    daily = tmp_path / 'selected-daily.parquet'
+    pl.DataFrame({'PHYSICAL_VIEWABILITY_RAW': [1.0], 'PHYSICAL_VIEWABILITY_STATE': ['positive']}).write_parquet(daily)
+    item = {'dataset_id': 'human.activity_and_effort.land_reporting_opportunity.daily_h3_r6',
+            'path': str(daily), 'sha256': sha256_file(daily)}
+    manifest = tmp_path / 'manifest.json'
+    payload = dict(manifest_schema_version=1, product='human.activity_and_effort.land_reporting_opportunity',
+                   stage='build', run_id='fixture', build_time_utc='2026-01-01T00:00:00Z',
+                   config_path='synthetic', config_hash='fixture', resolved_config={}, sources=[],
+                   inputs=[dict(item, dataset_id='input.land_static_weights')], artifacts=[item],
+                   h3_resolution=6, spatial_bounds_wgs84={}, temporal_coverage={}, source_completeness='partial',
+                   measurement_statuses=['derived'], attribution=[], licenses=[], known_limitations=['Synthetic fixture'])
+    manifest.write_text(json.dumps(payload))
+    monkeypatch.chdir(tmp_path)
+    selected, mapping, states = _land_daily_for_join(manifest)
+    assert selected == daily
+    assert mapping['LAND_PHYSICAL_VIEWABILITY_RAW'] == 'PHYSICAL_VIEWABILITY_RAW'
+    assert states['LAND_PHYSICAL_VIEWABILITY_STATE'] == 'PHYSICAL_VIEWABILITY_STATE'
+    payload['inputs'][0]['sha256'] = '0' * 64
+    manifest.write_text(json.dumps(payload))
+    with pytest.raises(ValueError, match='checksum'):
+        _land_member(manifest, 'inputs', 'input.land_static_weights')
