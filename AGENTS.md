@@ -86,3 +86,7 @@ Species-specific modeling belongs in the consuming application, never an OrcaCas
 Static matrix checks: `PYTHONPATH=src python -m pytest tests/test_static_matrix.py -q`;
 `human export-static-matrix --manifest <native-build-manifest> --output <new-parquet>`.
 The contract is documented in `docs/static-matrix.md`.
+
+Native release checks: `python -m pytest -q tests/test_release.py tests/test_static_matrix.py`.
+See `docs/release-readiness.md` for checksum auditing, immutable research snapshot publication,
+and remaining source/scientific/profile gates. Snapshot integrity is not production eligibility.

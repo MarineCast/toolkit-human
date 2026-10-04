@@ -41,7 +41,30 @@ def main(argv=None):
     matrix.add_argument("--manifest", type=Path, action="append", required=True)
     matrix.add_argument("--output", type=Path, required=True)
     matrix.add_argument("--input-manifest", type=Path, help="Checksum-verified supplemental inputs.")
+    for action in ("audit-manifests", "publish-static-snapshot"):
+        sub = commands.add_parser(action)
+        sub.add_argument("--manifest", type=Path, action="append", required=True)
+        sub.add_argument("--output", type=Path, required=True)
+        if action == "publish-static-snapshot":
+            sub.add_argument("--code-sha", required=True)
+            sub.add_argument("--input-manifest", type=Path)
+    verify = commands.add_parser("verify-static-snapshot")
+    verify.add_argument("path", type=Path)
     args = parser.parse_args(argv)
+    if args.command in ("audit-manifests", "publish-static-snapshot", "verify-static-snapshot"):
+        from human.release import audit, publish_static, verify_static
+        import json
+        if args.command == "audit-manifests":
+            report = audit(args.manifest)
+            with args.output.open("x") as handle:
+                handle.write(json.dumps(report, indent=2, allow_nan=False) + "\n")
+            return 0 if report["integrity_passed"] else 1
+        if args.command == "publish-static-snapshot":
+            print(publish_static(args.manifest, args.output, code_sha=args.code_sha,
+                                 input_manifest=args.input_manifest))
+        else:
+            print(verify_static(args.path)["data_release_id"])
+        return 0
     if args.command == "export-static-matrix":
         from human.static_matrix import export
         print(export(args.manifest, args.output, args.input_manifest))

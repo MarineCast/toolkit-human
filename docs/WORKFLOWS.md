@@ -101,3 +101,11 @@ OrcaCast imports, asserts the package comes from that environment's site-package
 and checks resources, all 35 family help routes and non-destructive workspace initialization.
 These checks first run without GDAL or OSRM. The wheel environment then installs matching
 GDAL bindings and runs copied native viewshed and land-smoke fixtures outside the checkout.
+
+## Native release audit and immutable snapshots
+
+Use `human audit-manifests`, `human publish-static-snapshot`, and
+`human verify-static-snapshot` as documented in [release readiness](release-readiness.md).
+These retain native contracts and explicitly do not promote scientific eligibility or
+claim application-profile conformance. CI exercises snapshot publication/validation from
+the installed wheel outside the checkout, in addition to native runtime checks.
