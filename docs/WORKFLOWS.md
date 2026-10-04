@@ -60,7 +60,9 @@ the synthetic CLI/in-process parity test checks their interoperability.
 
 Native road routing retains its OSRM **26.8.0** version requirement. Install that
 runtime, including its `share/osrm/profiles` directory (Homebrew formula
-`osrm-backend` on macOS). `HUMAN_OSRM_ROOT` selects the installation prefix;
+`osrm-backend` on macOS). CI builds the checksum-verified 26.8.0 source from an
+immutable Homebrew formula revision; installing the latest formula can select a
+newer engine and intentionally fail the existing version guard. `HUMAN_OSRM_ROOT` selects the installation prefix;
 otherwise the prefix is discovered from `osrm-extract` on `PATH`, following symlinks.
 `HUMAN_OSMIUM` can select the `osmium` executable; otherwise it is found on `PATH`.
 Osmium is needed for real extract inspection/merging, not the synthetic profile test.
