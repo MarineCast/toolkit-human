@@ -526,7 +526,7 @@ def build(
     executable = shutil.which("gdal_viewshed")
     payload["runtime_versions"]["gdal_viewshed_cli"] = (
         subprocess.run(
-            [executable, "--version"], capture_output=True, text=True, check=True
+            [executable, "--utility_version"], capture_output=True, text=True, check=True
         ).stdout.strip()
         if executable
         else "unavailable"
