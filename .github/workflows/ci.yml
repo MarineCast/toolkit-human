@@ -51,6 +51,7 @@ jobs:
           "$wheel_env/bin/human" families
           "$wheel_env/bin/human" --workspace "$workspace" init
           test -f "$workspace/config/common.yaml"
+          export HUMAN_WORKSPACE="$workspace"
           "$wheel_env/bin/python" -m pip install numpy wheel setuptools
           "$wheel_env/bin/python" -m pip install --no-build-isolation "GDAL[numpy]==$(gdal-config --version).*"
           "$wheel_env/bin/python" check_native_runtime.py gdal

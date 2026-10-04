@@ -54,6 +54,17 @@ load two Arrow libraries and fail filesystem registration even when versions mat
 The GDAL preflight checks this collision. Homebrew OSRM runs out of process and
 can be used alongside that environment. The OSRM CI runner uses macOS 15 so current
 Python 3.14 Rasterio wheels are available.
+For example, create an isolated native environment, then install the toolkit without
+replacing already-satisfied native dependencies:
+
+```bash
+conda create -n human-native -c conda-forge python=3.11 gdal=3.12.3 rasterio pyarrow pip
+conda activate human-native
+python -m pip install -e '.[test]'
+python scripts/check_native_runtime.py gdal
+python -m pytest -q
+```
+
 See [GDAL's binding installation guidance](https://gdal.org/en/stable/api/python/python_bindings.html).
 The preflight prints both Rasterio's GDAL and the Python/native runtime versions;
 the synthetic CLI/in-process parity test checks their interoperability.
