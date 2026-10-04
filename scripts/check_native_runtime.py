@@ -13,7 +13,10 @@ def main() -> None:
     if args.runtime == "gdal":
         from osgeo import gdal, gdal_array
         import rasterio
+        import pyarrow.fs
 
+        # Exercise Arrow after loading GDAL to catch incompatible native libraries.
+        pyarrow.fs.LocalFileSystem()
         assert callable(gdal.ViewshedGenerate)
         assert gdal_array is not None
         assert shutil.which("gdal_viewshed"), "gdal_viewshed CLI is required"

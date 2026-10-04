@@ -50,7 +50,7 @@ jobs:
           test -f "$workspace/config/common.yaml"
       - run: git diff --check
   native-osrm:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

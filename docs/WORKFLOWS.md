@@ -48,8 +48,12 @@ python scripts/check_native_runtime.py gdal
 python -m pytest -q
 ```
 
-On macOS, provision GDAL with Homebrew (`brew install gdal`) and use the same
-matching-binding install and preflight commands in your virtual environment.
+For a complete macOS terrain environment, prefer a consistent conda-forge stack
+for Python, GDAL, Rasterio and PyArrow. Mixing Homebrew GDAL with PyPI PyArrow can
+load two Arrow libraries and fail filesystem registration even when versions match.
+The GDAL preflight checks this collision. Homebrew OSRM runs out of process and
+can be used alongside that environment. The OSRM CI runner uses macOS 15 so current
+Python 3.14 Rasterio wheels are available.
 See [GDAL's binding installation guidance](https://gdal.org/en/stable/api/python/python_bindings.html).
 The preflight prints both Rasterio's GDAL and the Python/native runtime versions;
 the synthetic CLI/in-process parity test checks their interoperability.
