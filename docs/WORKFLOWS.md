@@ -18,7 +18,8 @@ Land routing may require OSRM/container tooling; installation alone does not pro
 Run `python -m pytest -q` from this checkout after installing `.[test]`.
 Tests create clearly marked synthetic geometry fixtures and remove their files afterward.
 They do not validate regional source coverage, network acquisition, source rights,
-OSRM/container availability, full terrain execution or application production integration.
+regional terrain execution or application production integration. Native fixture coverage
+depends on the explicitly provisioned runtimes below.
 Build a wheel with `python -m pip wheel --no-deps --no-build-isolation . -w dist` and verify
 installation from outside the checkout, including `human init` and shipped resources.
 
@@ -31,3 +32,51 @@ After building the static families, use the explicit [static matrix exporter](st
 to produce one H3 R7 Parquet from their native build manifests. This retains component
 support and missingness; it does not aggregate time-varying products or transfer land
 population to marine cells.
+
+## Native validation environments
+
+The full suite requires GDAL Python bindings (including NumPy support and
+`ViewshedGenerate`) and the `gdal_viewshed` CLI. Installing Rasterio alone does not
+provide `osgeo`. Linux CI uses Ubuntu 24.04's `gdal-bin` and `libgdal-dev`, then builds
+bindings against that same native version in each Python 3.11/3.14 environment:
+
+```bash
+sudo apt-get install gdal-bin libgdal-dev
+python -m pip install -e '.[test]' numpy wheel setuptools
+python -m pip install --no-build-isolation "GDAL[numpy]==$(gdal-config --version).*"
+python scripts/check_native_runtime.py gdal
+python -m pytest -q
+```
+
+On macOS, provision GDAL with Homebrew (`brew install gdal`) and use the same
+matching-binding install and preflight commands in your virtual environment.
+See [GDAL's binding installation guidance](https://gdal.org/en/stable/api/python/python_bindings.html).
+The preflight prints both Rasterio's GDAL and the Python/native runtime versions;
+the synthetic CLI/in-process parity test checks their interoperability.
+
+Native road routing retains its OSRM **26.8.0** version requirement. Install that
+runtime, including its `share/osrm/profiles` directory (Homebrew formula
+`osrm-backend` on macOS). `HUMAN_OSRM_ROOT` selects the installation prefix;
+otherwise the prefix is discovered from `osrm-extract` on `PATH`, following symlinks.
+`HUMAN_OSMIUM` can select the `osmium` executable; otherwise it is found on `PATH`.
+Osmium is needed for real extract inspection/merging, not the synthetic profile test.
+No package install downloads OSM data or builds a regional graph.
+
+```bash
+python scripts/check_native_runtime.py osrm
+python -m pytest -q tests/human/accessibility/test_road_only_routing.py
+```
+
+CI requires GDAL on both Python versions and OSRM in a separate macOS job; failed
+preflight checks are errors, not skips. Without OSRM, the local full suite explicitly
+skips only its native profile fixture. The GDAL integration fixtures are required by
+CI, including land smoke, canopy/endpoint batch invariance and CLI parity. Live source
+acquisition, regional graph/terrain builds and consumer application integration remain
+separate, unrun workflows. No lint/type checker is configured in this repository.
+
+The wheel CI step uses a fresh virtual environment without system site packages,
+installs the regular wheel with dependencies, and copies `scripts/check_installed_wheel.py`
+and the import contract test outside the checkout before running them. It blocks
+OrcaCast imports, asserts the package comes from that environment's site-packages,
+and checks resources and non-destructive workspace initialization. This smoke intentionally
+needs no GDAL or OSRM; native execution is covered by the jobs above.

@@ -218,3 +218,25 @@ def test_native_profile_excludes_ferry_and_shuttle_train(tmp_path: Path):
                 "no edges" in (result.stdout + result.stderr).lower()
                 or "no nodes" in (result.stdout + result.stderr).lower()
             )
+
+
+def test_native_runtime_prefix_can_be_configured(tmp_path, monkeypatch):
+    from human.accessibility.land_transport_access.routing import resolve_osrm_root
+
+    monkeypatch.setenv("HUMAN_OSRM_ROOT", str(tmp_path))
+    monkeypatch.setattr(shutil, "which", lambda _: pytest.fail("explicit prefix must win"))
+    assert resolve_osrm_root() == tmp_path.resolve()
+
+
+def test_native_runtime_prefix_follows_executable_symlink(tmp_path, monkeypatch):
+    from human.accessibility.land_transport_access.routing import resolve_osrm_root
+
+    prefix = tmp_path / "versioned-install"
+    executable = prefix / "bin/osrm-extract"
+    executable.parent.mkdir(parents=True)
+    executable.touch()
+    link = tmp_path / "osrm-extract"
+    link.symlink_to(executable)
+    monkeypatch.delenv("HUMAN_OSRM_ROOT", raising=False)
+    monkeypatch.setattr(shutil, "which", lambda _: str(link))
+    assert resolve_osrm_root() == prefix
