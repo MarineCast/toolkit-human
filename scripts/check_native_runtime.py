@@ -22,7 +22,7 @@ def main() -> None:
         assert shutil.which("gdal_viewshed"), "gdal_viewshed CLI is required"
         print(f"GDAL bindings: {gdal.VersionInfo('--version')}")
         print(f"Rasterio: {rasterio.__version__}; GDAL: {rasterio.__gdal_version__}")
-        subprocess.run(["gdalinfo", "--version"], check=True)
+        subprocess.run(["gdal_viewshed", "--utility_version"], check=True)
     else:
         from human.accessibility.land_transport_access.routing import OSRM_ROOT
 

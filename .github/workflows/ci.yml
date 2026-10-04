@@ -40,6 +40,9 @@ jobs:
           mkdir -p "$outside"
           cp scripts/check_installed_wheel.py "$outside/"
           cp tests/viewshed/test_viewability_import_contract.py "$outside/"
+          cp tests/viewshed/test_gdal_inprocess_viewshed.py "$outside/"
+          cp tests/human/activity_and_effort/test_land_opportunity_smoke.py "$outside/"
+          cp scripts/check_native_runtime.py "$outside/"
           cd "$outside"
           unset PYTHONPATH HUMAN_WORKSPACE
           "$wheel_env/bin/python" check_installed_wheel.py
@@ -48,6 +51,10 @@ jobs:
           "$wheel_env/bin/human" families
           "$wheel_env/bin/human" --workspace "$workspace" init
           test -f "$workspace/config/common.yaml"
+          "$wheel_env/bin/python" -m pip install numpy wheel setuptools
+          "$wheel_env/bin/python" -m pip install --no-build-isolation "GDAL[numpy]==$(gdal-config --version).*"
+          "$wheel_env/bin/python" check_native_runtime.py gdal
+          "$wheel_env/bin/python" -m pytest -q test_gdal_inprocess_viewshed.py test_land_opportunity_smoke.py
       - run: git diff --check
   native-osrm:
     runs-on: macos-15

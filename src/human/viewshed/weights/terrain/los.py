@@ -344,7 +344,7 @@ def run_gdal_viewshed(
     out_path.parent.mkdir(parents=True, exist_ok=True)
     cmd = [
         gdal_viewshed,
-        "--quiet",
+        "-q",
         "-b",
         "1",
         "-ox",

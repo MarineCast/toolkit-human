@@ -373,7 +373,7 @@ def kernel_runtime_info():
     executable = shutil.which("gdal_viewshed")
     runtime["gdal_cli"] = (
         subprocess.run(
-            [executable, "--version"], capture_output=True, text=True, check=True
+            [executable, "--utility_version"], capture_output=True, text=True, check=True
         ).stdout.strip()
         if executable
         else "unavailable"

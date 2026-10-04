@@ -82,5 +82,6 @@ The wheel CI step uses a fresh virtual environment without system site packages,
 installs the regular wheel with dependencies, and copies `scripts/check_installed_wheel.py`
 and the import contract test outside the checkout before running them. It blocks
 OrcaCast imports, asserts the package comes from that environment's site-packages,
-and checks resources and non-destructive workspace initialization. This smoke intentionally
-needs no GDAL or OSRM; native execution is covered by the jobs above.
+and checks resources, all 35 family help routes and non-destructive workspace initialization.
+These checks first run without GDAL or OSRM. The wheel environment then installs matching
+GDAL bindings and runs copied native viewshed and land-smoke fixtures outside the checkout.
