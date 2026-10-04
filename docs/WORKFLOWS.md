@@ -76,7 +76,10 @@ immutable Homebrew formula revision; installing the latest formula can select a
 newer engine and intentionally fail the existing version guard. `HUMAN_OSRM_ROOT` selects the installation prefix;
 otherwise the prefix is discovered from `osrm-extract` on `PATH`, following symlinks.
 `HUMAN_OSMIUM` can select the `osmium` executable; otherwise it is found on `PATH`.
-Osmium is needed for real extract inspection/merging, not the synthetic profile test.
+Osmium is needed for real extract inspection/merging, not the synthetic routing test.
+That test builds tiny graphs and starts temporary loopback-only OSRM servers; it requires
+permission to bind an ephemeral localhost port. It verifies road/bridge/tunnel reachability
+and ferry/shuttle-train disconnection without live data or external routing services.
 No package install downloads OSM data or builds a regional graph.
 
 ```bash

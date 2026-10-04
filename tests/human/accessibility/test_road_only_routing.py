@@ -1,11 +1,14 @@
 import json
 import shutil
+import socket
+import time
 import subprocess
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import pytest
+import requests
 
 from human.accessibility.land_transport_access.routing import (
     OSRM_ROOT,
@@ -174,50 +177,83 @@ def test_snap_cannot_cross_water_even_within_same_land_polygon():
 @pytest.mark.skipif(
     not (OSRM_ROOT / "bin/osrm-extract").exists(), reason="native OSRM not installed"
 )
-def test_native_profile_excludes_ferry_and_shuttle_train(tmp_path: Path):
-    """Native extractor accepts roads but rejects both water/rail connectors."""
+@pytest.mark.parametrize("kind", ("road", "bridge", "tunnel", "ferry", "shuttle_train"))
+def test_native_profile_excludes_ferry_and_shuttle_train(tmp_path: Path, kind: str):
+    """Route between road segments; prohibited connectors must leave them disconnected."""
     profiles = tmp_path / "profiles"
     shutil.copytree(OSRM_ROOT / "share/osrm/profiles", profiles)
     from human.accessibility.land_transport_access import routing
 
     shutil.copy2(Path(routing.__file__).with_name("road_only.lua"), profiles / "road_only.lua")
-    for kind in ("road", "bridge", "tunnel", "ferry", "shuttle_train"):
-        directory = tmp_path / kind
-        directory.mkdir()
-        osm = directory / "test.osm"
-        tags = (
-            '<tag k="highway" v="residential"/>'
-            if kind == "road"
-            else f'<tag k="route" v="{kind}"/>'
-        )
-        if kind in {"bridge", "tunnel"}:
-            tags = f'<tag k="highway" v="residential"/><tag k="{kind}" v="yes"/>'
-        osm.write_text(
-            '<?xml version="1.0"?><osm version="0.6">'
-            '<node id="1" lat="48.0" lon="-123.0" version="1"/>'
-            '<node id="2" lat="48.001" lon="-123.001" version="1"/>'
-            '<way id="1" version="1"><nd ref="1"/><nd ref="2"/>' + tags + "</way></osm>"
-        )
+    tags = (
+        '<tag k="highway" v="residential"/>'
+        if kind == "road"
+        else f'<tag k="route" v="{kind}"/>'
+    )
+    if kind in {"bridge", "tunnel"}:
+        tags = f'<tag k="highway" v="residential"/><tag k="{kind}" v="yes"/>'
+    osm = tmp_path / "test.osm"
+    osm.write_text(
+        '<?xml version="1.0"?><osm version="0.6">'
+        '<node id="1" lat="48.000" lon="-123.000" version="1"/>'
+        '<node id="2" lat="48.001" lon="-123.001" version="1"/>'
+        '<node id="3" lat="48.002" lon="-123.002" version="1"/>'
+        '<node id="4" lat="48.003" lon="-123.003" version="1"/>'
+        '<way id="1" version="1"><nd ref="1"/><nd ref="2"/>'
+        '<tag k="highway" v="residential"/></way>'
+        '<way id="2" version="1"><nd ref="2"/><nd ref="3"/>' + tags + '</way>'
+        '<way id="3" version="1"><nd ref="3"/><nd ref="4"/>'
+        '<tag k="highway" v="residential"/></way></osm>'
+    )
+    graph = tmp_path / "test.osrm"
+    for binary, args in (
+        ("extract", ["-p", str(profiles / "road_only.lua"), str(osm)]),
+        ("partition", [str(graph)]),
+        ("customize", [str(graph)]),
+    ):
         result = subprocess.run(
-            [
-                str(OSRM_ROOT / "bin/osrm-extract"),
-                "--threads",
-                "1",
-                "-p",
-                str(profiles / "road_only.lua"),
-                str(osm),
-            ],
-            capture_output=True,
-            text=True,
+            [str(OSRM_ROOT / f"bin/osrm-{binary}"), "--threads", "1", *args],
+            capture_output=True, text=True,
         )
-        if kind in {"road", "bridge", "tunnel"}:
-            assert result.returncode == 0, result.stdout + result.stderr
-        else:
-            assert result.returncode != 0
-            assert (
-                "no edges" in (result.stdout + result.stderr).lower()
-                or "no nodes" in (result.stdout + result.stderr).lower()
-            )
+        assert result.returncode == 0, result.stdout + result.stderr
+
+    with socket.socket() as listener:
+        listener.bind(("127.0.0.1", 0))
+        port = listener.getsockname()[1]
+    with (tmp_path / "routed.log").open("w+") as log:
+        server = subprocess.Popen(
+            [str(OSRM_ROOT / "bin/osrm-routed"), "--algorithm", "mld",
+             "--ip", "127.0.0.1", "--port", str(port), "--threads", "1", str(graph)],
+            stdout=log, stderr=subprocess.STDOUT,
+        )
+        try:
+            deadline = time.monotonic() + 15
+            url = f"http://127.0.0.1:{port}/route/v1/driving/-123.000,48.000;-123.003,48.003"
+            while True:
+                assert server.poll() is None, "osrm-routed exited during startup"
+                try:
+                    response = requests.get(
+                        url, params={"overview": "false", "radiuses": "20;20"}, timeout=2
+                    )
+                    break
+                except requests.ConnectionError:
+                    if time.monotonic() >= deadline:
+                        pytest.fail("osrm-routed did not become ready")
+                    time.sleep(0.05)
+            payload = response.json()
+            if kind in {"road", "bridge", "tunnel"}:
+                assert response.status_code == 200, payload
+                assert payload["code"] == "Ok", payload
+                assert payload["routes"][0]["distance"] > 300
+            else:
+                assert payload["code"] == "NoRoute", payload
+        finally:
+            server.terminate()
+            try:
+                server.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                server.kill()
+                server.wait(timeout=5)
 
 
 def test_native_runtime_prefix_can_be_configured(tmp_path, monkeypatch):
