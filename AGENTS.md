@@ -96,3 +96,6 @@ Retain native local service dates; never infer ambiguous DST folds or monthly da
 
 UTC schedule subset pilot: `python -m pytest -q tests/human/activity_and_effort/test_ferry_utc_schedule.py`.
 See `docs/utc-delivery-pilot.md`; retain unresolved-time records and never treat schedules as actual traffic.
+
+UTC land research method: `python -m pytest -q tests/human/activity_and_effort/test_land_utc_context.py`.
+See `docs/utc-scientific-methods.md`; regional qualification and AIS rights remain open.
