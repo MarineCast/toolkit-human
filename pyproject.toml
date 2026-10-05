@@ -15,7 +15,7 @@ dependencies = [
   "numpy>=1.26", "pandas>=2.1", "Pillow>=10", "polars>=1", "psutil>=5.9",
   "pyarrow>=14", "pydantic>=2", "pyproj>=3.6", "python-dotenv>=1",
   "PyYAML>=6", "rasterio>=1.4", "requests>=2.31", "scipy>=1.11",
-  "shapely>=2", "tqdm>=4.66", "xarray>=2024.1",
+  "shapely>=2", "tqdm>=4.66", "tzdata>=2026.2", "xarray>=2024.1",
 ]
 
 [project.optional-dependencies]

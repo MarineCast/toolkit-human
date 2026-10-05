@@ -1,0 +1,110 @@
+[
+  {
+    "date": "2020-02-29",
+    "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2020-02-29&coords=47.6062%2C-122.3321&tz=0",
+    "sha256": "da027c6393310646fa71eb1bee1a3c85fc786e41eb779e3c02ff12f4ebad5325",
+    "retrieved_at": "2026-10-05T00:52:11.228143+00:00",
+    "latitude": 47.6062,
+    "longitude": -122.3321,
+    "events": [
+      {
+        "phen": "Set",
+        "time": "01:52"
+      },
+      {
+        "phen": "Rise",
+        "time": "14:51"
+      }
+    ]
+  },
+  {
+    "date": "2020-03-08",
+    "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2020-03-08&coords=47.6062%2C-122.3321&tz=0",
+    "sha256": "82a4641e7d7e758cebca13ef0fac2d1a144cb17d96fe5605ef1979436050a9a5",
+    "retrieved_at": "2026-10-05T00:52:11.750812+00:00",
+    "latitude": 47.6062,
+    "longitude": -122.3321,
+    "events": [
+      {
+        "phen": "Set",
+        "time": "02:04"
+      },
+      {
+        "phen": "Rise",
+        "time": "14:35"
+      }
+    ]
+  },
+  {
+    "date": "2020-11-01",
+    "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2020-11-01&coords=47.6062%2C-122.3321&tz=0",
+    "sha256": "f7a660a4094532cc728ee770d268bdde212ed557c6687a6544c11b1806296e77",
+    "retrieved_at": "2026-10-05T00:52:12.280748+00:00",
+    "latitude": 47.6062,
+    "longitude": -122.3321,
+    "events": [
+      {
+        "phen": "Set",
+        "time": "00:52"
+      },
+      {
+        "phen": "Rise",
+        "time": "14:54"
+      }
+    ]
+  },
+  {
+    "date": "2021-01-01",
+    "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2021-01-01&coords=47.6062%2C-122.3321&tz=0",
+    "sha256": "5de91a9e02a05951b23e00343b69e669a0da9f762b83dd2cef0031a5e50fc398",
+    "retrieved_at": "2026-10-05T00:52:12.766904+00:00",
+    "latitude": 47.6062,
+    "longitude": -122.3321,
+    "events": [
+      {
+        "phen": "Set",
+        "time": "00:28"
+      },
+      {
+        "phen": "Rise",
+        "time": "15:58"
+      }
+    ]
+  },
+  {
+    "date": "2025-06-21",
+    "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2025-06-21&coords=47.6062%2C-122.3321&tz=0",
+    "sha256": "23a7bb393be1d74573b3646b34a68f9032fa2eb8159256c484174ad978e0004b",
+    "retrieved_at": "2026-10-05T00:52:13.294768+00:00",
+    "latitude": 47.6062,
+    "longitude": -122.3321,
+    "events": [
+      {
+        "phen": "Set",
+        "time": "04:11"
+      },
+      {
+        "phen": "Rise",
+        "time": "12:12"
+      }
+    ]
+  },
+  {
+    "date": "2025-12-21",
+    "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2025-12-21&coords=47.6062%2C-122.3321&tz=0",
+    "sha256": "d728a48ac68efcd15d3263c6286c8b868d2c964d879ee44698538f5779c8efed",
+    "retrieved_at": "2026-10-05T00:52:13.800931+00:00",
+    "latitude": 47.6062,
+    "longitude": -122.3321,
+    "events": [
+      {
+        "phen": "Set",
+        "time": "00:20"
+      },
+      {
+        "phen": "Rise",
+        "time": "15:55"
+      }
+    ]
+  }
+]
