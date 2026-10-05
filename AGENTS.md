@@ -93,3 +93,6 @@ and remaining source/scientific/profile gates. Snapshot integrity is not product
 Optional static record-count profile: `python -m pytest -q tests/test_static_profile.py`.
 Ferry UTC normalization: `python -m pytest -q tests/human/activity_and_effort/test_ferry_utc.py`.
 Retain native local service dates; never infer ambiguous DST folds or monthly daily observations.
+
+UTC schedule subset pilot: `python -m pytest -q tests/human/activity_and_effort/test_ferry_utc_schedule.py`.
+See `docs/utc-delivery-pilot.md`; retain unresolved-time records and never treat schedules as actual traffic.
