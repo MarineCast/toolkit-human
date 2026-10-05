@@ -52,3 +52,33 @@ def test_empty_is_typed_and_inputs_unchanged():
     assert daily.empty and excluded.empty
     assert str(daily.valid_start_utc.dt.tz)=='UTC'
     pd.testing.assert_frame_equal(f,before)
+
+
+@pytest.mark.parametrize('labels', [[0, 0, 0, 0, 0, 0], [4, 4, 2, 4, 2, 4], ['b', 'b', 'a', 'b', 'a', 'b']])
+def test_duplicate_indexes_preserve_ledger_order_and_conservation(labels):
+    frame = records([
+        '2025-03-09 02:30', '2025-03-09 03:30',
+        None, '2025-11-02 01:30',
+        '2025-03-09 04:30', '2025-03-09 05:30',
+    ], [10, 20, 30, 40, 0, None])
+    frame.index = labels
+    before = frame.copy(deep=True)
+    daily, ledger = summarize_utc_schedule(frame)
+    assert ledger.sailing_id.tolist() == ['0', '2', '3']
+    assert ledger.index.tolist() == [labels[i] for i in [0, 2, 3]]
+    assert ledger.utc_time_status.tolist() == [
+        'ambiguous_or_nonexistent_local_time',
+        'missing_or_invalid_local_time',
+        'ambiguous_or_nonexistent_local_time',
+    ]
+    assert ledger.scheduled_departure_utc.isna().all()
+    pd.testing.assert_frame_equal(ledger[frame.columns], frame.iloc[[0, 2, 3]])
+    assert daily.utc_resolved_schedule_record_count.sum() + len(ledger) == len(frame)
+    assert daily.reported_total_known_record_count.sum() + ledger.reported_total_riders.notna().sum() == frame.reported_total_riders.notna().sum()
+    assert daily.reported_total_at_scheduled_departure_sum.sum() + ledger.reported_total_riders.sum() == frame.reported_total_riders.sum()
+    assert daily.reported_total_record_coverage_fraction.tolist() == [pytest.approx(2 / 3)]
+    # Index labels cannot change the scientific result or ledger row ordering.
+    reference, reference_ledger = summarize_utc_schedule(frame.reset_index(drop=True))
+    pd.testing.assert_frame_equal(daily, reference)
+    pd.testing.assert_frame_equal(ledger.reset_index(drop=True), reference_ledger.reset_index(drop=True))
+    pd.testing.assert_frame_equal(frame, before)

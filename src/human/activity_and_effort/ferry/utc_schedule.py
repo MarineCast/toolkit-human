@@ -36,11 +36,13 @@ def summarize_utc_schedule(frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFr
     work['reported_total_riders'] = values
     work['scheduled_departure_utc'] = times.dt.tz_localize(
         'America/Los_Angeles', ambiguous='NaT', nonexistent='NaT').dt.tz_convert('UTC')
-    unresolved = work.loc[work.scheduled_departure_utc.isna()].copy()
+    # Select positionally: index labels need not be unique after concatenation.
+    unresolved_mask = work.scheduled_departure_utc.isna().to_numpy()
+    unresolved = work.loc[unresolved_mask].copy()
     unresolved['utc_time_status'] = np.where(
-        times.loc[unresolved.index].isna(), 'missing_or_invalid_local_time',
+        times.isna().to_numpy()[unresolved_mask], 'missing_or_invalid_local_time',
         'ambiguous_or_nonexistent_local_time')
-    valid = work.loc[work.scheduled_departure_utc.notna()].copy()
+    valid = work.loc[~unresolved_mask].copy()
     valid['valid_start_utc'] = valid.scheduled_departure_utc.dt.floor('D')
     keys = ['segment_id', 'direction_id', 'valid_start_utc']
     result = valid.groupby(keys, observed=True, sort=True).agg(
