@@ -33,6 +33,7 @@ required = (
     "core/artifacts/contracts.py",
     "resources/config/common.yaml",
     "resources/config/data/human/activity_and_effort/land_reporting_opportunity.yaml",
+    "resources/config/data/human/demography_and_presence/population_static.yaml",
     "resources/config/modeling/effort/viewshed.yaml",
     "accessibility/land_transport_access/road_only.lua",
 )
@@ -60,3 +61,13 @@ for family in FAMILIES:
                 raise AssertionError(f"Help did not exit: {action} {family}")
         count += 1
 print(f"Passed {count} family CLI help routes with application imports blocked")
+
+assert callable(human.get_population)
+with contextlib.redirect_stdout(io.StringIO()):
+    try:
+        main(["get", "population", "--help"])
+    except SystemExit as error:
+        assert error.code == 0, error.code
+    else:
+        raise AssertionError("Population help did not exit")
+print("Standalone population API/config/CLI checks passed")

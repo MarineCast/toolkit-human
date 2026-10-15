@@ -11,6 +11,13 @@ The public entry points are `human` / `python -m human` and each family's
 `config/data/human/`; legacy geometry configuration is under `config/modeling/effort/`.
 `src/human/resources/config` is the installed copy; keep both trees synchronized.
 
+Static resident population also exposes `from human import get_population` and
+`human get population`. Its implementation lives under
+`human.demography_and_presence.population.static`, with explicit original census
+sources, independent caches and per-metric completeness. `human.study.export_study`
+composes population, calendar and explicitly supplied retained native products into
+local Parquets. See the [population contract and examples](population.md).
+
 Species-specific land model ablations, shadow predictions and comparisons remain in
 OrcaCast under `evaluation/sightings/land_opportunity`. Application consumers import `human`
 or read documented products; there is no legacy namespace shim. The toolkit must install

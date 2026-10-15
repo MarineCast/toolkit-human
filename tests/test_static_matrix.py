@@ -72,3 +72,26 @@ def test_supplemental_input_checksum_is_required(tmp_path):
     inventory.write_text(json.dumps({'records': [{'path': str(source), 'sha256': 'wrong'}]}))
     with pytest.raises(ValueError, match='Input inventory checksum'):
         export([], tmp_path / 'out.parquet', inventory)
+
+
+def test_static_population_v1_adapter_retains_coverage_and_units(tmp_path):
+    from human import get_population
+    from human.demography_and_presence.population.static import PopulationSources
+    from human.static_matrix import export
+    import geopandas as gpd
+    from shapely.geometry import box
+    import pyarrow.parquet as pq
+    import json
+    cell = h3.latlng_to_cell(48, -123, 7)
+    sources = PopulationSources(gpd.GeoDataFrame({'source_id':['synthetic'], 'country':['US'],
+        'jurisdiction':['synthetic'], 'vintage':[2020], 'population':[10.]},
+        geometry=[box(-123.01,47.99,-122.99,48.01)],crs=4326))
+    result = get_population(target_h3=[cell],sources=sources,workspace=tmp_path,allow_partial=True)
+    result.to_parquet(tmp_path/'population.parquet')
+    output=export([tmp_path/'population.metadata.json'],tmp_path/'static.parquet')
+    table=pq.read_table(output)
+    assert table['population_static_v1__population_count'].to_pylist()==[None]
+    assert table['population_static_v1__population_count__coverage_status'].to_pylist()==['partial']
+    metadata=json.loads(table.schema.metadata[b'human_static_matrix'])
+    assert metadata['fields']['population_static_v1__population_density_per_km2']['units']=='persons/km2'
+    assert metadata['sources'][0]['native_manifest']['method']=='area_weighted_original_polygons.v1.2'

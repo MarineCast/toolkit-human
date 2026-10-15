@@ -15,6 +15,12 @@ KEYS = ['H3_INDEX', 'H3_RESOLUTION']
 
 
 def _units(component: str, column: str) -> str:
+    if column == 'population_density_per_km2':
+        return 'persons/km2'
+    if column == 'cell_area_km2':
+        return 'km2'
+    if column.startswith('population_') and ('__' not in column or column.endswith('__available_source_subtotal')):
+        return 'persons'
     if column in ('POPULATION', 'POPULATION_US_2020', 'POPULATION_CA_2021'):
         return 'allocated persons'
     if column == 'POPULATION_LOG1P':
@@ -92,6 +98,18 @@ def export(manifests: list[Path], output: Path, input_manifest: Path | None = No
     }
     for manifest_path in manifests:
         manifest = json.loads(manifest_path.read_text())
+        if manifest.get('schema') == 'human.population.static.v1':
+            artifact = manifest.get('artifact', {})
+            path = manifest_path.parent / artifact['path']
+            if _checksum(path) != artifact['sha256']:
+                raise ValueError(f'Artifact checksum mismatch: {path}')
+            if 'population_static_v1' in frames:
+                raise ValueError('Duplicate component: population_static_v1')
+            frames['population_static_v1'] = pd.read_parquet(path).rename(columns={
+                'h3_index': 'H3_INDEX', 'h3_resolution': 'H3_RESOLUTION'})
+            provenance.append({'manifest_path': str(manifest_path.resolve()),
+                'manifest_sha256': _checksum(manifest_path), 'native_manifest': manifest})
+            continue
         if manifest.get('stage') != 'build':
             raise ValueError('Static matrix requires native build manifests.')
         selected = False

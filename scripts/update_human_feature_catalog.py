@@ -763,6 +763,25 @@ def build_catalog() -> dict[str, object]:
             "population_cross_border_r7": [feature["name"] for feature in population_predictors]
         },
         "collections": {
+            "population_static_v1": {
+                "category": "demography_and_presence",
+                "artifact": "population-r7-static.parquet",
+                "schema": "human.population.static.v1",
+                "h3_resolution": 7,
+                "supported_resolutions": list(range(16)),
+                "temporal_grain": "static_mixed_census_vintage",
+                "model_policy": "evidence_only",
+                "features": [
+                    _feature(name, role="evidence", status="estimated", model_eligible=False,
+                             unit="people_per_km2" if name == "population_density_per_km2" else "people")
+                    for name in ("population_count", "population_density_per_km2",
+                        "population_within_25km", "population_within_50km",
+                        "population_within_100km", "population_within_250km",
+                        "population_0_25km", "population_25_50km",
+                        "population_50_100km", "population_100_250km")
+                ],
+                "coverage_contract": "Per-metric coverage_status and available_source_subtotal; incomplete canonical values null",
+            },
             "calendar_daily": {
                 "category": "temporal_context",
                 "artifact": "data/processed/domain/human/temporal_context/calendar/calendar_daily.parquet",

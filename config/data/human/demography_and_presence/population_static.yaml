@@ -1,0 +1,23 @@
+schema_version: 1
+product: population_static
+h3_resolution: 7
+radii_km: [25, 50, 100, 250]
+source_manifest: cache/population/sources.json
+resource_limits:
+  max_targets: 100000
+  max_sources: 1000000
+  batch_size: 128
+  workers: 1
+  max_radius_km: 500
+  group_size_m: 10000
+  buffer_tolerance_m: 25
+  edge_step_m: 1000
+  area_tolerance_m2: 1
+  max_elapsed_seconds: 14400
+# Live acquisition is disabled until explicit, bounded source entries are configured.
+# See docs/population.md. Offline never performs provider calls.
+acquisition:
+  max_downloads: 0
+  max_download_bytes: 1000000000
+  us: []
+  canada: []
