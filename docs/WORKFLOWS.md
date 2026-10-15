@@ -109,3 +109,11 @@ Use `human audit-manifests`, `human publish-static-snapshot`, and
 These retain native contracts and explicitly do not promote scientific eligibility or
 claim application-profile conformance. CI exercises snapshot publication/validation from
 the installed wheel outside the checkout, in addition to native runtime checks.
+
+## Standalone resident population
+
+Use `human get population` or `from human import get_population` with explicit H3 cells or a
+bbox. See [population](population.md) for dry-run, bounded original census preparation,
+strict/partial coverage and the offline synthetic example. It does not run water, AIS,
+viewshed or routing stages. `human.study.export_study` writes local static, calendar and
+native spatial activity files with companion metadata and a catalog.

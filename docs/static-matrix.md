@@ -25,3 +25,8 @@ research products and model-ineligible by default. Local export does not authori
 redistribution of source data.
 
 Validation: `PYTHONPATH=src python -m pytest tests/test_static_matrix.py -q`.
+
+The versioned [static resident-population product](population.md) supplies full-cell counts,
+density and geodesic neighborhood totals. Pass its `.metadata.json` to `--manifest`;
+the checksum-verified R7 adapter adds `population_static_v1` with per-metric completeness
+and preserves its source/method metadata. Legacy `population` columns remain separate.

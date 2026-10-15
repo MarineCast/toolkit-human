@@ -53,8 +53,39 @@ states. Research feature availability does not establish fitness for ecological 
 - [Architecture and ownership](docs/ARCHITECTURE.md)
 - [Scientific and input contracts](docs/CONTRACTS.md)
 - [Workflows and validation](docs/WORKFLOWS.md)
+- [Static resident population API and neighborhood counts](docs/population.md)
 - [Static H3 matrix export](docs/static-matrix.md)
 - [Migration scope and evidence](docs/MIGRATION.md)
 - [Executed checks and limitations](docs/VALIDATION.md)
 - [Domain source notes](src/human/README.md) and [remaining research work](src/human/TODO.txt)
 - [Agent and Graphify guidance](AGENTS.md)
+
+## Static population and study exports
+
+The standalone population API estimates residents in full H3 cells and within
+25, 50, 100 and 250 km of their centers. Prepare an explicit normalized census
+source manifest using the [population guide](docs/population.md), then query it:
+
+```python
+from human import get_population
+
+result = get_population(
+    bbox=(-125.8, 46.85, -121.6, 50.0), h3_res=7,
+    source_manifest="/path/to/sources.json", workspace="./human-workspace",
+    mode="offline", include_bands=True,
+)
+result.to_parquet("./population-r7-static.parquet")
+```
+
+Strict coverage is the default. Explicit `allow_partial=True` preserves incomplete
+canonical totals as null and reports available-source subtotals separately. Run
+`python examples/population_offline.py --workspace /tmp/synthetic-human-example`
+for a complete synthetic example without provider access.
+
+`human.study.export_study` and [examples/export_study.py](examples/export_study.py)
+write static location features, a non-spatial calendar, and native spatial activity
+Parquets with metadata and a catalog. The executed workspace study used the configured
+2020–2030 calendar period; retained activity ends on 2026-08-31. See the
+[study output contract](docs/population.md#static-and-regional-exports) and
+[executed validation record](docs/VALIDATION.md#static-population-implementation-2026-10-14)
+for file names, coverage limits and checks.

@@ -29,3 +29,8 @@ of supplied observations and inherit their coverage restrictions.
 Source licenses, attribution, completeness and redistribution restrictions remain in each
 source manifest/configuration. AIS archive rights are unresolved in the supplied example;
 this migration does not authorize redistribution. No research datasets are bundled.
+
+The independent [static population v1 contract](population.md) uses original census
+polygons for full-cell and geodesic neighborhood area allocation. It preserves missing
+source geometry, mixed census vintages and per-metric completeness. Legacy water-distance
+weights and population-context schemas retain their original meaning.

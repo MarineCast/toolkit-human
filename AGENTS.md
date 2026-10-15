@@ -99,3 +99,8 @@ See `docs/utc-delivery-pilot.md`; retain unresolved-time records and never treat
 
 UTC land research method: `python -m pytest -q tests/human/activity_and_effort/test_land_utc_context.py`.
 See `docs/utc-scientific-methods.md`; regional qualification and AIS rights remain open.
+
+Static population checks: `python -m pytest tests/test_population_static.py tests/test_static_matrix.py tests/test_study.py -q`.
+Use `human get population --help` for standalone population queries. See `docs/population.md`
+for bounded preparation, strict coverage, caches, and local study exports. No live acquisition
+is needed for deterministic fixtures.

@@ -37,6 +37,9 @@ def main(argv=None):
         sub.add_argument("family", choices=[family for family in FAMILIES
             if action != "download" or family != "observer-effort"])
         sub.add_argument("arguments", nargs=argparse.REMAINDER)
+    query = commands.add_parser("get", help="Query a standalone static product.")
+    query.add_argument("family", choices=["population"])
+    query.add_argument("arguments", nargs=argparse.REMAINDER)
     matrix = commands.add_parser("export-static-matrix", help="Export native static H3 R7 components.")
     matrix.add_argument("--manifest", type=Path, action="append", required=True)
     matrix.add_argument("--output", type=Path, required=True)
@@ -66,6 +69,9 @@ def main(argv=None):
         else:
             print(verify_static(args.path)["data_release_id"])
         return 0
+    if args.command == "get":
+        from human.demography_and_presence.population.static.cli import main as population_main
+        return population_main(args.arguments, workspace=args.workspace)
     if args.command == "export-static-matrix":
         from human.static_matrix import export
         print(export(args.manifest, args.output, args.input_manifest))

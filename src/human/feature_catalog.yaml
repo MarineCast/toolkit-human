@@ -23,6 +23,84 @@ default_model_policy:
   - water_weighted_population_75mi
   - water_weighted_population_100mi
 collections:
+  population_static_v1:
+    category: demography_and_presence
+    artifact: population-r7-static.parquet
+    schema: human.population.static.v1
+    h3_resolution: 7
+    supported_resolutions:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    - 11
+    - 12
+    - 13
+    - 14
+    - 15
+    temporal_grain: static_mixed_census_vintage
+    model_policy: evidence_only
+    features:
+    - name: population_count
+      role: evidence
+      measurement_status: estimated
+      model_eligible: false
+      unit: people
+    - name: population_density_per_km2
+      role: evidence
+      measurement_status: estimated
+      model_eligible: false
+      unit: people_per_km2
+    - name: population_within_25km
+      role: evidence
+      measurement_status: estimated
+      model_eligible: false
+      unit: people
+    - name: population_within_50km
+      role: evidence
+      measurement_status: estimated
+      model_eligible: false
+      unit: people
+    - name: population_within_100km
+      role: evidence
+      measurement_status: estimated
+      model_eligible: false
+      unit: people
+    - name: population_within_250km
+      role: evidence
+      measurement_status: estimated
+      model_eligible: false
+      unit: people
+    - name: population_0_25km
+      role: evidence
+      measurement_status: estimated
+      model_eligible: false
+      unit: people
+    - name: population_25_50km
+      role: evidence
+      measurement_status: estimated
+      model_eligible: false
+      unit: people
+    - name: population_50_100km
+      role: evidence
+      measurement_status: estimated
+      model_eligible: false
+      unit: people
+    - name: population_100_250km
+      role: evidence
+      measurement_status: estimated
+      model_eligible: false
+      unit: people
+    coverage_contract: Per-metric coverage_status and available_source_subtotal; incomplete
+      canonical values null
+    model_channel: evidence_only
   calendar_daily:
     category: temporal_context
     artifact: data/processed/domain/human/temporal_context/calendar/calendar_daily.parquet
