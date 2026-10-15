@@ -52,6 +52,8 @@ For documentation-only work, inspect `git status --short` and the diff, verify r
 Run `python scripts/check_native_runtime.py gdal` before the full suite and
 `python scripts/check_native_runtime.py osrm` before the native road-profile fixture.
 Install `python -m pip install -e '.[test]'` and run `python -m pytest -q`.
+Set `PYTHONTZPATH=''` for the full suite to use packaged timezone rules consistently,
+as documented in the native validation workflow.
 Validate a regular wheel from outside the checkout. Keep config/ and
 src/human/resources/config synchronized; workspace paths use HUMAN_WORKSPACE or cwd.
 When adding executable behavior, add appropriate checks and document their exact commands here.

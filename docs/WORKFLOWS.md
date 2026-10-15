@@ -35,6 +35,11 @@ population to marine cells.
 
 ## Native validation environments
 
+Run the full suite with `PYTHONTZPATH='' python -m pytest -q` so Python and pandas
+use the installed `tzdata` rules consistently. CI sets this environment variable too.
+An older system timezone database can otherwise disagree with the explicitly packaged
+WA/BC civil-time rules used by the UTC research method.
+
 The full suite requires GDAL Python bindings (including NumPy support and
 `ViewshedGenerate`) and the `gdal_viewshed` CLI. Installing Rasterio alone does not
 provide `osgeo`. Linux CI uses Ubuntu 24.04's `gdal-bin` and `libgdal-dev`, then builds
@@ -99,6 +104,8 @@ installs the regular wheel with dependencies, and copies `scripts/check_installe
 and the import contract test outside the checkout before running them. It blocks
 OrcaCast imports, asserts the package comes from that environment's site-packages,
 and checks resources, all 35 family help routes and non-destructive workspace initialization.
+It also checks the standalone population API/config/CLI and runs the population and study
+export tests against the installed wheel outside the checkout.
 These checks first run without GDAL or OSRM. The wheel environment then installs matching
 GDAL bindings and runs copied native viewshed and land-smoke fixtures outside the checkout.
 

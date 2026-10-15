@@ -1,7 +1,7 @@
 """Study export preserves native time support, spatial grain and nulls."""
 import hashlib
 import json
-from pathlib import Path
+from importlib.resources import files
 
 import geopandas as gpd
 import h3
@@ -31,7 +31,7 @@ def test_study_export(tmp_path):
     support.write_text(json.dumps({'native_h3_resolution':7,'native_calendar_timezone':'America/Los_Angeles'}))
     manifest=tmp_path/'release.json'
     manifest.write_text(json.dumps({'artifacts':[{'path':p.name,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in [native,support]]}))
-    config=yaml.safe_load((Path(__file__).parents[1]/'config/data/human/temporal_context/calendar.yaml').read_text())
+    config=yaml.safe_load(files('human').joinpath('resources/config/data/human/temporal_context/calendar.yaml').read_text())
     config['time']['start_date']='2026-03-08';config['time']['end_date']='2026-03-09'
     cfg=tmp_path/'calendar.yaml';cfg.write_text(yaml.safe_dump(config))
     output=tmp_path/'export'

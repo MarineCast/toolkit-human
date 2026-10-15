@@ -135,3 +135,42 @@ report are retained locally under `Data/Human/.workspace/provenance/` and `valid
 Live acquisition, empirical census-allocation accuracy and new regional activity/terrain/
 routing builds remain unverified. Generated data, raw sources and local run provenance
 are excluded from the source commit. No package release or data redistribution was performed.
+
+### Integration with current Git main (2026-10-14)
+
+After the study run, the population branch was rebased onto `fd29579`, retaining the
+newer native-runtime, immutable-release and UTC research interfaces. The population
+method and the executed study calculations were unchanged. Validation was repeated
+against the combined source:
+
+```bash
+/private/tmp/human-population-314-env/bin/python scripts/check_native_runtime.py gdal
+/private/tmp/human-population-314-env/bin/python scripts/check_native_runtime.py osrm
+PYTHONTZPATH='' /private/tmp/human-population-314-env/bin/python -m pytest -q --tb=short
+/private/tmp/human-population-314-env/bin/python -m pip wheel --no-deps --no-build-isolation . -w /private/tmp/human-population-git-wheel
+```
+
+Result: **437 passed in 44.27 seconds**, with no skips, including the five synthetic
+OSRM routing cases. GDAL preflight and OSRM 26.8.0 preflight passed. Routing tests
+required permission to bind temporary loopback ports outside the filesystem sandbox.
+`PYTHONTZPATH=''` aligned Python/pandas with packaged `tzdata` 2026.3; the older conda
+system timezone database otherwise failed the existing post-2026 BC civil-time test.
+CI and the native workflow now specify that setting.
+
+A new regular wheel (`sha256:1a826d59176be6f18e48d88fb9ffc85ac6040239c8ee5f0305b2034ed10f2116`)
+was installed with `--no-deps` in `/private/tmp/human-population-git-env`, a fresh
+virtual environment using the existing scientific system packages. From
+`/private/tmp/human-population-git-wheel-tests`, the installed-wheel script passed
+resource/init checks, all 35 family help routes with application imports blocked,
+and the population API/config/CLI checks. `pip check` passed; the copied population,
+study, matrix, release, profile and UTC tests passed **88/88 in 10.03 seconds** with
+`PYTHONTZPATH=''`. The study test reads its calendar fixture from installed package
+resources. CI now includes the population and study tests in its outside-checkout
+wheel run.
+
+All 23 configuration files matched their packaged copies, the generated feature
+catalog was current, all 26 local documentation links/anchors resolved, and
+`git diff --check` passed. This is local Python 3.14/macOS evidence; Python 3.11 and
+Linux CI execution are separate checks. No new regional acquisition, activity,
+terrain, routing graph, empirical validation or package release accompanied Git
+integration.
