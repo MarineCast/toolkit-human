@@ -6,7 +6,7 @@ Install the package in the documented Python environment, configure `config/huma
 Run supported pipeline checks with:
 
 ```sh
-PYTHONTZPATH='' python -m pytest -q tests/test_census_acquisition.py tests/test_run_settings.py tests/test_pipeline.py tests/test_static_delivery.py tests/test_native_features.py tests/test_collected_population.py tests/test_static_water_support.py tests/test_calendar_lookup.py tests/test_population_collection.py tests/test_population_static.py tests/test_statcan_gaf.py tests/test_packaging.py tests/human/test_feature_catalog.py
+PYTHONTZPATH='' python -m pytest -q -m 'not legacy' tests/test_census_acquisition.py tests/test_run_settings.py tests/test_pipeline.py tests/test_static_delivery.py tests/test_native_features.py tests/test_collected_population.py tests/test_static_water_support.py tests/test_calendar_lookup.py tests/test_population_collection.py tests/test_population_static.py tests/test_statcan_gaf.py tests/test_packaging.py tests/human/test_feature_catalog.py
 python -m pyflakes src/human/pipelines src/human/utils/downloads.py src/human/utils/study.py src/human/cli.py tests/test_census_acquisition.py tests/test_run_settings.py
 python scripts/check_pipeline_docs.py
 python scripts/update_human_feature_catalog.py
@@ -16,6 +16,8 @@ python -m pip wheel --no-deps --no-build-isolation . -w /path/to/small/wheel-sta
 Validate a regular wheel outside the checkout with `scripts/check_installed_wheel.py` and the copied `tests/test_census_acquisition.py`, `tests/test_run_settings.py`, `tests/test_pipeline.py` plus its fixture modules (`test_static_delivery.py`, `test_native_features.py`) under a `tests` package. A wheel test must not inherit the checkout's PYTHONPATH.
 
 Tests use synthetic source fixtures and fake bounded HTTP responses. They verify all three output grains, source checksums, cleanup on success/failure, publication rollback, immutable receipts, semantic rejection and preserved scientific ancestry. They do not qualify live source availability, current source rights, historical snapshot recovery or a regional reproduction.
+
+The base dependency check excludes tests marked `legacy`; the legacy viewshed packaging import is still exercised by the full native suite.
 
 The retained full research suite still needs the GDAL and OSRM preflights, runtimes and timezone settings in [historical native workflows](legacy-workflows.md#native-validation-environments). Run those preflights before `PYTHONTZPATH='' python -m pytest -q`; report any missing runtime rather than claiming full validation. No native terrain/routing dependency is needed for `get_human_data` from normalized census/native source inputs.
 

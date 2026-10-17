@@ -37,3 +37,4 @@ human = ["resources/**/*", "**/*.yaml", "**/*.lua", "**/*.md", "**/*.txt"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra --import-mode=importlib"
+markers = ["legacy: requires optional legacy research dependencies and native runtime"]
