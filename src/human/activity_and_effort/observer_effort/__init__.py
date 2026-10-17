@@ -1,1 +1,1 @@
-"""Coverage-aware observer-effort products built from human activity evidence."""
+"""Legacy AIS/viewshed-proxy compatibility; excluded from active Human products."""

@@ -1,7 +1,7 @@
 schema_version: 1
 product: population_static
 h3_resolution: 7
-radii_km: [25, 50, 100, 250]
+radii_km: [25, 50, 100]
 source_manifest: cache/population/sources.json
 resource_limits:
   max_targets: 100000

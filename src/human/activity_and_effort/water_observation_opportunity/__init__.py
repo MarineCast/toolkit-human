@@ -1,1 +1,1 @@
-"""Component-first water observation-opportunity research products."""
+"""Legacy modeling-proxy compatibility; excluded from active Human products."""

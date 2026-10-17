@@ -1,3 +1,5 @@
+AIS ownership (2026-10-17): acquisition/aggregation moved out of Human to toolkit-ais. Historical AIS notes below describe external/legacy input needs, not an active Human adapter. Original source evidence is retained.
+
 HUMAN DOMAIN ROADMAP
 ====================
 
@@ -33,36 +35,22 @@ Path: `demography_and_presence/seasonal_population_pressure/`
 Activity and Effort
 -------------------
 
-Water Observation Opportunity
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Legacy Observation-Opportunity Proxies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Path: `activity_and_effort/water_observation_opportunity/`
-
-[x] Publish schema-v2 daily and weekly H3 R6 source and target component tables
-    with controlled missingness states, row lineage, immutable generations, and
-    research-only catalog registration.
-
-[x] Keep AIS all-vessel, passenger, recreational, commercial, and fishing
-    activity separate; propagate ferry rider/platform measures from native R7;
-    retain the passenger-plus-recreational artifact as compatibility/sensitivity
-    only and define no canonical primary water composite.
-
-[x] Add distance-aware atmospheric visibility plus separate daylight, wind,
-    precipitation, unavailable sea-state, and unavailable reporting-capture
-    fields without changing the physical viewshed algorithm.
-
-[x] Audit all checksum-bound canonical positive sightings and add WA/BC
-    15/30/50 km matching diagnostics without fitting, scaling, or correcting a
-    proxy from whale outcomes.
-
-[ ] Replace partial legacy AIS with authoritative raw positions; complete BC
-    shore access and ferry histories; acquire independent whale-watch and direct
-    observer effort; reconstruct sea state; then evaluate before promotion.
+Land, water and AIS/viewshed observation-opportunity combinations are owned by
+modeling as of 2026-10-15. Existing namespaces and artifacts remain compatibility
+evidence; they are excluded from active Human CLI families, workspace defaults,
+feature collections and study exports. Visibility/sea-state acquisition and
+proxy evaluation are not Human source-data completion gates. See docs/product-scope.md.
 
 Direct Observer Effort - Highest Priority
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Path: `activity_and_effort/observer_effort/`
+
+The existing implementation at this path is a retired AIS/viewshed proxy.
+Future directly measured survey effort needs its own explicit source contract.
 
 [ ] Acquire direct survey and encounter tracks with platform hours, track
     kilometres, surveyed cells, provider/source availability, and detection

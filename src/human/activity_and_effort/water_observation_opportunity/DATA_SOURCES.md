@@ -1,4 +1,9 @@
-# Water observation-opportunity data sources
+# Legacy water observation-opportunity data sources
+
+This cross-domain calculation is modeling-owned as of 2026-10-15 and excluded
+from active Human products, CLI families, workspace defaults, feature catalogs
+and study exports. Its implementation and method remain legacy research/import
+compatibility. See [product scope](../../../../docs/product-scope.md).
 
 This research product consumes only locally materialized, checksum-bound inputs:
 

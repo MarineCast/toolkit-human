@@ -59,9 +59,11 @@ def test_monotone_bands_and_geodesic_boundary_crossing(tmp_path):
     row = result.table.iloc[0]
     assert 0 < row.population_within_25km < 100
     assert row.population_within_50km == pytest.approx(100)
-    values = row[['population_within_25km', 'population_within_50km', 'population_within_100km', 'population_within_250km']].astype(float)
+    values = row[['population_within_25km', 'population_within_50km', 'population_within_100km']].astype(float)
     assert (np.diff(values) >= -1e-8).all()
-    assert row[['population_0_25km','population_25_50km','population_50_100km','population_100_250km']].sum() == pytest.approx(row.population_within_250km)
+    assert list(result.metadata['radii_km']) == [25., 50., 100.]
+    assert not any('250km' in column for column in result.table)
+    assert row[['population_0_25km','population_25_50km','population_50_100km']].sum() == pytest.approx(row.population_within_100km)
     assert row.population_count == 0
     assert row.population_count__coverage_status == 'known_zero'
     # Independent intersection fraction in the recorded equal-area system.
@@ -90,15 +92,15 @@ def test_missing_source_values_and_unverified_support_are_not_zero(tmp_path):
     source = fixture_sources([cell_polygon(CELL)], [None])
     with pytest.raises(PopulationCoverageError) as error:
         query(tmp_path, source)
-    assert error.value.report['incomplete_metrics'] == 5
+    assert error.value.report['incomplete_metrics'] == 4
     result=query(tmp_path,source,allow_partial=True,include_bands=True)
     row=result.table.iloc[0]
     assert pd.isna(row.population_count)
     assert pd.isna(row.population_25_50km)
     assert json.loads(row.population_count__missing_sources) == ['synthetic:0']
     unknown = query(tmp_path/'unverified',fixture_sources(coverage=False),allow_partial=True).table.iloc[0]
-    assert pd.isna(unknown.population_within_250km)
-    assert unknown.population_within_250km__available_source_subtotal == 100
+    assert pd.isna(unknown.population_within_100km)
+    assert unknown.population_within_100km__available_source_subtotal == 100
     zero = query(tmp_path/'zero',fixture_sources(populations=[0])).table.iloc[0]
     assert zero.population_count == 0
     assert zero.population_count__coverage_status == 'known_zero'
@@ -193,13 +195,13 @@ def test_geometry_refinement(tmp_path):
 
 
 def test_dry_run_cli_export_and_population_imports(tmp_path,monkeypatch,capsys):
-    from human.cli import main
+    from human.demography_and_presence.population.static.cli import main
     manifest=write_sources(fixture_sources(),tmp_path/'inputs')
     plan=get_population(target_h3=[CELL],workspace=tmp_path/'new',dry_run=True)
     assert not plan['source_available'] and plan['missing_work']
     assert not (tmp_path/'new').exists()
     output=tmp_path/'out.parquet'
-    assert main(['--workspace',str(tmp_path),'get','population','--target-h3',CELL,'--source-manifest',str(manifest),'--output',str(output)])==0
+    assert main(['--target-h3',CELL,'--source-manifest',str(manifest),'--output',str(output)], workspace=tmp_path)==0
     assert output.exists()
     assert output.with_suffix('.metadata.json').exists()
     with pytest.raises(FileExistsError):
@@ -313,3 +315,21 @@ def test_target_h3_case_variants_have_one_canonical_identity(tmp_path):
     assert query(tmp_path,target_h3=[CELL.upper()]).table.h3_index.tolist()==[CELL]
     with pytest.raises(ValueError,match='Duplicate target H3 identities'):
         query(tmp_path,target_h3=[CELL,CELL.upper()])
+
+
+def test_distinct_national_counts_survive_cartographic_overlap(tmp_path):
+    from human.demography_and_presence.population.static.sources import retain_distinct_national_counts
+    source=fixture_sources([box(-123.02,47.99,-123,48.01),box(-123.01,47.99,-122.99,48.01)],[100,200])
+    source.geographies.loc[1,['country','vintage','jurisdiction']]=['CA',2021,'synthetic_CA']
+    revised=retain_distinct_national_counts(source)
+    assert revised.geographies.population.tolist()==[100,200]
+    assert revised.metadata['cross_border_overlap_source_count']==2
+    row=query(tmp_path,revised).table.iloc[0]
+    assert row.population_within_25km==pytest.approx(300)
+    assert row.population_within_25km__missing_sources=='[]'
+    # Neither full original denominator nor national counts are clipped to a seam.
+    original_area=source.geographies.to_crs(revised.geographies.crs).area.to_numpy()
+    np.testing.assert_allclose(revised.geographies.area,original_area)
+    source.geographies.loc[1,'country']='US'
+    with pytest.raises(ValueError,match='Same-country overlapping'):
+        retain_distinct_national_counts(source)

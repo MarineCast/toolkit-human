@@ -1,126 +1,26 @@
 # Workflows
 
-1. Install the package and optional provider dependencies needed for your source.
-2. Run `human --workspace /path/to/workspace init`; review every source and output path.
-3. Provision external geometry/weather/observation inputs where required.
-4. Run `human --workspace /path/to/workspace download FAMILY --help`, then the explicit
-   acquisition command. Downloads may access remote services or materialize snapshots.
-5. Run `human --workspace /path/to/workspace build FAMILY --help`, then build from the
-   prepared inputs. Overwrite and partial-source flags remain explicit per-family choices.
-6. Inspect products with `human --workspace /path/to/workspace inspect FAMILY`.
+Install the package in the documented Python environment, configure `config/human.yaml`, and run `human get-human-data` or `from human import get_human_data; get_human_data()`.
+`human get-human-data` collects missing configured sources. `--mode offline` requires retained verified snapshots. `human validate /path/to/Data/Human` checks the three final products. See [the pipeline guide](get-human-data.md) for source acquisition, missing-input behavior, pinned calendar rules and cleanup.
 
-`human families` lists available families. Observer effort consumes prepared activity products
-and exposes build/inspect only, with no download command. Legacy geometry remains accessible through
-`python -m human.viewshed.cli.main --help`. Read the selected stage before execution: terrain
-work may invoke GDAL, create large caches, publish products and clean intermediates.
-Land routing may require OSRM/container tooling; installation alone does not provision it.
+Run supported pipeline checks with:
 
-Run `python -m pytest -q` from this checkout after installing `.[test]`.
-Tests create clearly marked synthetic geometry fixtures and remove their files afterward.
-They do not validate regional source coverage, network acquisition, source rights,
-regional terrain execution or application production integration. Native fixture coverage
-depends on the explicitly provisioned runtimes below.
-Build a wheel with `python -m pip wheel --no-deps --no-build-isolation . -w dist` and verify
-installation from outside the checkout, including `human init` and shipped resources.
-
-Feature catalog maintenance: `python scripts/update_human_feature_catalog.py`.
-Graph navigation and the exact code-only refresh command are documented in `AGENTS.md`.
-
-## Static H3 export
-
-After building the static families, use the explicit [static matrix exporter](static-matrix.md)
-to produce one H3 R7 Parquet from their native build manifests. This retains component
-support and missingness; it does not aggregate time-varying products or transfer land
-population to marine cells.
-
-## Native validation environments
-
-Run the full suite with `PYTHONTZPATH='' python -m pytest -q` so Python and pandas
-use the installed `tzdata` rules consistently. CI sets this environment variable too.
-An older system timezone database can otherwise disagree with the explicitly packaged
-WA/BC civil-time rules used by the UTC research method.
-
-The full suite requires GDAL Python bindings (including NumPy support and
-`ViewshedGenerate`) and the `gdal_viewshed` CLI. Installing Rasterio alone does not
-provide `osgeo`. Linux CI uses Ubuntu 24.04's `gdal-bin` and `libgdal-dev`, then builds
-bindings against that same native version in each Python 3.11/3.14 environment:
-
-```bash
-sudo apt-get install gdal-bin libgdal-dev
-python -m pip install -e '.[test]' numpy wheel setuptools
-python -m pip install --no-build-isolation "GDAL[numpy]==$(gdal-config --version).*"
-python scripts/check_native_runtime.py gdal
-python -m pytest -q
+```sh
+PYTHONTZPATH='' python -m pytest -q -m 'not legacy' tests/test_census_acquisition.py tests/test_run_settings.py tests/test_pipeline.py tests/test_static_delivery.py tests/test_native_features.py tests/test_collected_population.py tests/test_static_water_support.py tests/test_calendar_lookup.py tests/test_population_collection.py tests/test_population_static.py tests/test_statcan_gaf.py tests/test_packaging.py tests/human/test_feature_catalog.py
+python -m pyflakes src/human/pipelines src/human/utils/downloads.py src/human/utils/study.py src/human/cli.py tests/test_census_acquisition.py tests/test_run_settings.py
+python scripts/check_pipeline_docs.py
+python scripts/update_human_feature_catalog.py
+python -m pip wheel --no-deps --no-build-isolation . -w /path/to/small/wheel-staging
 ```
 
-For a complete macOS terrain environment, prefer a consistent conda-forge stack
-for Python, GDAL, Rasterio and PyArrow. Mixing Homebrew GDAL with PyPI PyArrow can
-load two Arrow libraries and fail filesystem registration even when versions match.
-The GDAL preflight checks this collision. Homebrew OSRM runs out of process and
-can be used alongside that environment. The OSRM CI runner uses macOS 15 so current
-Python 3.14 Rasterio wheels are available.
-For example, create an isolated native environment, then install the toolkit without
-replacing already-satisfied native dependencies:
+Validate a regular wheel outside the checkout with `scripts/check_installed_wheel.py` and the copied `tests/test_census_acquisition.py`, `tests/test_run_settings.py`, `tests/test_pipeline.py` plus its fixture modules (`test_static_delivery.py`, `test_native_features.py`) under a `tests` package. A wheel test must not inherit the checkout's PYTHONPATH.
 
-```bash
-conda create -n human-native -c conda-forge python=3.11 gdal=3.12.3 rasterio pyarrow pip
-conda activate human-native
-python -m pip install -e '.[test]'
-python scripts/check_native_runtime.py gdal
-python -m pytest -q
-```
+Tests use synthetic source fixtures and fake bounded HTTP responses. They verify all three output grains, source checksums, cleanup on success/failure, publication rollback, immutable receipts, semantic rejection and preserved scientific ancestry. They do not qualify live source availability, current source rights, historical snapshot recovery or a regional reproduction.
 
-See [GDAL's binding installation guidance](https://gdal.org/en/stable/api/python/python_bindings.html).
-The preflight prints both Rasterio's GDAL and the Python/native runtime versions;
-the synthetic CLI/in-process parity test checks their interoperability.
+The base dependency check excludes tests marked `legacy`; the legacy viewshed packaging import is still exercised by the full native suite.
 
-Native road routing retains its OSRM **26.8.0** version requirement. Install that
-runtime, including its `share/osrm/profiles` directory (Homebrew formula
-`osrm-backend` on macOS). CI builds the checksum-verified 26.8.0 source from an
-immutable Homebrew formula revision; installing the latest formula can select a
-newer engine and intentionally fail the existing version guard. `HUMAN_OSRM_ROOT` selects the installation prefix;
-otherwise the prefix is discovered from `osrm-extract` on `PATH`, following symlinks.
-`HUMAN_OSMIUM` can select the `osmium` executable; otherwise it is found on `PATH`.
-Osmium is needed for real extract inspection/merging, not the synthetic routing test.
-That test builds tiny graphs and starts temporary loopback-only OSRM servers; it requires
-permission to bind an ephemeral localhost port. It verifies road/bridge/tunnel reachability
-and ferry/shuttle-train disconnection without live data or external routing services.
-No package install downloads OSM data or builds a regional graph.
+The retained full research suite still needs the GDAL and OSRM preflights, runtimes and timezone settings in [historical native workflows](legacy-workflows.md#native-validation-environments). Run those preflights before `PYTHONTZPATH='' python -m pytest -q`; report any missing runtime rather than claiming full validation. No native terrain/routing dependency is needed for `get_human_data` from normalized census/native source inputs.
 
-```bash
-python scripts/check_native_runtime.py osrm
-python -m pytest -q tests/human/accessibility/test_road_only_routing.py
-```
+For a final full suite, use the existing documented native runtime, run both `scripts/check_native_runtime.py gdal` and `osrm`, set PYTHONTZPATH='', and point HUMAN_WORKSPACE at an isolated fixture workspace containing the shipped configs. The historical autouse fixture may create small synthetic water/land files under HUMAN_WORKSPACE; never point it at a live source deployment for validation. Native OSRM tests require a temporary loopback listener. This is separate from the supported pipeline dependency gate.
 
-CI requires GDAL on both Python versions and OSRM in a separate macOS job; failed
-preflight checks are errors, not skips. Without OSRM, the local full suite explicitly
-skips only its native profile fixture. The GDAL integration fixtures are required by
-CI, including land smoke, canopy/endpoint batch invariance and CLI parity. Live source
-acquisition, regional graph/terrain builds and consumer application integration remain
-separate, unrun workflows. No lint/type checker is configured in this repository.
-
-The wheel CI step uses a fresh virtual environment without system site packages,
-installs the regular wheel with dependencies, and copies `scripts/check_installed_wheel.py`
-and the import contract test outside the checkout before running them. It blocks
-OrcaCast imports, asserts the package comes from that environment's site-packages,
-and checks resources, all 35 family help routes and non-destructive workspace initialization.
-It also checks the standalone population API/config/CLI and runs the population and study
-export tests against the installed wheel outside the checkout.
-These checks first run without GDAL or OSRM. The wheel environment then installs matching
-GDAL bindings and runs copied native viewshed and land-smoke fixtures outside the checkout.
-
-## Native release audit and immutable snapshots
-
-Use `human audit-manifests`, `human publish-static-snapshot`, and
-`human verify-static-snapshot` as documented in [release readiness](release-readiness.md).
-These retain native contracts and explicitly do not promote scientific eligibility or
-claim application-profile conformance. CI exercises snapshot publication/validation from
-the installed wheel outside the checkout, in addition to native runtime checks.
-
-## Standalone resident population
-
-Use `human get population` or `from human import get_population` with explicit H3 cells or a
-bbox. See [population](population.md) for dry-run, bounded original census preparation,
-strict/partial coverage and the offline synthetic example. It does not run water, AIS,
-viewshed or routing stages. `human.study.export_study` writes local static, calendar and
-native spatial activity files with companion metadata and a catalog.
+The packaged five-source census recipe is sufficient configuration for a fresh source store, but provider access and hash identity must still pass. On 2026-10-17 US HEAD checks confirmed 514,605,141 combined archive bytes; both required Canadian endpoints returned HTTP403. No clean official-census regional acquisition success is claimed. A retained-normalization uncached calculation tests the engine, not raw acquisition. The original GAF CSV remains a separate retained audit input; its optional adapter does not silently replace the pinned BC Profile source.

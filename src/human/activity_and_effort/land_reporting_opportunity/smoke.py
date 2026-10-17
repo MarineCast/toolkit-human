@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+from importlib.resources import files
 from human.core.config.paths import project_root
 
 import geopandas as gpd
@@ -170,7 +171,11 @@ def run_smoke(output_dir: Path) -> Path:
         coverage={"fixture": True},
         row_count=len(static),
     )
-    config = yaml.safe_load((project / DEFAULT_CONFIG_PATH).read_text())
+    legacy_config = project / DEFAULT_CONFIG_PATH
+    config = yaml.safe_load(
+        legacy_config.read_text() if legacy_config.is_file()
+        else files("human").joinpath("resources", DEFAULT_CONFIG_PATH).read_text()
+    )
     pipeline = config["pipeline"]
     pipeline["static_weights_path"] = str(static_path)
     pipeline["viewshed_config_path"] = str(viewshed_config)

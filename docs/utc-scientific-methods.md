@@ -1,5 +1,9 @@
 # UTC solar and civil-calendar research method
 
+This is a retained legacy modeling method, excluded from active Human products
+under the 2026-10-15 [scope decision](product-scope.md). Its weather/visibility
+requirements are not Human acquisition or completion gates.
+
 `land_reporting_opportunity.utc_context.integrate_land_context` defines an opt-in
 research scenario. It does not replace native daily builders or establish measured
 presence, reporting effort, detection probability, or production eligibility.

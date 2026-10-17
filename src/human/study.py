@@ -11,6 +11,7 @@ import pyarrow.parquet as pq
 import yaml
 
 from human.demography_and_presence.population.static.sources import checksum
+from human.product_scope import HUMAN_ACTIVITY_FAMILIES
 
 
 def _verified_artifact(manifest_path, relative_path):
@@ -25,33 +26,30 @@ def _verified_artifact(manifest_path, relative_path):
     return path, manifest
 
 
-def _write(frame, path, metadata):
-    companion = path.with_suffix('.metadata.json')
-    if path.exists() or companion.exists():
-        raise FileExistsError(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    table = pa.Table.from_pandas(frame, preserve_index=False)
-    table = table.replace_schema_metadata({**(table.schema.metadata or {}),
-        b'human_study': json.dumps(metadata, sort_keys=True).encode()})
-    temporary = path.with_suffix('.parquet.tmp')
-    pq.write_table(table, temporary, compression='zstd')
-    temporary.replace(path)
-    metadata = {**metadata, 'artifact': {'path': path.name, 'sha256': checksum(path), 'rows': len(frame)}}
-    companion.write_text(json.dumps(metadata, indent=2, sort_keys=True))
-    return metadata
+from human.utils.artifacts import write_study_parquet as _write
 
 
-def export_study(*, population, output_dir, calendar_config, static_input=None, dynamic_inputs=()):
+def _export_study(*, population, output_dir, calendar_config, static_input=None, dynamic_inputs=()):
     """Export population/static H3, non-spatial calendar, and native spatial activity.
 
     `population` is a PopulationResult. Optional retained artifacts are checksum-verified
     against explicit release manifests. No acquisition or legacy activity rebuild occurs.
+    Dynamic families are ferry source products; AIS is owned by toolkit-ais. Cross-domain observation-
+    opportunity proxies belong to modeling and are rejected before any writes.
     Each dynamic descriptor supplies manifest, artifact, family, date_column,
     cell_column, resolution_column, and support_manifest. Different native resolutions
     produce separate files; local days retain their original UTC interval boundaries.
     """
     from human.temporal_context.calendar.download import download
     from human.temporal_context.calendar.build import build
+    dynamic_inputs = tuple(dynamic_inputs)
+    for entry in dynamic_inputs:
+        if entry['family'] not in HUMAN_ACTIVITY_FAMILIES:
+            raise ValueError(
+                f"{entry['family']!r} is outside Human study activity scope. "
+                "Supported family is ferry; AIS belongs to toolkit-ais and observation-opportunity "
+                "composites belong to modeling."
+            )
     output_dir = Path(output_dir)
     cfg = yaml.safe_load(Path(calendar_config).read_text())
     start, end = pd.Timestamp(cfg['time']['start_date']), pd.Timestamp(cfg['time']['end_date'])
@@ -60,7 +58,8 @@ def export_study(*, population, output_dir, calendar_config, static_input=None, 
     cells = set(frame.h3_index)
     manifest = {'schema': 'human.study.v1', 'bbox': population.metadata.get('bbox'),
         'requested_calendar_start': str(start.date()), 'requested_calendar_end': str(end.date()),
-        'products': [], 'model_eligible': False, 'limitations': [
+        'products': [], 'model_eligible': False,
+        'product_scope': 'human_source_inputs; modeling_composites_excluded', 'limitations': [
             'Static population is computed once; no census interpolation or daily population expansion.',
             'Dynamic files retain native cadence, coverage and timezone; no implied full-period availability.']}
     static_meta = {'schema': 'human.study.static.v1', 'population': population.metadata,
@@ -138,3 +137,26 @@ def export_study(*, population, output_dir, calendar_config, static_input=None, 
         raise FileExistsError(catalog)
     catalog.write_text(json.dumps(manifest,indent=2,sort_keys=True))
     return catalog
+
+
+def export_study(*, population, output_dir, calendar_config, static_input=None,
+                 dynamic_inputs=(), metadata_dir=None):
+    """Export native grains as final-only Parquets with external build receipts."""
+    import hashlib
+    import tempfile
+    from human.final_delivery import finalize_delivery
+    # Validate scope before creating any target or staging directory.
+    dynamic_inputs=tuple(dynamic_inputs)
+    for entry in dynamic_inputs:
+        if entry['family'] not in HUMAN_ACTIVITY_FAMILIES:
+            raise ValueError(f"{entry['family']!r} is outside Human study activity scope. Supported family is ferry; AIS belongs to toolkit-ais and observation-opportunity composites belong to modeling.")
+    output=Path(output_dir)
+    if output.exists() and any(output.iterdir()): raise FileExistsError('Use an empty final delivery directory')
+    identity=hashlib.sha256(str(output.resolve()).encode()).hexdigest()[:16]
+    receipts=Path(metadata_dir) if metadata_dir else Path.cwd()/'data/delivery-metadata'/identity
+    receipts.parent.mkdir(parents=True,exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix='human-study-',dir=receipts.parent) as temporary:
+        staging=Path(temporary)/'products'
+        _export_study(population=population,output_dir=staging,calendar_config=calendar_config,
+            static_input=static_input,dynamic_inputs=dynamic_inputs)
+        return finalize_delivery(staging,output,receipts)
