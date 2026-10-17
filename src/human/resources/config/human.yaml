@@ -1,0 +1,24 @@
+# Paths are relative to HUMAN_WORKSPACE/cwd. Collects a fresh native inventory.
+# Choose a new source_store vintage to refresh; existing snapshots are verified/reused.
+schema: human.pipeline.v1
+study_config: ../../config/study.v1.json
+output_dir: ../../Data/Human
+work_dir: data/.human-runs
+source_store: data/sources/2026-10-17
+metadata_dir: data/delivery/runs
+calendar:
+  start_date: '2009-01-01'
+  end_date: '2026-12-31'
+  as_of: '2026-10-16'
+  holidays_version: '0.100'
+  tzdata_version: '2026.3'
+population:
+  manifest_pointer: data/static-work/source-manifest-path.txt
+  specification: config/census-sources.v1.json
+  cache_workspace: data/static-work/independent-review-20261017
+native:
+  acquire: true
+assets: []
+max_download_bytes: 0
+expected_rows:
+  static.parquet: 13461

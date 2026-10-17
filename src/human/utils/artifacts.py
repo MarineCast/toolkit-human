@@ -250,3 +250,21 @@ def load_manifest(path: str | Path, *, verify_artifacts: bool = True) -> dict[st
         raise ValueError(f"Human manifest root must be a mapping: {path}")
     validate_manifest(payload, verify_artifacts=verify_artifacts)
     return payload
+
+
+def write_study_parquet(frame, path, metadata):
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+    companion = path.with_suffix('.metadata.json')
+    if path.exists() or companion.exists():
+        raise FileExistsError(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    table = pa.Table.from_pandas(frame, preserve_index=False)
+    table = table.replace_schema_metadata({**(table.schema.metadata or {}),
+        b'human_study': json.dumps(metadata, sort_keys=True).encode()})
+    temporary = path.with_suffix('.parquet.tmp')
+    pq.write_table(table, temporary, compression='zstd')
+    temporary.replace(path)
+    metadata = {**metadata, 'artifact': {'path': path.name, 'sha256': sha256_file(path), 'rows': len(frame)}}
+    companion.write_text(json.dumps(metadata, indent=2, sort_keys=True))
+    return metadata

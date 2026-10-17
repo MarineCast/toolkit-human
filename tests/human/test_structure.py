@@ -8,12 +8,13 @@ ACTIVE = (
     "demography_and_presence/population",
     "demography_and_presence/places",
     "temporal_context/calendar",
-    "activity_and_effort/ais",
     "activity_and_effort/ferry",
-    "activity_and_effort/land_reporting_opportunity",
-    "activity_and_effort/water_observation_opportunity",
     "accessibility/public_shore_access",
     "accessibility/boat_launch_access",
+)
+LEGACY_MODELING = (
+    "activity_and_effort/land_reporting_opportunity",
+    "activity_and_effort/water_observation_opportunity",
 )
 PLANNED = (
     "demography_and_presence/seasonal_population_pressure",
@@ -33,12 +34,14 @@ def test_human_family_structure_and_authoritative_todo() -> None:
     root = project_root() / "src/human"
     todo = (root / "TODO.txt").read_text(encoding="utf-8")
     required = {"download.py", "build.py", "inspect.py", "config.py", "DATA_SOURCES.md"}
-    assert len(ACTIVE) + len(PLANNED) == 19
+    assert len(ACTIVE) + len(PLANNED) + len(LEGACY_MODELING) == 18
     assert len(PLANNED) == 10
     for relative in ACTIVE:
         family = root / relative
         assert family.is_dir()
         assert required.issubset({path.name for path in family.iterdir()})
+    for relative in LEGACY_MODELING:
+        assert (root / relative).is_dir()  # Existing research imports remain readable.
     for relative in PLANNED:
         family = root / relative
         assert family.is_dir()

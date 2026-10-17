@@ -1,28 +1,23 @@
 from __future__ import annotations
 
-from pathlib import Path
-
 import yaml
 
-from human.core.config import ConfigDocument
+from human.core.config.paths import project_root
 from human.viewshed.config import load_app_config
 from human.viewshed.config.paths import DEFAULT_CONFIG
-from human.viewshed.finalize.final_artifacts import (
-    static_scientific_config_hash,
-)
 
-CANONICAL_CONFIG = Path("config/modeling/effort/viewshed.yaml")
+CANONICAL_CONFIG = project_root() / "config/modeling/effort/viewshed.yaml"
 
 
 def test_canonical_config_is_the_only_viewshed_yaml_under_config() -> None:
     matches = sorted(
         path
-        for path in Path("config").rglob("*.yaml")
+        for path in (project_root() / "config").rglob("*.yaml")
         if "viewshed" in path.parts or path.name == "viewshed.yaml"
     )
 
     assert matches == [CANONICAL_CONFIG]
-    legacy_human_config = Path("config/data/human.yaml")
+    legacy_human_config = project_root() / "config/data/human.yaml"
     if legacy_human_config.exists():
         assert "viewshed" not in yaml.safe_load(legacy_human_config.read_text())
     assert DEFAULT_CONFIG == CANONICAL_CONFIG.resolve()
@@ -47,8 +42,8 @@ def test_canonical_config_uses_model_area_bbox() -> None:
         "longitude": -122.767230,
     }
     assert app.run.write_maps is False
-    assert app.paths.map_dir == Path("outputs/effort/viewshed").resolve()
-    assert app.paths.output_dir == Path("data/tmp/viewshed/h3r7").resolve()
-    assert app.paths.final_output_dir == Path("data/processed/domain/human/viewshed/RES7").resolve()
+    assert app.paths.map_dir == (project_root() / "outputs/effort/viewshed").resolve()
+    assert app.paths.output_dir == (project_root() / "data/tmp/viewshed/h3r7").resolve()
+    assert app.paths.final_output_dir == (project_root() / "data/processed/domain/human/viewshed/RES7").resolve()
 
 

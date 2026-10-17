@@ -1,7 +1,15 @@
+# Human implementation
+
+The supported API is `human.get_human_data`; see the repository README and docs/get-human-data.md. Canonical code is grouped under `pipelines/delivery`, `pipelines/population`, `pipelines/native` and `pipelines/calendar`; `utils` owns shared artifact/download/study helpers. Root modules are compatibility aliases. Other family modules below remain source adapters or legacy compatibility, not independently supported outputs.
+
 # Human domain
 
-This package owns non-viewshed human presence, access, activity, effort, and
-exposure products. Feature families mirror their configuration, raw-data,
+This data-only package owns human layers and source-supported effects datasets,
+including acquisition, processing, documented data derivations and export. Current
+products cover population, access, calendar and activity; broader pressure/exposure
+and effects layers require their own sources, implementation and validation.
+Ecological response fitting, prediction and observation/reporting assumptions belong
+to consuming modeling work. Feature families mirror their configuration, raw-data,
 processed-data, and inspection-output paths.
 
 ## Organization
@@ -10,13 +18,13 @@ processed-data, and inspection-output paths.
 | --- | --- | --- |
 | `demography_and_presence/` | `population/`, `places/` | `seasonal_population_pressure/` |
 | `temporal_context/` | `calendar/` | — |
-| `activity_and_effort/` | `ais/`, `ferry/`, `land_reporting_opportunity/`, `water_observation_opportunity/` | `observer_effort/`, `fishing_activity/` |
+| `activity_and_effort/` | `ferry/` (AIS belongs to toolkit-ais) | Direct survey effort, `fishing_activity/` |
 | `accessibility/` | `public_shore_access/`, `boat_launch_access/`, `land_transport_access/`, `population_travel_time/` | — |
 | `tourism_and_recreation/` | — | `park_visitation/`, `whale_watch_activity/`, `recreational_boating/`, `tourism_pressure/` |
 | `exposure/` | — | `vessel_acoustic_exposure/` |
 
-`viewshed/` remains an independent bounded context and is not part of this
-migration.
+`viewshed/` is retained legacy compatibility. Physical-viewability production is
+owned by the independent Viewshed toolkit.
 
 ## Pipeline contract
 
@@ -24,9 +32,9 @@ Each active family owns `download.py`, `build.py`, `inspect.py`, `config.py`,
 and `DATA_SOURCES.md`. Run a stage directly, for example:
 
 ```bash
-python -m human.activity_and_effort.ais.download
-python -m human.activity_and_effort.ais.build --allow-partial
-python -m human.activity_and_effort.ais.inspect
+python -m human.activity_and_effort.ferry.download
+python -m human.activity_and_effort.ferry.build --allow-partial
+python -m human.activity_and_effort.ferry.inspect
 ```
 
 Accessibility sources are intentionally heterogeneous. Washington authoritative
@@ -37,22 +45,16 @@ Washington linework; OSM representative points never substitute for access
 boundaries.
 
 Land transport and population travel-time products currently adopt
-checksum-pinned OSRM notebook snapshots into standardized manifests.
-`land_reporting_opportunity/` combines the static land viewshed, viewing
-conditions, reachable population/travel, road and city access, public-shore
-evidence, and calendar opportunity into daily and weekly research composites.
-Every component is also published standalone. Verified-only and mapped-public
-composites are explicit lower bounds; unknown access is never zero-filled.
-These products remain research-only until routing, access coverage, response
-curves, stability, and leakage checks pass.
+checksum-pinned OSRM notebook snapshots into standardized manifests. Their
+source assumptions and coverage remain explicit.
 
-`water_observation_opportunity/` publishes class-separated AIS and ferry
-activity plus daily/weekly viewing-condition-weighted target components. Ferry
-is propagated at native R7 and stays separate from passenger AIS. Whale-watch,
-sea state, and reporting capture remain explicitly unavailable. No canonical
-water composite is defined; the older passenger-plus-recreational AIS artifact
-under `observer_effort/` is compatibility/sensitivity only. See
-`docs/architecture/observation_opportunity.md` for the complete contract.
+Combining human sources with weather, viewshed or reporting assumptions belongs
+to modeling. The `land_reporting_opportunity/`, `water_observation_opportunity/`
+and existing AIS/viewshed `observer_effort/` implementations remain importable
+for legacy research only. They are excluded from active CLI families, workspace
+defaults, feature collections and study exports. See
+[product scope](../../docs/product-scope.md). Atmospheric visibility does not
+gate completion of a Human source-data pull.
 
 Paths mirror the source package below `config/data/human/`, `data/raw/human/`,
 `data/processed/domain/human/`, and `outputs/domains/human/`. Download manifests
@@ -64,7 +66,7 @@ The valid source measurement states are `observed`, `derived`, `estimated`,
 `fallback`, and `unavailable`. A missing value remains unknown unless complete
 source coverage establishes a true zero.
 
-Schema-v2 opportunity tables additionally use controlled component states:
+Retained legacy schema-v2 opportunity tables use controlled component states:
 `positive`, `observed_zero`, `derived_zero`, `unknown`, `partial`, `unmapped`,
 `source_unavailable`, `outside_jurisdiction`, `not_applicable`, and
 `processing_failure`.
@@ -90,8 +92,7 @@ python scripts/update_human_feature_catalog.py --check
 ## Roadmaps
 
 - `TODO.txt` tracks feature-family implementation inside the human domain.
-- `human_layer_todo.txt` tracks cross-domain integration, evidence, and release
-  gates for the broader human layer.
+- `human_layer_todo.txt` retains the historical cross-domain modeling roadmap;
+  its proxy-combination work is outside active Human scope.
 
-The files are intentionally separate: completing a producer does not imply that
-its integration or release-readiness gates have passed.
+Completing a source producer does not imply modeling integration or acceptance.

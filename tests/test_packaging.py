@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 import ast
+import pytest
 from importlib.resources import files
 from pathlib import Path
 
 from human.cli import initialize_workspace
 from human.core.config.paths import project_root
+from human.product_scope import LEGACY_MODELING_MODULES
 
 
 def test_runtime_has_no_application_imports():
@@ -36,12 +38,27 @@ def test_workspace_is_explicit_and_independent_of_installation(tmp_path, monkeyp
 def test_initialization_preserves_edits_and_includes_routing_profile(tmp_path):
     created = initialize_workspace(tmp_path)
     assert created
-    config = tmp_path / 'config/data/human/temporal_context/calendar.yaml'
+    config = tmp_path / 'config/human.yaml'
     assert config.is_file()
     config.write_text('custom configuration\n')
     assert initialize_workspace(tmp_path) == []
     assert config.read_text() == 'custom configuration\n'
     assert files('human').joinpath('accessibility/land_transport_access/road_only.lua').is_file()
+
+
+def test_initialization_excludes_modeling_configs_and_preserves_legacy_edits(tmp_path):
+    legacy = tmp_path / 'config/data/human/activity_and_effort/land_reporting_opportunity.yaml'
+    legacy.parent.mkdir(parents=True)
+    legacy.write_text('existing research configuration\n')
+    created = initialize_workspace(tmp_path)
+    assert legacy.read_text() == 'existing research configuration\n'
+    for path in created:
+        if path.parent == legacy.parent:
+            assert not any(path.stem == name or path.stem.startswith(name + '_')
+                           for name in LEGACY_MODELING_MODULES)
+    assert not (legacy.parent / 'ferry.yaml').exists()
+    assert [p.relative_to(tmp_path).as_posix() for p in created] == ['config/human.yaml', 'config/census-sources.v1.json', '.env.example']
+    assert not (legacy.parent / 'ais.yaml').exists()
 
 
 def test_packaged_configuration_matches_checkout():
@@ -65,9 +82,10 @@ def test_viewshed_artifact_api_is_packaged():
     assert final_artifacts
 
 
-def test_observer_effort_rejects_nonexistent_download():
-    import pytest
+@pytest.mark.parametrize('family', ['land-reporting-opportunity', 'water-observation-opportunity', 'observer-effort'])
+@pytest.mark.parametrize('action', ['build', 'download', 'inspect'])
+def test_modeling_proxies_are_not_human_cli_products(action, family):
     from human.cli import main
     with pytest.raises(SystemExit) as error:
-        main(['download', 'observer-effort'])
+        main([action, family])
     assert error.value.code == 2

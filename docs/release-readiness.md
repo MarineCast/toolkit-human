@@ -1,5 +1,13 @@
 # Native release integrity and remaining production gates
 
+## Current product scope
+
+Since 2026-10-15, combined land/water/AIS reporting-opportunity proxies are owned
+by modeling and excluded from active Human products, catalogs, workspace defaults
+and new study exports. Their historical integrity/readiness findings below remain
+legacy evidence. Weather, visibility, viewability and proxy qualification are not
+Human source-data completion gates. See [product scope](product-scope.md).
+
 The standalone package and native runtime CI passing does not qualify every Human
 product for production. `human audit-manifests` checks supplied build manifests'
 artifact and input existence, SHA-256 and declared Parquet row counts. It reports

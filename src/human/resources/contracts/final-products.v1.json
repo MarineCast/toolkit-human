@@ -1,0 +1,409 @@
+{
+  "schema": "human.product_contract.v1",
+  "products": {
+    "dynamic-calendar.parquet": {
+      "schema": "human.study.calendar_lookup.v1",
+      "primary_key": [
+        "date",
+        "jurisdiction"
+      ],
+      "columns": [
+        {
+          "arrow_type": "large_string",
+          "name": "date"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "jurisdiction"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "country"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "subdivision"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "timezone"
+        },
+        {
+          "arrow_type": "timestamp[us, tz=UTC]",
+          "name": "local_day_start_utc"
+        },
+        {
+          "arrow_type": "timestamp[us, tz=UTC]",
+          "name": "local_day_end_utc"
+        },
+        {
+          "arrow_type": "int64",
+          "name": "day_of_week"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "is_weekend"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "is_actual_holiday"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "is_observed_holiday"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "actual_holiday_names"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "observed_holiday_names"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "is_holiday"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "calendar_basis"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "rules_version"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "timezone_rules_version"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "as_of"
+        }
+      ],
+      "arrow_schema_base64": "/////yAEAAAQAAAAAAAKAAwABgAFAAgACgAAAAABBAAMAAAACAAIAAAABAAIAAAABAAAABIAAADEAwAAgAMAAFQDAAAkAwAA9AIAAKQCAABcAgAAHAIAAOwBAAC0AQAAfAEAAEABAAAEAQAA1AAAAKAAAABsAAAAMAAAAAQAAACU/P//AAABFBAAAAAYAAAABAAAAAAAAAAFAAAAYXNfb2YAAACE/P//vPz//wAAARQQAAAAKAAAAAQAAAAAAAAAFgAAAHRpbWV6b25lX3J1bGVzX3ZlcnNpb24AALz8///0/P//AAABFBAAAAAgAAAABAAAAAAAAAANAAAAcnVsZXNfdmVyc2lvbgAAAOz8//8k/f//AAABFBAAAAAgAAAABAAAAAAAAAAOAAAAY2FsZW5kYXJfYmFzaXMAABz9//9U/f//AAABBhAAAAAcAAAABAAAAAAAAAAKAAAAaXNfaG9saWRheQAASP3//4D9//8AAAEUEAAAACgAAAAEAAAAAAAAABYAAABvYnNlcnZlZF9ob2xpZGF5X25hbWVzAACA/f//uP3//wAAARQQAAAAKAAAAAQAAAAAAAAAFAAAAGFjdHVhbF9ob2xpZGF5X25hbWVzAAAAALj9///w/f//AAABBhAAAAAkAAAABAAAAAAAAAATAAAAaXNfb2JzZXJ2ZWRfaG9saWRheQDs/f//JP7//wAAAQYQAAAAJAAAAAQAAAAAAAAAEQAAAGlzX2FjdHVhbF9ob2xpZGF5AAAAIP7//1j+//8AAAEGEAAAABwAAAAEAAAAAAAAAAoAAABpc193ZWVrZW5kAABM/v//hP7//wAAAQIQAAAAJAAAAAQAAAAAAAAACwAAAGRheV9vZl93ZWVrAAgADAAIAAcACAAAAAAAAAFAAAAAwP7//wAAAQoQAAAAJAAAAAQAAAAAAAAAEQAAAGxvY2FsX2RheV9lbmRfdXRjAAAAvP///wAAAgAEAAAAAwAAAFVUQwAE////AAABChAAAAAsAAAABAAAAAAAAAATAAAAbG9jYWxfZGF5X3N0YXJ0X3V0YwAIAAwABgAIAAgAAAAAAAIABAAAAAMAAABVVEMAUP///wAAARQQAAAAHAAAAAQAAAAAAAAACAAAAHRpbWV6b25lAAAAAET///98////AAABFBAAAAAcAAAABAAAAAAAAAALAAAAc3ViZGl2aXNpb24AcP///6j///8AAAEUEAAAABgAAAAEAAAAAAAAAAcAAABjb3VudHJ5AJj////Q////AAABFBAAAAAgAAAABAAAAAAAAAAMAAAAanVyaXNkaWN0aW9uAAAAAMj///8QABQACAAGAAcADAAAABAAEAAAAAAAARQQAAAAHAAAAAQAAAAAAAAABAAAAGRhdGUAAAAABAAEAAQAAAA="
+    },
+    "static-native.parquet": {
+      "schema": "human.native_features.v1",
+      "primary_key": [
+        "feature_id"
+      ],
+      "columns": [
+        {
+          "arrow_type": "string",
+          "name": "feature_id"
+        },
+        {
+          "arrow_type": "string",
+          "name": "record_id"
+        },
+        {
+          "arrow_type": "string",
+          "name": "group"
+        },
+        {
+          "arrow_type": "string",
+          "name": "role"
+        },
+        {
+          "arrow_type": "string",
+          "name": "name"
+        },
+        {
+          "arrow_type": "string",
+          "name": "category"
+        },
+        {
+          "arrow_type": "string",
+          "name": "location_method"
+        },
+        {
+          "arrow_type": "string",
+          "name": "h3_index"
+        },
+        {
+          "arrow_type": "list<element: double>",
+          "name": "label_point"
+        },
+        {
+          "arrow_type": "binary",
+          "name": "geometry"
+        },
+        {
+          "arrow_type": "string",
+          "name": "geometry_json"
+        },
+        {
+          "arrow_type": "string",
+          "name": "properties_json"
+        }
+      ],
+      "arrow_schema_base64": "/////8ACAAAQAAAAAAAKAAwABgAFAAgACgAAAAABBAAMAAAACAAIAAAABAAIAAAABAAAAAwAAABcAgAAHAIAAPABAADEAQAAmAEAAGgBAAA0AQAABAEAAJwAAABsAAAAOAAAAAQAAADk/f//AAABBRAAAAAgAAAABAAAAAAAAAAPAAAAcHJvcGVydGllc19qc29uANj9//8U/v//AAABBRAAAAAgAAAABAAAAAAAAAANAAAAZ2VvbWV0cnlfanNvbgAAAAj+//9E/v//AAABBBAAAAAcAAAABAAAAAAAAAAIAAAAZ2VvbWV0cnkAAAAANP7//3D+//8AAAEMFAAAACAAAAAEAAAAAQAAABgAAAALAAAAbGFiZWxfcG9pbnQAZP7//6D+//8AAAEDEAAAACAAAAAEAAAAAAAAAAcAAABlbGVtZW50AAAABgAIAAYABgAAAAAAAgDU/v//AAABBRAAAAAcAAAABAAAAAAAAAAIAAAAaDNfaW5kZXgAAAAAxP7//wD///8AAAEFEAAAACAAAAAEAAAAAAAAAA8AAABsb2NhdGlvbl9tZXRob2QA9P7//zD///8AAAEFEAAAABwAAAAEAAAAAAAAAAgAAABjYXRlZ29yeQAAAAAg////XP///wAAAQUQAAAAGAAAAAQAAAAAAAAABAAAAG5hbWUAAAAASP///4T///8AAAEFEAAAABgAAAAEAAAAAAAAAAQAAAByb2xlAAAAAHD///+s////AAABBRAAAAAYAAAABAAAAAAAAAAFAAAAZ3JvdXAAAACY////1P///wAAAQUQAAAAHAAAAAQAAAAAAAAACQAAAHJlY29yZF9pZAAAAMT///8QABQACAAGAAcADAAAABAAEAAAAAAAAQUQAAAAIAAAAAQAAAAAAAAACgAAAGZlYXR1cmVfaWQAAAQABAAEAAAAAAAAAA=="
+    },
+    "static.parquet": {
+      "schema": "human.study.static.v1",
+      "primary_key": [
+        "h3_index"
+      ],
+      "columns": [
+        {
+          "arrow_type": "large_string",
+          "name": "h3_index"
+        },
+        {
+          "arrow_type": "int64",
+          "name": "h3_resolution"
+        },
+        {
+          "arrow_type": "double",
+          "name": "cell_area_km2"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_count__available_source_subtotal"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_count__coverage_status"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_count__missing_sources"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_count__unverified_geographic_support"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_within_25km__available_source_subtotal"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_25km__coverage_status"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_25km__missing_sources"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_within_25km__unverified_geographic_support"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_within_50km__available_source_subtotal"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_50km__coverage_status"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_50km__missing_sources"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_within_50km__unverified_geographic_support"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_within_100km__available_source_subtotal"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_100km__coverage_status"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_100km__missing_sources"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_within_100km__unverified_geographic_support"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_count_collected"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_count_collected__coverage_status"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_count_collected__zero_imputed"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_count_collected__method"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_within_25km_collected"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_within_25km_collected__zero_imputed"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_25km_collected__method"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_within_50km_collected"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_within_50km_collected__zero_imputed"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_50km_collected__method"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_within_100km_collected"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_within_100km_collected__zero_imputed"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_100km_collected__method"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_density_per_km2_collected"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_density_per_km2_collected__zero_imputed"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_density_per_km2_collected__method"
+        },
+        {
+          "arrow_type": "double",
+          "name": "boat_launch_access__BOAT_LAUNCH_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "boat_launch_access__VERIFIED_PUBLIC_BOAT_LAUNCH_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "boat_launch_access__BOAT_LAUNCHES_WITH_KNOWN_RAMP_CAPABILITY"
+        },
+        {
+          "arrow_type": "double",
+          "name": "boat_launch_access__BOAT_LAUNCHES_WITH_KNOWN_SEASONAL_OPERATION"
+        },
+        {
+          "arrow_type": "double",
+          "name": "boat_launch_access__WA_SOURCE_RECORD_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "boat_launch_access__BC_SOURCE_RECORD_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "boat_launch_access__SOURCE_DATASET_COUNT"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "boat_launch_access__SOURCE_COVERAGE_COMPLETE"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "boat_launch_access__MEASUREMENT_STATUS"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "public_shore_access__JURISDICTION"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__TOTAL_MARINE_SHORELINE_M"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__PUBLIC_ACCESSIBLE_SHORELINE_M"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__ACCESSIBLE_WATERFRONT_FRACTION"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__ACCESSIBLE_WATERFRONT_RAW_RATIO_QC"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "public_shore_access__PUBLIC_ACCESS_STATE"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "public_shore_access__PUBLIC_ACCESS_EVIDENCE_STATE"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__PUBLIC_ACCESS_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__VERIFIED_PUBLIC_ACCESS_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__OSM_EXPLICIT_PUBLIC_ACCESS_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__OSM_SHORE_CANDIDATE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__MAPPED_ACCESS_UNKNOWN_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__RESTRICTED_ACCESS_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__CONDITIONAL_ACCESS_SITE_COUNT"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "public_shore_access__SOURCE_COVERAGE_COMPLETE"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "public_shore_access__FRACTION_DENOMINATOR_MISMATCH_QC"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "public_shore_access__MEASUREMENT_STATUS"
+        },
+        {
+          "arrow_type": "double",
+          "name": "places__CATALOG_RECORD_COUNT"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "places__MEASUREMENT_STATUS"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "places__SOURCE_COVERAGE_COMPLETE"
+        }
+      ],
+      "arrow_schema_base64": "//////AUAAAQAAAAAAAKAAwABgAFAAgACgAAAAABBAAMAAAACAAIAAAABAAIAAAABAAAAEAAAACQFAAAPBQAAAAUAACsEwAAZBMAABwTAADIEgAAbBIAACASAADUEQAAeBEAABwRAADQEAAAhBAAACgQAADMDwAAfA8AACwPAADQDgAAjA4AADwOAADsDQAApA0AAFgNAAAEDQAAtAwAAGgMAAAUDAAAxAsAAHgLAAAkCwAA1AoAAIQKAAAsCgAA2AkAAIgJAAAoCQAAwAgAAFgIAAAECAAAsAcAAFwHAAAIBwAAvAYAAHQGAAAcBgAAwAUAAGQFAAAEBQAAtAQAAFwEAAAEBAAApAMAAEADAADoAgAAiAIAACwCAADQAQAAfAEAACABAADUAAAAjAAAAEwAAAAEAAAAgOz//wAAAQYQAAAANAAAAAQAAAAAAAAAIAAAAHBsYWNlc19fU09VUkNFX0NPVkVSQUdFX0NPTVBMRVRFAAAAAIjs///E7P//AAABFBAAAAAsAAAABAAAAAAAAAAaAAAAcGxhY2VzX19NRUFTVVJFTUVOVF9TVEFUVVMAAMTs//8A7f//AAABAxAAAAAwAAAABAAAAAAAAAAcAAAAcGxhY2VzX19DQVRBTE9HX1JFQ09SRF9DT1VOVAAAAACK7f//AAACAETt//8AAAEUEAAAADgAAAAEAAAAAAAAACcAAABwdWJsaWNfc2hvcmVfYWNjZXNzX19NRUFTVVJFTUVOVF9TVEFUVVMAUO3//4zt//8AAAEGEAAAAEgAAAAEAAAAAAAAADUAAABwdWJsaWNfc2hvcmVfYWNjZXNzX19GUkFDVElPTl9ERU5PTUlOQVRPUl9NSVNNQVRDSF9RQwAAAKjt///k7f//AAABBhAAAABAAAAABAAAAAAAAAAtAAAAcHVibGljX3Nob3JlX2FjY2Vzc19fU09VUkNFX0NPVkVSQUdFX0NPTVBMRVRFAAAA+O3//zTu//8AAAEDEAAAAEQAAAAEAAAAAAAAADIAAABwdWJsaWNfc2hvcmVfYWNjZXNzX19DT05ESVRJT05BTF9BQ0NFU1NfU0lURV9DT1VOVAAA0u7//wAAAgCM7v//AAABAxAAAABEAAAABAAAAAAAAAAxAAAAcHVibGljX3Nob3JlX2FjY2Vzc19fUkVTVFJJQ1RFRF9BQ0NFU1NfU0lURV9DT1VOVAAAACrv//8AAAIA5O7//wAAAQMQAAAASAAAAAQAAAAAAAAANQAAAHB1YmxpY19zaG9yZV9hY2Nlc3NfX01BUFBFRF9BQ0NFU1NfVU5LTk9XTl9TSVRFX0NPVU5UAAAAhu///wAAAgBA7///AAABAxAAAABAAAAABAAAAAAAAAAuAAAAcHVibGljX3Nob3JlX2FjY2Vzc19fT1NNX1NIT1JFX0NBTkRJREFURV9DT1VOVAAA2u///wAAAgCU7///AAABAxAAAABMAAAABAAAAAAAAAA6AAAAcHVibGljX3Nob3JlX2FjY2Vzc19fT1NNX0VYUExJQ0lUX1BVQkxJQ19BQ0NFU1NfU0lURV9DT1VOVAAAOvD//wAAAgD07///AAABAxAAAABIAAAABAAAAAAAAAA2AAAAcHVibGljX3Nob3JlX2FjY2Vzc19fVkVSSUZJRURfUFVCTElDX0FDQ0VTU19TSVRFX0NPVU5UAACW8P//AAACAFDw//8AAAEDEAAAAEAAAAAEAAAAAAAAAC0AAABwdWJsaWNfc2hvcmVfYWNjZXNzX19QVUJMSUNfQUNDRVNTX1NJVEVfQ09VTlQAAADq8P//AAACAKTw//8AAAEUEAAAAEQAAAAEAAAAAAAAADEAAABwdWJsaWNfc2hvcmVfYWNjZXNzX19QVUJMSUNfQUNDRVNTX0VWSURFTkNFX1NUQVRFAAAAvPD///jw//8AAAEUEAAAADwAAAAEAAAAAAAAACgAAABwdWJsaWNfc2hvcmVfYWNjZXNzX19QVUJMSUNfQUNDRVNTX1NUQVRFAAAAAAjx//9E8f//AAABAxAAAABIAAAABAAAAAAAAAA3AAAAcHVibGljX3Nob3JlX2FjY2Vzc19fQUNDRVNTSUJMRV9XQVRFUkZST05UX1JBV19SQVRJT19RQwDm8f//AAACAKDx//8AAAEDEAAAAEQAAAAEAAAAAAAAADMAAABwdWJsaWNfc2hvcmVfYWNjZXNzX19BQ0NFU1NJQkxFX1dBVEVSRlJPTlRfRlJBQ1RJT04APvL//wAAAgD48f//AAABAxAAAABEAAAABAAAAAAAAAAyAAAAcHVibGljX3Nob3JlX2FjY2Vzc19fUFVCTElDX0FDQ0VTU0lCTEVfU0hPUkVMSU5FX00AAJby//8AAAIAUPL//wAAAQMQAAAAQAAAAAQAAAAAAAAALQAAAHB1YmxpY19zaG9yZV9hY2Nlc3NfX1RPVEFMX01BUklORV9TSE9SRUxJTkVfTQAAAOry//8AAAIApPL//wAAARQQAAAANAAAAAQAAAAAAAAAIQAAAHB1YmxpY19zaG9yZV9hY2Nlc3NfX0pVUklTRElDVElPTgAAAKzy///o8v//AAABFBAAAAA4AAAABAAAAAAAAAAmAAAAYm9hdF9sYXVuY2hfYWNjZXNzX19NRUFTVVJFTUVOVF9TVEFUVVMAAPTy//8w8///AAABBhAAAABAAAAABAAAAAAAAAAsAAAAYm9hdF9sYXVuY2hfYWNjZXNzX19TT1VSQ0VfQ09WRVJBR0VfQ09NUExFVEUAAAAARPP//4Dz//8AAAEDEAAAADwAAAAEAAAAAAAAACgAAABib2F0X2xhdW5jaF9hY2Nlc3NfX1NPVVJDRV9EQVRBU0VUX0NPVU5UAAAAABb0//8AAAIA0PP//wAAAQMQAAAAPAAAAAQAAAAAAAAAKgAAAGJvYXRfbGF1bmNoX2FjY2Vzc19fQkNfU09VUkNFX1JFQ09SRF9DT1VOVAAAZvT//wAAAgAg9P//AAABAxAAAAA8AAAABAAAAAAAAAAqAAAAYm9hdF9sYXVuY2hfYWNjZXNzX19XQV9TT1VSQ0VfUkVDT1JEX0NPVU5UAAC29P//AAACAHD0//8AAAEDEAAAAFAAAAAEAAAAAAAAAD8AAABib2F0X2xhdW5jaF9hY2Nlc3NfX0JPQVRfTEFVTkNIRVNfV0lUSF9LTk9XTl9TRUFTT05BTF9PUEVSQVRJT04AGvX//wAAAgDU9P//AAABAxAAAABQAAAABAAAAAAAAAA8AAAAYm9hdF9sYXVuY2hfYWNjZXNzX19CT0FUX0xBVU5DSEVTX1dJVEhfS05PV05fUkFNUF9DQVBBQklMSVRZAAAAAH71//8AAAIAOPX//wAAAQMQAAAASAAAAAQAAAAAAAAANQAAAGJvYXRfbGF1bmNoX2FjY2Vzc19fVkVSSUZJRURfUFVCTElDX0JPQVRfTEFVTkNIX0NPVU5UAAAA2vX//wAAAgCU9f//AAABAxAAAAA4AAAABAAAAAAAAAAlAAAAYm9hdF9sYXVuY2hfYWNjZXNzX19CT0FUX0xBVU5DSF9DT1VOVAAAACb2//8AAAIA4PX//wAAARQQAAAAQAAAAAQAAAAAAAAALAAAAHBvcHVsYXRpb25fZGVuc2l0eV9wZXJfa20yX2NvbGxlY3RlZF9fbWV0aG9kAAAAAPT1//8w9v//AAABBhAAAABEAAAABAAAAAAAAAAyAAAAcG9wdWxhdGlvbl9kZW5zaXR5X3Blcl9rbTJfY29sbGVjdGVkX196ZXJvX2ltcHV0ZWQAAEj2//+E9v//AAABAxAAAAA4AAAABAAAAAAAAAAkAAAAcG9wdWxhdGlvbl9kZW5zaXR5X3Blcl9rbTJfY29sbGVjdGVkAAAAABb3//8AAAIA0Pb//wAAARQQAAAAPAAAAAQAAAAAAAAAKQAAAHBvcHVsYXRpb25fd2l0aGluXzEwMGttX2NvbGxlY3RlZF9fbWV0aG9kAAAA4Pb//xz3//8AAAEGEAAAAEAAAAAEAAAAAAAAAC8AAABwb3B1bGF0aW9uX3dpdGhpbl8xMDBrbV9jb2xsZWN0ZWRfX3plcm9faW1wdXRlZAAw9///bPf//wAAAQMQAAAANAAAAAQAAAAAAAAAIQAAAHBvcHVsYXRpb25fd2l0aGluXzEwMGttX2NvbGxlY3RlZAAAAPr3//8AAAIAtPf//wAAARQQAAAAPAAAAAQAAAAAAAAAKAAAAHBvcHVsYXRpb25fd2l0aGluXzUwa21fY29sbGVjdGVkX19tZXRob2QAAAAAxPf//wD4//8AAAEGEAAAAEAAAAAEAAAAAAAAAC4AAABwb3B1bGF0aW9uX3dpdGhpbl81MGttX2NvbGxlY3RlZF9femVyb19pbXB1dGVkAAAU+P//UPj//wAAAQMQAAAANAAAAAQAAAAAAAAAIAAAAHBvcHVsYXRpb25fd2l0aGluXzUwa21fY29sbGVjdGVkAAAAAN74//8AAAIAmPj//wAAARQQAAAAPAAAAAQAAAAAAAAAKAAAAHBvcHVsYXRpb25fd2l0aGluXzI1a21fY29sbGVjdGVkX19tZXRob2QAAAAAqPj//+T4//8AAAEGEAAAAEAAAAAEAAAAAAAAAC4AAABwb3B1bGF0aW9uX3dpdGhpbl8yNWttX2NvbGxlY3RlZF9femVyb19pbXB1dGVkAAD4+P//NPn//wAAAQMQAAAANAAAAAQAAAAAAAAAIAAAAHBvcHVsYXRpb25fd2l0aGluXzI1a21fY29sbGVjdGVkAAAAAML5//8AAAIAfPn//wAAARQQAAAANAAAAAQAAAAAAAAAIgAAAHBvcHVsYXRpb25fY291bnRfY29sbGVjdGVkX19tZXRob2QAAIT5///A+f//AAABBhAAAAA8AAAABAAAAAAAAAAoAAAAcG9wdWxhdGlvbl9jb3VudF9jb2xsZWN0ZWRfX3plcm9faW1wdXRlZAAAAADQ+f//DPr//wAAARQQAAAAPAAAAAQAAAAAAAAAKwAAAHBvcHVsYXRpb25fY291bnRfY29sbGVjdGVkX19jb3ZlcmFnZV9zdGF0dXMAHPr//1j6//8AAAEDEAAAACwAAAAEAAAAAAAAABoAAABwb3B1bGF0aW9uX2NvdW50X2NvbGxlY3RlZAAA3vr//wAAAgCY+v//AAABBhAAAABIAAAABAAAAAAAAAA2AAAAcG9wdWxhdGlvbl93aXRoaW5fMTAwa21fX3VudmVyaWZpZWRfZ2VvZ3JhcGhpY19zdXBwb3J0AAC0+v//8Pr//wAAARQQAAAAPAAAAAQAAAAAAAAAKAAAAHBvcHVsYXRpb25fd2l0aGluXzEwMGttX19taXNzaW5nX3NvdXJjZXMAAAAAAPv//zz7//8AAAEUEAAAADwAAAAEAAAAAAAAACgAAABwb3B1bGF0aW9uX3dpdGhpbl8xMDBrbV9fY292ZXJhZ2Vfc3RhdHVzAAAAAEz7//+I+///AAABAxAAAABEAAAABAAAAAAAAAAyAAAAcG9wdWxhdGlvbl93aXRoaW5fMTAwa21fX2F2YWlsYWJsZV9zb3VyY2Vfc3VidG90YWwAACb8//8AAAIA4Pv//wAAAQYQAAAASAAAAAQAAAAAAAAANQAAAHBvcHVsYXRpb25fd2l0aGluXzUwa21fX3VudmVyaWZpZWRfZ2VvZ3JhcGhpY19zdXBwb3J0AAAA/Pv//zj8//8AAAEUEAAAADgAAAAEAAAAAAAAACcAAABwb3B1bGF0aW9uX3dpdGhpbl81MGttX19taXNzaW5nX3NvdXJjZXMARPz//4D8//8AAAEUEAAAADgAAAAEAAAAAAAAACcAAABwb3B1bGF0aW9uX3dpdGhpbl81MGttX19jb3ZlcmFnZV9zdGF0dXMAjPz//8j8//8AAAEDEAAAAEQAAAAEAAAAAAAAADEAAABwb3B1bGF0aW9uX3dpdGhpbl81MGttX19hdmFpbGFibGVfc291cmNlX3N1YnRvdGFsAAAAZv3//wAAAgAg/f//AAABBhAAAABIAAAABAAAAAAAAAA1AAAAcG9wdWxhdGlvbl93aXRoaW5fMjVrbV9fdW52ZXJpZmllZF9nZW9ncmFwaGljX3N1cHBvcnQAAAA8/f//eP3//wAAARQQAAAAOAAAAAQAAAAAAAAAJwAAAHBvcHVsYXRpb25fd2l0aGluXzI1a21fX21pc3Npbmdfc291cmNlcwCE/f//wP3//wAAARQQAAAAOAAAAAQAAAAAAAAAJwAAAHBvcHVsYXRpb25fd2l0aGluXzI1a21fX2NvdmVyYWdlX3N0YXR1cwDM/f//CP7//wAAAQMQAAAARAAAAAQAAAAAAAAAMQAAAHBvcHVsYXRpb25fd2l0aGluXzI1a21fX2F2YWlsYWJsZV9zb3VyY2Vfc3VidG90YWwAAACm/v//AAACAGD+//8AAAEGEAAAAEAAAAAEAAAAAAAAAC8AAABwb3B1bGF0aW9uX2NvdW50X191bnZlcmlmaWVkX2dlb2dyYXBoaWNfc3VwcG9ydAB0/v//sP7//wAAARQQAAAANAAAAAQAAAAAAAAAIQAAAHBvcHVsYXRpb25fY291bnRfX21pc3Npbmdfc291cmNlcwAAALj+///0/v//AAABFBAAAAA0AAAABAAAAAAAAAAhAAAAcG9wdWxhdGlvbl9jb3VudF9fY292ZXJhZ2Vfc3RhdHVzAAAA/P7//zj///8AAAEDEAAAADwAAAAEAAAAAAAAACsAAABwb3B1bGF0aW9uX2NvdW50X19hdmFpbGFibGVfc291cmNlX3N1YnRvdGFsAM7///8AAAIAiP///wAAAQMQAAAAJAAAAAQAAAAAAAAADQAAAGNlbGxfYXJlYV9rbTIABgAIAAYABgAAAAAAAgDA////AAABAhAAAAAoAAAABAAAAAAAAAANAAAAaDNfcmVzb2x1dGlvbgAAAAgADAAIAAcACAAAAAAAAAFAAAAAEAAUAAgABgAHAAwAAAAQABAAAAAAAAEUEAAAACAAAAAEAAAAAAAAAAgAAABoM19pbmRleAAAAAAEAAQABAAAAA=="
+    }
+  }
+}

@@ -51,13 +51,13 @@ def test_cli_and_places_record_counts(tmp_path):
     import hashlib
     import json
     import pyarrow.parquet as pq
-    from human.cli import main
+    from human.static_matrix import main
     catalog = tmp_path / 'places_of_interest.json'
     catalog.write_text(json.dumps([{'latitude': 48, 'longitude': -123, 'destination_score': 99}, {'latitude': 48, 'longitude': -123, 'destination_score': 7}]))
     manifest = tmp_path / 'manifest.json'
     manifest.write_text(json.dumps({'stage': 'build', 'artifacts': [{'path': str(catalog), 'sha256': hashlib.sha256(catalog.read_bytes()).hexdigest()}]}))
     output = tmp_path / 'out.parquet'
-    assert main(['export-static-matrix', '--manifest', str(manifest), '--output', str(output)]) == 0
+    assert main(['--manifest', str(manifest), '--output', str(output)]) == 0
     table = pq.read_table(output)
     assert table['places__CATALOG_RECORD_COUNT'].to_pylist() == [2]
     assert not any('score' in name for name in table.column_names)
@@ -94,4 +94,4 @@ def test_static_population_v1_adapter_retains_coverage_and_units(tmp_path):
     assert table['population_static_v1__population_count__coverage_status'].to_pylist()==['partial']
     metadata=json.loads(table.schema.metadata[b'human_static_matrix'])
     assert metadata['fields']['population_static_v1__population_density_per_km2']['units']=='persons/km2'
-    assert metadata['sources'][0]['native_manifest']['method']=='area_weighted_original_polygons.v1.2'
+    assert metadata['sources'][0]['native_manifest']['method']=='area_weighted_original_polygons.v1.3'

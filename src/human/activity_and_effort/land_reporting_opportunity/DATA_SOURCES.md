@@ -1,4 +1,10 @@
-# Land reporting opportunity
+# Legacy land reporting-opportunity method
+
+This combined proxy is modeling-owned as of 2026-10-15 and excluded from active
+Human products, CLI families, workspace defaults, feature catalogs and study
+exports. The implementation and method below remain for legacy research/import
+compatibility. Visibility availability is not a Human source-data completion gate.
+See [product scope](../../../../docs/product-scope.md).
 
 This research product estimates relative opportunities for a land observer to
 see and report whales. It is not observed visitation, observer-hours, detection

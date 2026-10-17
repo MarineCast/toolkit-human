@@ -1,6 +1,7 @@
-"""Standalone static population product; legacy coastal population is separate."""
-from .api import get_population, PopulationResult, PopulationCoverageError, ResourceLimits
-from .sources import PopulationSources, read_sources, write_sources
-
+"""Compatibility exports for the supported static population pipeline."""
+from human.pipelines.population.static import (
+    get_population, PopulationResult, PopulationCoverageError, ResourceLimits,
+    PopulationSources, read_sources, write_sources,
+)
 __all__ = ["get_population", "PopulationResult", "PopulationCoverageError", "ResourceLimits",
            "PopulationSources", "read_sources", "write_sources"]

@@ -29,7 +29,7 @@ def main():
         result=get_population(target_h3=cells,sources=sources,include_bands=True,
             workspace=args.workspace/key,reference=reference)
         results[key]=result
-    columns=['population_count',*[f'population_within_{r}km' for r in (25,50,100,250)]]
+    columns=['population_count',*[f'population_within_{r}km' for r in (25,50,100)]]
     delta=(results['reference'].table[columns]-results['optimized'].table[columns]).abs().max().max()
     report={'synthetic':True,'max_absolute_difference_persons':float(delta),
         'runs':{key:{**value.metadata['benchmark'],'cache_hit':value.cache_hit} for key,value in results.items()}}

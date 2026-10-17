@@ -1,3 +1,11 @@
+AIS ownership (2026-10-17): toolkit-ais owns acquisition/aggregation; historical AIS tasks below are external/legacy context, not a Human producer roadmap.
+
+# Historical cross-domain roadmap: retained for research context.
+# Since 2026-10-15, weather/viewshed-weighted observation-opportunity combinations
+# are modeling-owned and excluded from active Human products. Proxy tasks below
+# are not Human acquisition, coverage or completion gates. Current source work is
+# tracked in TODO.txt; the active boundary is documented in docs/product-scope.md.
+
 HUMAN LAYER COMPLETION ROADMAP
 ==============================
 

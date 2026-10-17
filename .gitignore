@@ -10,3 +10,8 @@ __pycache__/
 /artifacts/
 /graphify-out/
 .DS_Store
+
+# Private local settings; never commit credentials or user overrides.
+.env
+.env.*
+!.env.example

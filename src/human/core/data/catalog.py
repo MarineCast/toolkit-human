@@ -69,18 +69,6 @@ def register_builtin_datasets() -> None:
             ("date",),
         ),
         (
-            "human.ais.daily_r6",
-            "{data_root}/processed/domain/human/activity_and_effort/ais/ais_activity_daily_r6.parquet",
-            "human.activity_and_effort.ais.build",
-            ("DATE", "H3_INDEX"),
-        ),
-        (
-            "human.ais.weekly_r6",
-            "{data_root}/processed/domain/human/activity_and_effort/ais/ais_activity_weekly_r6.parquet",
-            "human.activity_and_effort.ais.build",
-            ("WEEK_START", "H3_INDEX"),
-        ),
-        (
             "human.ferry.route_daily_r7",
             "{data_root}/processed/domain/human/activity_and_effort/ferry/ferry_effort_daily_by_route_r7.parquet",
             "human.activity_and_effort.ferry.build",

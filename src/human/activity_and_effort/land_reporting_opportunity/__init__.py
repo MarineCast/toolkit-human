@@ -1,1 +1,1 @@
-"""Land-based reporting-opportunity components and composites."""
+"""Legacy modeling-proxy compatibility; excluded from active Human products."""
