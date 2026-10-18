@@ -10,7 +10,7 @@ import pyarrow.parquet as pq
 import pytest
 from shapely.geometry import Point, Polygon, LineString
 
-from human.native_features import compose_native_features, export_native_features, extend_static_delivery, summary_fields, checksum
+from human.pipelines.native.features import compose_native_features, export_native_features, extend_static_delivery, summary_fields, checksum
 
 
 def specification(tmp_path):
@@ -73,13 +73,13 @@ def test_deterministic_export_and_exact_static_calendar_preservation(tmp_path):
     meta=next(product for product in json.loads(receipt.read_text())['products'] if product['schema']=='human.native_features.v1')
     assert meta['artifact']['records']==5 and meta['artifact']['features']==6 and meta['artifact']['context_features']==1
     repeat=tmp_path/'repeat';export_native_features(spec,repeat)
-    from human.final_delivery import native_payload
+    from human.pipelines.delivery.finalize import native_payload
     assert native_payload(out/'static-native.parquet')==json.loads((repeat/'human-native-features.geojson').read_text())
     assert {p.name for p in out.iterdir()}=={'static.parquet','static-native.parquet','dynamic-calendar.parquet'}
     again=tmp_path/'again'
     extend_static_delivery(out,spec,again,metadata_dir=tmp_path/'again-receipts')
     assert native_payload(again/'static-native.parquet')==native_payload(out/'static-native.parquet')
-    from human.final_delivery import read_catalog
+    from human.pipelines.delivery.finalize import read_catalog
     with (again/'static-native.parquet').open('ab') as stream: stream.write(b'tampered')
     with pytest.raises(ValueError,match='checksum mismatch'): read_catalog(again)
 

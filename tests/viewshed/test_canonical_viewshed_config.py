@@ -3,8 +3,8 @@ from __future__ import annotations
 import yaml
 
 from human.core.config.paths import project_root
-from human.viewshed.config import load_app_config
-from human.viewshed.config.paths import DEFAULT_CONFIG
+from human.legacy.viewshed.config import load_app_config
+from human.legacy.viewshed.config.paths import DEFAULT_CONFIG
 
 CANONICAL_CONFIG = project_root() / "config/modeling/effort/viewshed.yaml"
 

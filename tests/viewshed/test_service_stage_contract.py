@@ -3,8 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 
 from human.core.artifacts import RunManifest
-from human.viewshed.api import stages
-from human.viewshed.api.service import (
+from human.legacy.viewshed.api import stages
+from human.legacy.viewshed.api.service import (
     STAGES,
     ViewshedRequest,
     _artifact_refs,
@@ -120,7 +120,7 @@ def test_resume_requires_exact_stage_signature_paths_and_checksums(tmp_path: Pat
     manifest_path = tmp_path / "manifest.json"
     RunManifest(
         run_id=request.run_id,
-        workflow="human.viewshed",
+        workflow='human.legacy.viewshed',
         config_hash=config_hash,
         resolved_config={},
         outputs=refs,
@@ -160,7 +160,7 @@ def test_completed_run_can_refresh_only_its_own_manifest(tmp_path: Path) -> None
     manifest_path = tmp_path / "manifest.json"
     RunManifest(
         run_id=request.run_id,
-        workflow="human.viewshed",
+        workflow='human.legacy.viewshed',
         config_hash=config_hash,
         resolved_config={},
         stage_signature=signature,

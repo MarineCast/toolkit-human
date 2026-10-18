@@ -6,8 +6,8 @@ Install the package in the documented Python environment, configure `config/huma
 Run supported pipeline checks with:
 
 ```sh
-PYTHONTZPATH='' python -m pytest -q -m 'not legacy' tests/test_census_acquisition.py tests/test_run_settings.py tests/test_pipeline.py tests/test_static_delivery.py tests/test_native_features.py tests/test_collected_population.py tests/test_static_water_support.py tests/test_calendar_lookup.py tests/test_population_collection.py tests/test_population_static.py tests/test_statcan_gaf.py tests/test_packaging.py tests/human/test_feature_catalog.py
-python -m pyflakes src/human/pipelines src/human/utils/downloads.py src/human/utils/study.py src/human/cli.py tests/test_census_acquisition.py tests/test_run_settings.py
+PYTHONTZPATH='' python -m pytest -q -m 'not legacy' tests/test_census_acquisition.py tests/test_extracted_census.py tests/test_run_settings.py tests/test_pipeline.py tests/test_static_delivery.py tests/test_native_features.py tests/test_collected_population.py tests/test_static_water_support.py tests/test_calendar_lookup.py tests/test_population_collection.py tests/test_population_static.py tests/test_statcan_gaf.py tests/test_packaging.py tests/human/test_feature_catalog.py tests/human/test_structure.py
+python -m pyflakes src/human/pipelines src/human/utils/downloads.py src/human/utils/study.py src/human/cli.py tests/test_census_acquisition.py tests/test_extracted_census.py tests/test_run_settings.py
 python scripts/check_pipeline_docs.py
 python scripts/update_human_feature_catalog.py
 python -m pip wheel --no-deps --no-build-isolation . -w /path/to/small/wheel-staging

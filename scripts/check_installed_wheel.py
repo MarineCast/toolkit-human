@@ -17,10 +17,17 @@ class BlockApplicationImports(importlib.abc.MetaPathFinder):
 sys.meta_path.insert(0,BlockApplicationImports())
 import human
 from human.cli import main,initialize_workspace,FAMILIES
-from human.validation import product_contract
+from human.pipelines.delivery.validation import product_contract
 root=Path(str(files('human'))).resolve()
 assert root.is_relative_to(Path(sys.prefix).resolve()) and 'site-packages' in root.parts
 assert callable(human.get_human_data) and not FAMILIES
+assert {p.name for p in root.glob('*.py')}=={'__init__.py','__main__.py','main.py','cli.py'}
+from human.main import get_human_data
+assert human.get_human_data is get_human_data
+for removed in ('human.pipeline','human.static_matrix','human.shared_study','human.validation'):
+    assert __import__('importlib').util.find_spec(removed) is None
+assert not any(name.startswith('human.legacy') for name in sys.modules)
+assert root.joinpath('resources/feature_catalog.yaml').is_file()
 assert set(product_contract()['products'])=={'static.parquet','dynamic-calendar.parquet','static-native.parquet'}
 with tempfile.TemporaryDirectory() as tmp:
     workspace=Path(tmp);created=initialize_workspace(workspace)

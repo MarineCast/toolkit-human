@@ -12,7 +12,7 @@ import pytest
 from shapely.geometry import Polygon, box
 from shapely.ops import unary_union
 
-from human.viewshed.visualization import (
+from human.legacy.viewshed.visualization import (
     ViewshedMapConfig,
     add_click_to_copy_coordinates,
     aggregate_target_weight_sums,
@@ -21,7 +21,7 @@ from human.viewshed.visualization import (
     quantile_visibility_classes,
     select_source_for_viewshed_map,
 )
-from human.viewshed.visualization.static_maps import (
+from human.legacy.viewshed.visualization.static_maps import (
     _masked_gaussian_filter,
 )
 

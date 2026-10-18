@@ -2,7 +2,7 @@ import numpy as np
 import rasterio
 from rasterio.transform import from_origin
 
-from human.viewshed.prepare.elevation.terrain import canonical_endpoint_repair
+from human.legacy.viewshed.prepare.elevation.terrain import canonical_endpoint_repair
 
 
 def test_tiled_repair_matches_source_center_and_neighbor_rule(tmp_path):
@@ -40,7 +40,7 @@ def test_tiled_repair_matches_source_center_and_neighbor_rule(tmp_path):
 
 
 def test_cache_identity_ignores_json_object_key_order():
-    from human.viewshed.prepare.elevation.terrain import (
+    from human.legacy.viewshed.prepare.elevation.terrain import (
         projected_dem_metadata_matches,
     )
 

@@ -6,7 +6,7 @@ import numpy as np
 import polars as pl
 import pytest
 
-from human.viewshed.weights.distance.compute import (
+from human.legacy.viewshed.weights.distance.compute import (
     DistanceWeightConfig,
     distance_weight_expr,
     distance_weight_values,

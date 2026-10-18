@@ -1,9 +1,9 @@
 {
   "canada": [
     {
-      "geography": "data/sources/census-us2020-ca2021/canada/lda_000b21a_e.zip",
+      "geography": "data/raw/statcan/2021/lda_000b21a_e.zip",
       "jurisdiction": "CA-BC",
-      "population": "data/sources/census-us2020-ca2021/canada/bc_census_profile_2021.csv.zip",
+      "population": "data/raw/statcan/2021/98-401-X2021006_BC_CB_eng_CSV.zip",
       "population_column": "Population, 2021",
       "population_id": "DGUID",
       "province_code": "59",

@@ -9,7 +9,7 @@ import polars as pl
 import yaml
 from shapely.geometry import Polygon
 
-from human.viewshed.visualization import (
+from human.legacy.viewshed.visualization import (
     export_source_type_static_weight_map,
     export_static_weight_maps,
 )

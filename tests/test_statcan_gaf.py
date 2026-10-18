@@ -2,7 +2,7 @@ import csv
 import zipfile
 import pandas as pd
 import pytest
-from human.demography_and_presence.population.canada.gaf import COLUMNS,read_gaf_da_counts
+from human.pipelines.population.gaf import COLUMNS,read_gaf_da_counts
 
 
 def write_gaf(path,rows):
@@ -41,8 +41,8 @@ def test_zip_and_csv_semantics_match(tmp_path):
 def test_census_preparation_accepts_explicit_gaf_and_retains_unknown(tmp_path):
     import geopandas as gpd
     from shapely.geometry import box
-    from human.demography_and_presence.population.static.census import prepare_census_sources
-    from human.demography_and_presence.population.static.sources import read_sources
+    from human.pipelines.population.static.census import prepare_census_sources
+    from human.pipelines.population.static.sources import read_sources
     table=tmp_path/'gaf.csv';write_gaf(table,[('59000001001',5,'F'),('59000001002',7,'F'),('59000002001',0,'T')])
     geography=tmp_path/'da.parquet'
     gpd.GeoDataFrame({'DGUID':['2021S051259000001','2021S051259000002'],'PRUID':['59','59']},

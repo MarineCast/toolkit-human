@@ -7,10 +7,10 @@ import pandas as pd
 import pytest
 from shapely.geometry import box
 
-from human.demography_and_presence.population.static import PopulationSources
-from human.demography_and_presence.population.static.sources import write_sources
-from human.shared_study import load_static_study
-from human.static_delivery import export_static_study
+from human.pipelines.population.static import PopulationSources
+from human.pipelines.population.static.sources import write_sources
+from human.utils.study import load_static_study
+from human.pipelines.population.delivery import export_static_study
 
 
 def fixture_study(tmp_path):
@@ -81,7 +81,7 @@ def test_static_delivery_no_proxies_and_compatible_binding(tmp_path):
     for radius in (25, 50, 100):
         assert f'population_within_{radius}km' not in meta['population']['fields']
     assert meta['population']['distance_delivery']['fields'] == [f'population_within_{r}km_collected' for r in (25, 50, 100)]
-    from human.collected_population import DISPLAY_LABELS, PUBLIC_BASES
+    from human.pipelines.population.collected import DISPLAY_LABELS, PUBLIC_BASES
     assert not set(PUBLIC_BASES) & set(static)
     assert set(meta['population']['fields']) == set(DISPLAY_LABELS)
     assert {k: v['label'] for k, v in meta['population']['fields'].items()} == DISPLAY_LABELS

@@ -64,12 +64,12 @@ def collect_native(entry, root, run, source_store, *, mode):
     if entry.get('acquire') is not True:
         raise ValueError('native requires specification or acquire: true')
     families={
-        'launches':('accessibility/boat_launch_access','boat_launch_facilities_r7.parquet','boat_launch_access_h3_r7.parquet'),
-        'shore_access':('accessibility/public_shore_access','public_shore_facilities_r7.parquet','public_shore_access_h3_r7.parquet'),
-        'places':('demography_and_presence/places','places_of_interest.json',None),
+        'launches':('accessibility/boat_launch_access','boat_launch_facilities_r7.parquet','boat_launch_access_h3_r7.parquet','human.pipelines.native.boat_launches'),
+        'shore_access':('accessibility/public_shore_access','public_shore_facilities_r7.parquet','public_shore_access_h3_r7.parquet','human.pipelines.native.shore_access'),
+        'places':('demography_and_presence/places','places_of_interest.json',None,'human.pipelines.native.places'),
     }
     spec={'schema':'human.native_sources.v1'};sources=[]
-    for group,(module,primary,summary) in families.items():
+    for group,(module,primary,summary,adapter) in families.items():
         configured=entry.get('configs',{}).get(group)
         if configured:
             text=(root/configured).read_text()
@@ -86,9 +86,9 @@ def collect_native(entry, root, run, source_store, *, mode):
         config=run/(group+'.yaml');config.write_text(yaml.safe_dump(cfg))
         receipt=Path(cfg['raw']['manifest_path'])
         if receipt.exists():_verify_raw_manifest(receipt)
-        if mode=='live' and not receipt.exists():import_module('human.'+module.replace('/','.')+'.download').download(config,overwrite=False)
+        if mode=='live' and not receipt.exists():import_module(adapter+'.download').download(config,overwrite=False)
         raw_manifest=_verify_raw_manifest(receipt)
-        import_module('human.'+module.replace('/','.')+'.build').build(config,allow_partial=True,overwrite=False)
+        import_module(adapter+'.build').build(config,allow_partial=True,overwrite=False)
         spec[group]={'manifest':cfg['output']['manifest_path'],'catalog' if group=='places' else 'facilities':str(output/primary)}
         if summary:spec[group]['summary']=str(output/summary)
         sources.append({'path':str(receipt),'sha256':digest(receipt),'original_sources':raw_manifest['sources']})

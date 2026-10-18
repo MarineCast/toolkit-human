@@ -1,7 +1,7 @@
 import h3
 import pandas as pd
 import pytest
-from human.static_matrix import combine_frames
+from human.pipelines.native.summary import combine_frames
 
 
 def test_union_preserves_absent_and_unknown_values():
@@ -29,7 +29,7 @@ def test_export_verifies_artifact_and_embeds_manifest(tmp_path):
     import hashlib
     import json
     import pyarrow.parquet as pq
-    from human.static_matrix import export
+    from human.pipelines.native.summary import export
     cell = h3.latlng_to_cell(48, -123, 7)
     artifact = tmp_path / 'boat_launch_access_h3_r7.parquet'
     pd.DataFrame({'H3_INDEX': [cell], 'H3_RESOLUTION': [7], 'COUNT': [2]}).to_parquet(artifact)
@@ -51,7 +51,7 @@ def test_cli_and_places_record_counts(tmp_path):
     import hashlib
     import json
     import pyarrow.parquet as pq
-    from human.static_matrix import main
+    from human.pipelines.native.summary import main
     catalog = tmp_path / 'places_of_interest.json'
     catalog.write_text(json.dumps([{'latitude': 48, 'longitude': -123, 'destination_score': 99}, {'latitude': 48, 'longitude': -123, 'destination_score': 7}]))
     manifest = tmp_path / 'manifest.json'
@@ -65,7 +65,7 @@ def test_cli_and_places_record_counts(tmp_path):
 
 def test_supplemental_input_checksum_is_required(tmp_path):
     import json
-    from human.static_matrix import export
+    from human.pipelines.native.summary import export
     source = tmp_path / 'external-water.parquet'
     source.write_bytes(b'changed')
     inventory = tmp_path / 'inputs.json'
@@ -76,8 +76,8 @@ def test_supplemental_input_checksum_is_required(tmp_path):
 
 def test_static_population_v1_adapter_retains_coverage_and_units(tmp_path):
     from human import get_population
-    from human.demography_and_presence.population.static import PopulationSources
-    from human.static_matrix import export
+    from human.pipelines.population.static import PopulationSources
+    from human.pipelines.native.summary import export
     import geopandas as gpd
     from shapely.geometry import box
     import pyarrow.parquet as pq

@@ -16,14 +16,14 @@ Native geometry uses GeoParquet 1.1, EPSG:4326 and WKB in `geometry`. `geometry_
 
 Every Parquet embeds its full scientific dictionary and provenance under Arrow schema key `human_study`. The `geo` key describes native geometry. `human_delivery` identifies the final-only contract and external checksum receipt path. The external toolkit-managed `data/delivery/current/catalog.json` binds the three files and stores per-product companions; no manifest, README, cache, staging directory or old release is placed in `Data/Human`. The app verifies this receipt, embedded metadata, row identity, and every file checksum before export. Human calendar context is retained as a final product but is not currently a map layer.
 
-`human.static_delivery.export_static_study`, `human.native_features.extend_static_delivery` and `human.study.export_study` now stage outside the final directory and publish only final Parquets. The historical study API retains its native calendar/activity meanings; a supplied native ferry source would require its own `dynamic-ferry-rN.parquet`, never a join to jurisdiction/date rows. The current approved catalog contains no ferry activity or land-opportunity product. Older, distinct ferry snapshots and original source evidence remain in gitignored toolkit `data/retained`, not in this current delivery. Land opportunity is legacy modeling research, outside active Human scope.
+`human.pipelines.population.delivery.export_static_study`, `human.pipelines.native.features.extend_static_delivery` and `human.legacy.study.export_study` now stage outside the final directory and publish only final Parquets. The historical study API retains its native calendar/activity meanings; a supplied native ferry source would require its own `dynamic-ferry-rN.parquet`, never a join to jurisdiction/date rows. The current approved catalog contains no ferry activity or land-opportunity product. Older, distinct ferry snapshots and original source evidence remain in gitignored toolkit `data/retained`, not in this current delivery. Land opportunity is legacy modeling research, outside active Human scope.
 
 ## Lower-level reproduction reference
 
 From the toolkit checkout, use a processing workspace outside the final directory:
 
 ```sh
-python -m human.static_delivery \
+python -m human.pipelines.population.delivery \
   --study-config ../../config/study.v1.json \
   --workspace data/static-work \
   --source-manifest /absolute/path/to/the/verified/sources.json \
@@ -33,7 +33,7 @@ python -m human.static_delivery \
   --metadata-dir /absolute/path/to/toolkit-managed/receipts
 ```
 
-Validate staged products before promoting them. `python -m human.final_delivery --source <legacy-or-final-directory> --output <empty-final-directory> --metadata-dir <external-toolkit-directory>` repackages without acquisition or scientific recomputation. It verifies checksums, all Arrow values/nulls/types and full native geometry/property round trips. `read_catalog`, `embedded` and `native_payload` in this module are the producer's public Python readers. Receipts must move with a portable delivery, with their path explicitly rebound and hashes regenerated; embedded scientific metadata remains inspectable in each individual file.
+Validate staged products before promoting them. `python -m human.pipelines.delivery.finalize --source <legacy-or-final-directory> --output <empty-final-directory> --metadata-dir <external-toolkit-directory>` repackages without acquisition or scientific recomputation. It verifies checksums, all Arrow values/nulls/types and full native geometry/property round trips. `read_catalog`, `embedded` and `native_payload` in this module are the producer's public Python readers. Receipts must move with a portable delivery, with their path explicitly rebound and hashes regenerated; embedded scientific metadata remains inspectable in each individual file.
 
 Local storage after the 2026-10-17 cleanup: `data/static-work` contains the current normalized source/calculation cache; `data/provenance` contains necessary original source and review evidence; `data/retained/study-2009-forward` and `data/retained/ferry-current-grid` retain distinct older research inputs. Earlier logs retain their historical paths. `data/provenance/final-layout-20261017` records exact relocation and recovery paths. The byte-identical duplicate land-opportunity copy and superseded processing caches were moved recoverably to the task's named Trash folder. This task did not permanently delete unique source data or empty Trash. At final readback the named recovery folder had disappeared: 24 obsolete/duplicate cached or replaced-encoding files were unavailable there. All current products and necessary original source evidence remained hash-verified; the ledger records each missing recovery path and its checksum. The cause of the recovery-folder disappearance is unknown.
 

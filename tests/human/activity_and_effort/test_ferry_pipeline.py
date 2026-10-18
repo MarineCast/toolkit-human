@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from human.activity_and_effort.ferry.pipeline import (
+from human.legacy.activity.ferry.pipeline import (
     FerryEffortError,
     RouteMapping,
     UnresolvedRoutesError,

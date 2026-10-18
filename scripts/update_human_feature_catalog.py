@@ -3,9 +3,9 @@ from __future__ import annotations
 
 from pathlib import Path
 import yaml
-from human.validation import product_contract
-from human.collected_population import DISPLAY_LABELS, COLLECTED_LIMITATION
-from human.native_features import summary_fields, GROUPS
+from human.pipelines.delivery.validation import product_contract
+from human.pipelines.population.collected import DISPLAY_LABELS, COLLECTED_LIMITATION
+from human.pipelines.native.features import summary_fields, GROUPS
 
 
 def build_catalog():
@@ -30,5 +30,5 @@ def build_catalog():
 
 
 if __name__=='__main__':
-    target=Path(__file__).resolve().parents[1]/'src/human/feature_catalog.yaml'
+    target=Path(__file__).resolve().parents[1]/'src/human/resources/feature_catalog.yaml'
     target.write_text(yaml.safe_dump(build_catalog(),sort_keys=False,allow_unicode=True))

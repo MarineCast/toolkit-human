@@ -7,8 +7,8 @@ import h3
 import polars as pl
 from shapely.geometry import box
 
-from human.viewshed.config.distance import DistanceRuntime
-from human.viewshed.prepare.area import geometry
+from human.legacy.viewshed.config.distance import DistanceRuntime
+from human.legacy.viewshed.prepare.area import geometry
 
 
 def _runtime(tmp_path: Path) -> DistanceRuntime:

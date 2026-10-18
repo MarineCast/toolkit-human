@@ -10,8 +10,8 @@ from shapely.geometry import box
 import yaml
 
 from human.utils.downloads import obtain
-from human.demography_and_presence.population.static.census import prepare_census_sources
-from human.demography_and_presence.population.static.sources import read_sources
+from human.pipelines.population.static.census import prepare_census_sources
+from human.pipelines.population.static.sources import read_sources
 from tests.test_pipeline import setup_pipeline
 
 
@@ -96,11 +96,14 @@ def test_failed_download_cleans_partial_and_leaves_original_absent(tmp_path, mon
         def __exit__(self,*args):pass
         def iter_content(self,size):yield body
     monkeypatch.setattr('requests.get',lambda *a,**k:Response())
-    with pytest.raises(ValueError,match=match):
+    with pytest.raises(ValueError,match=match) as error:
         obtain(tmp_path/'source.zip','https://www2.census.gov/fixture.zip',mode='live',
             expected_sha256=hashlib.sha256(body).hexdigest() if pin=='good' else '0'*64,
             budget={'downloads':1,'bytes':budget})
     assert not list(tmp_path.iterdir())
+    if status==403:
+        assert str(tmp_path/'source.zip') in str(error.value) and hashlib.sha256(body).hexdigest() in str(error.value)
+        assert 'unchanged provider original' in str(error.value)
 
 
 def test_limits_and_official_host_are_checked_before_http(tmp_path,monkeypatch):
@@ -147,3 +150,39 @@ def test_orphan_receipt_is_preserved_before_any_request(tmp_path,monkeypatch):
         obtain(tmp_path/'original.zip','https://www2.census.gov/original.zip',mode='live',
             expected_sha256='0'*64,budget={'downloads':1,'bytes':100})
     assert receipt.read_text()=='unique retained receipt' and not (tmp_path/'original.zip').exists()
+
+
+@pytest.mark.parametrize('kind', ['geography', 'population'])
+def test_verified_local_canadian_originals_precede_network_and_download_budgets(tmp_path, monkeypatch, kind):
+    from importlib.resources import files
+    spec=json.loads(files('human').joinpath('resources/config/census-sources.v1.json').read_text())
+    entry=spec['canada'][0]
+    assert Path(entry[kind]).parent.as_posix()=='data/raw/statcan/2021'
+    path=tmp_path/entry[kind];path.parent.mkdir(parents=True)
+    body=b'synthetic Canadian original';path.write_bytes(body)
+    pin=hashlib.sha256(body).hexdigest();budget={'downloads':0,'bytes':0}
+    monkeypatch.setattr('requests.get',lambda *a,**kw:pytest.fail('Local input attempted HTTP'))
+    assert obtain(path,entry[kind+'_url'],expected_sha256=pin,mode='live',budget=budget)==path
+    assert budget=={'downloads':0,'bytes':0} and path.read_bytes()==body
+    assert not path.with_name(path.name+'.receipt.json').exists()  # No invented download timestamp.
+
+
+def test_mismatching_local_original_is_preserved_without_network(tmp_path, monkeypatch):
+    path=tmp_path/'original.zip';path.write_bytes(b'changed provider bytes')
+    monkeypatch.setattr('requests.get',lambda *a,**kw:pytest.fail('Mismatching original attempted HTTP'))
+    with pytest.raises(ValueError) as error:
+        obtain(path,'https://www12.statcan.gc.ca/original.zip',expected_sha256='0'*64,
+            mode='live',budget={'downloads':1,'bytes':100})
+    assert 'expected '+('0'*64) in str(error.value) and 'got '+hashlib.sha256(path.read_bytes()).hexdigest() in str(error.value)
+    assert 'preserved' in str(error.value) and path.read_bytes()==b'changed provider bytes'
+
+
+def test_missing_offline_original_gives_exact_placement_and_pin_without_writes(tmp_path, monkeypatch):
+    from human.utils.downloads import MissingHumanSources
+    path=tmp_path/'data/raw/statcan/2021/lda_000b21a_e.zip'
+    monkeypatch.setattr('requests.get',lambda *a,**kw:pytest.fail('Offline source attempted HTTP'))
+    with pytest.raises(MissingHumanSources) as error:
+        obtain(path,'https://www12.statcan.gc.ca/original.zip',expected_sha256='0'*64,
+            mode='offline',budget={'downloads':0,'bytes':0})
+    assert str(path) in str(error.value) and 'Expected SHA256: '+('0'*64) in str(error.value)
+    assert 'unchanged provider original' in str(error.value) and not path.parent.exists()

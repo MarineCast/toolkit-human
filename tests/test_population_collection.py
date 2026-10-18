@@ -6,10 +6,10 @@ import numpy as np
 import pytest
 from shapely.geometry import Point, box
 
-from human.demography_and_presence.population.static.collection import collection_footprint, CollectionFootprint
-from human.demography_and_presence.population.static.census import prepare_census_sources
-from human.demography_and_presence.population.static.geometry import GEOD, cell_polygon
-from human.demography_and_presence.population.static.sources import read_sources
+from human.pipelines.population.static.collection import collection_footprint, CollectionFootprint
+from human.pipelines.population.static.census import prepare_census_sources
+from human.pipelines.population.static.geometry import GEOD, cell_polygon
+from human.pipelines.population.static.sources import read_sources
 
 CELL = h3.latlng_to_cell(48, -123, 7)
 
@@ -73,22 +73,22 @@ def test_full_source_polygons_and_true_footprint_jurisdictions(tmp_path):
 
 def test_collection_plan_binds_real_study_and_companion(tmp_path):
     from tests.test_static_delivery import fixture_study
-    from human.population_collection import prepare_study_sources
+    from human.pipelines.population.collection import prepare_study_sources
     study,cell=fixture_study(tmp_path)
     plan=prepare_study_sources(study_config=study,workspace=tmp_path/'work',specification=tmp_path/'not-needed.json',plan_only=True)
     record=json.loads(plan.read_text())
     assert record['target_count']==1 and record['source_manifest'] is None
     assert record['maximum_radius_km']==100
     artifact=record['footprint_artifact']
-    from human.demography_and_presence.population.static.sources import checksum
+    from human.pipelines.population.static.sources import checksum
     assert checksum(artifact['path'])==artifact['sha256']
     assert prepare_study_sources(study_config=study,workspace=tmp_path/'work',specification=tmp_path/'not-needed.json',plan_only=True)==plan
 
 
 def test_delivery_rejects_preparation_for_other_targets(tmp_path):
     from tests.test_static_delivery import fixture_study
-    from human.static_delivery import export_static_study
-    from human.demography_and_presence.population.static.sources import write_sources, PopulationSources
+    from human.pipelines.population.delivery import export_static_study
+    from human.pipelines.population.static.sources import write_sources, PopulationSources
     study,cell=fixture_study(tmp_path)
     wrong=collection_footprint([h3.latlng_to_cell(49,-123,7)],7)
     sources=PopulationSources(gpd.GeoDataFrame({'source_id':['x'],'country':['US'],'vintage':[2020],
@@ -101,8 +101,8 @@ def test_delivery_rejects_preparation_for_other_targets(tmp_path):
 
 def test_standalone_live_api_uses_same_complete_collection_plan(tmp_path,monkeypatch):
     from human import get_population
-    from human.demography_and_presence.population.static.sources import write_sources, PopulationSources
-    from human.demography_and_presence.population.static import census
+    from human.pipelines.population.static.sources import write_sources, PopulationSources
+    from human.pipelines.population.static import census
     sources=PopulationSources(gpd.GeoDataFrame({'source_id':['x'],'country':['US'],'vintage':[2020],
         'jurisdiction':['US-WA'],'population':[100.]},geometry=[box(-123.01,47.99,-122.99,48.01)],crs=4326),
         gpd.GeoDataFrame(geometry=[box(-130,40,-115,55)],crs=4326),{'synthetic':True})
@@ -122,7 +122,7 @@ def test_standalone_live_api_uses_same_complete_collection_plan(tmp_path,monkeyp
 
 def test_planning_again_preserves_completed_source_preparation(tmp_path):
     from tests.test_static_delivery import fixture_study
-    from human.population_collection import prepare_study_sources
+    from human.pipelines.population.collection import prepare_study_sources
     study,cell=fixture_study(tmp_path)
     raw=tmp_path/'raw.parquet'
     gpd.GeoDataFrame({'GEOID20':['x'],'STATEFP20':['53'],'POP20':[100.]},

@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from human.activity_and_effort.land_reporting_opportunity.evaluate import (
+from human.legacy.activity.land_reporting_opportunity.evaluate import (
     PRIMARY_COLUMN,
     build_comparison,
     build_population_baseline,

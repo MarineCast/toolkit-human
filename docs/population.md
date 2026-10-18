@@ -85,7 +85,7 @@ The static workflow does not load the legacy population/water configuration.
 ## Preparing source inputs
 
 The supported normalized API is
-`human.demography_and_presence.population.static.PopulationSources(geographies, coverage, metadata)`.
+`human.pipelines.population.static.PopulationSources(geographies, coverage, metadata)`.
 `write_sources(bundle, directory)` writes a versioned, checksum-verified content-addressed
 bundle. Pass its manifest as `source_manifest=` to `get_population`. Source IDs must be
 unique across countries/tiles; overlapping source support beyond the declared numerical
@@ -96,7 +96,7 @@ The census adapter reuses the existing Canadian Profile-table reader and retaine
 population caches. It does not call the legacy coastal pipelines:
 
 ```python
-from human.demography_and_presence.population.static.census import prepare_census_sources
+from human.pipelines.population.static.census import prepare_census_sources
 
 manifest = prepare_census_sources(
     workspace='./human-workspace',
@@ -186,7 +186,7 @@ The existing `export-static-matrix` accepts the new population `.metadata.json` 
 legacy build manifests at R7. It adds a distinct `population_static_v1` component and
 retains the native companion metadata; it never replaces legacy population semantics.
 
-`human.study.export_study` accepts a `PopulationResult`, calendar configuration and
+`human.legacy.study.export_study` accepts a `PopulationResult`, calendar configuration and
 explicit checksum-verified retained static/dynamic artifact descriptors. It writes
 `human-r7-static.parquet`, `calendar-temporal.parquet`, and one spatial dynamic Parquet
 per native ferry family/resolution. Metadata/receipts are kept outside the final folder. The calendar covers configured

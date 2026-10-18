@@ -17,7 +17,7 @@ Legacy compatibility reference. The supported CLI is now `human get-human-data`;
 and the legacy AIS/viewshed observer-effort proxy are modeling-owned and excluded from
 the active CLI and default workspace setup. Their imports/templates remain for existing
 research; see [product scope](product-scope.md). Legacy geometry remains accessible through
-`python -m human.viewshed.cli.main --help`. Read the selected stage before execution: terrain
+`python -m human.legacy.viewshed.cli.main --help`. Read the selected stage before execution: terrain
 work may invoke GDAL, create large caches, publish products and clean intermediates.
 Land routing may require OSRM/container tooling; installation alone does not provision it.
 
@@ -128,5 +128,5 @@ the installed wheel outside the checkout, in addition to native runtime checks.
 Use `human get population` or `from human import get_population` with explicit H3 cells or a
 bbox. See [population](population.md) for dry-run, bounded original census preparation,
 strict/partial coverage and the offline synthetic example. It does not run water, AIS,
-viewshed or routing stages. `human.study.export_study` writes local static, calendar and
+viewshed or routing stages. `human.legacy.study.export_study` writes local static, calendar and
 native spatial activity files. Final folders contain only Parquets; scientific metadata is embedded and receipts live in toolkit storage outside the final folder. See [final-only delivery](final-delivery.md).

@@ -35,7 +35,8 @@ jobs:
         run: |
           wheel_env="$RUNNER_TEMP/wheel-env"
           python -m venv "$wheel_env"
-          "$wheel_env/bin/python" -m pip install "$RUNNER_TEMP"/dist/*.whl pytest
+          wheels=("$RUNNER_TEMP"/dist/*.whl)
+          "$wheel_env/bin/python" -m pip install "${wheels[0]}[legacy]" pytest
           "$wheel_env/bin/python" -m pip check
           outside="$RUNNER_TEMP/wheel-smoke"
           workspace="$RUNNER_TEMP/human-workspace"

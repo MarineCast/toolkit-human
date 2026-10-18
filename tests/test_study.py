@@ -12,8 +12,8 @@ from shapely.geometry import box
 import yaml
 
 from human import get_population
-from human.demography_and_presence.population.static import PopulationSources
-from human.study import export_study
+from human.pipelines.population.static import PopulationSources
+from human.legacy.study import export_study
 
 
 def test_study_export(tmp_path):

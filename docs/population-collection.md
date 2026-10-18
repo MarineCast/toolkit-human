@@ -18,12 +18,12 @@ a footprint does not require redownloading an archive already covering that area
 ## Plan and prepare
 
 ```bash
-python -m human.population_collection \
+python -m human.pipelines.population.collection \
   --study-config ../../config/study.v1.json \
   --workspace /absolute/path/to/task-owned-workspace \
   --specification /absolute/path/to/source-specification.json \
   --plan-only
-python -m human.population_collection \
+python -m human.pipelines.population.collection \
   --study-config ../../config/study.v1.json \
   --workspace /absolute/path/to/task-owned-workspace \
   --specification /absolute/path/to/source-specification.json
@@ -42,7 +42,7 @@ nationwide sweep or arbitrary provider API loop. Every input file is hash checke
 again before completing normalization. Jurisdictions are diagnosed against the
 actual required union, avoiding false missing jurisdictions at bounding-box corners.
 
-Use the plan's `source_manifest` for `python -m human.static_delivery`. Delivery
+Use the plan's `source_manifest` for `python -m human.pipelines.population.delivery`. Delivery
 rejects a radius-aware bundle prepared for different targets, resolution or radii.
 Earlier explicit source manifests without the additive collection capability remain
 supported. Population and product schema versions, units, missingness and original

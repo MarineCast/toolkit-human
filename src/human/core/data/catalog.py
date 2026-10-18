@@ -41,73 +41,73 @@ def register_builtin_datasets() -> None:
         (
             "human.population.us_h3_r7",
             "{data_root}/processed/domain/human/demography_and_presence/population/us_population_h3_r7.parquet",
-            "human.demography_and_presence.population.build",
+            'human.legacy.population.build',
             ("h3",),
         ),
         (
             "human.population.canada_h3_r7",
             "{data_root}/processed/domain/human/demography_and_presence/population/canada_population_h3_r7.parquet",
-            "human.demography_and_presence.population.build",
+            'human.legacy.population.build',
             ("h3",),
         ),
         (
             "human.population.cross_border_h3_r7",
             "{data_root}/processed/domain/human/demography_and_presence/population/cross_border_population_h3_r7.parquet",
-            "human.demography_and_presence.population.build",
+            'human.legacy.population.build',
             ("COUNTRY_CODE", "H3_INDEX"),
         ),
         (
             "human.population.context_h3_r7",
             "{data_root}/processed/domain/human/demography_and_presence/population/population_context_h3_r7.parquet",
-            "human.demography_and_presence.population.build",
+            'human.legacy.population.build',
             ("H3_INDEX",),
         ),
         (
             "human.calendar.daily",
             "{data_root}/processed/domain/human/temporal_context/calendar/calendar_daily.parquet",
-            "human.temporal_context.calendar.build",
+            'human.legacy.calendar.build',
             ("date",),
         ),
         (
             "human.ferry.route_daily_r7",
             "{data_root}/processed/domain/human/activity_and_effort/ferry/ferry_effort_daily_by_route_r7.parquet",
-            "human.activity_and_effort.ferry.build",
+            'human.legacy.activity.ferry.build',
             ("service_date", "route_key", "source_h3"),
         ),
         (
             "human.ferry.daily_r7",
             "{data_root}/processed/domain/human/activity_and_effort/ferry/ferry_effort_daily_r7.parquet",
-            "human.activity_and_effort.ferry.build",
+            'human.legacy.activity.ferry.build',
             ("service_date", "source_h3"),
         ),
         (
             "human.ferry.weekly_r6",
             "{data_root}/processed/domain/human/activity_and_effort/ferry/ferry_effort_weekly_r6.parquet",
-            "human.activity_and_effort.ferry.build",
+            'human.legacy.activity.ferry.build',
             ("week_start", "source_h3"),
         ),
         (
             "human.accessibility.boat_launch_access.facilities_r7",
             "{data_root}/processed/domain/human/accessibility/boat_launch_access/boat_launch_facilities_r7.parquet",
-            "human.accessibility.boat_launch_access.build",
+            'human.pipelines.native.boat_launches.build',
             ("ACCESS_SITE_ID",),
         ),
         (
             "human.accessibility.boat_launch_access.h3_r7",
             "{data_root}/processed/domain/human/accessibility/boat_launch_access/boat_launch_access_h3_r7.parquet",
-            "human.accessibility.boat_launch_access.build",
+            'human.pipelines.native.boat_launches.build',
             ("H3_INDEX",),
         ),
         (
             "human.accessibility.public_shore_access.facilities_r7",
             "{data_root}/processed/domain/human/accessibility/public_shore_access/public_shore_facilities_r7.parquet",
-            "human.accessibility.public_shore_access.build",
+            'human.pipelines.native.shore_access.build',
             ("ACCESS_SITE_ID",),
         ),
         (
             "human.accessibility.public_shore_access.h3_r7",
             "{data_root}/processed/domain/human/accessibility/public_shore_access/public_shore_access_h3_r7.parquet",
-            "human.accessibility.public_shore_access.build",
+            'human.pipelines.native.shore_access.build',
             ("H3_INDEX",),
         ),
     ):
@@ -125,7 +125,7 @@ def register_builtin_datasets() -> None:
         DatasetLayer.DOMAIN,
         DatasetFormat.JSON,
         "{data_root}/processed/domain/human/demography_and_presence/places/places_of_interest.json",
-        "human.demography_and_presence.places.build",
+        'human.pipelines.native.places.build',
         schema_version="1",
     )
 
@@ -135,7 +135,7 @@ def register_builtin_datasets() -> None:
         DatasetLayer.DOMAIN,
         DatasetFormat.DIRECTORY,
         "{data_root}/processed/domain/human/viewshed/RES7",
-        "human.viewshed",
+        'human.legacy.viewshed',
         schema_version="2",
     )
     for source_type in ("land", "water"):
@@ -145,7 +145,7 @@ def register_builtin_datasets() -> None:
             DatasetFormat.PARQUET,
             "{data_root}/processed/domain/human/viewshed/RES7/"
             f"{source_type.upper()}_STATIC_WEIGHTS_R7.parquet",
-            "human.viewshed",
+            'human.legacy.viewshed',
             dependencies=("human.viewshed.static",),
             primary_key=("source_h3", "target_h3"),
             schema_version="2",

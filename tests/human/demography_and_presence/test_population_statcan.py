@@ -7,11 +7,11 @@ import zipfile
 import pandas as pd
 import pytest
 
-from human.demography_and_presence.population.canada.statcan import (
+from human.legacy.population.canada.statcan import (
     load_canada_population,
     read_population_table,
 )
-from human.demography_and_presence.population.common.exceptions import (
+from human.pipelines.population.errors import (
     PopulationDataError,
 )
 

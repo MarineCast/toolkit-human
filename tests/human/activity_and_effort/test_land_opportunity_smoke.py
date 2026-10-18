@@ -9,14 +9,14 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from human.activity_and_effort.land_reporting_opportunity.access_kernel import (
+from human.legacy.activity.land_reporting_opportunity.access_kernel import (
     build_access_kernel,
 )
-from human.activity_and_effort.land_reporting_opportunity.config import (
+from human.legacy.activity.land_reporting_opportunity.config import (
     load_land_reporting_config,
 )
-from human.activity_and_effort.land_reporting_opportunity.smoke import run_smoke
-from human.viewshed.config import load_app_config
+from human.legacy.activity.land_reporting_opportunity.smoke import run_smoke
+from human.legacy.viewshed.config import load_app_config
 
 
 def test_offline_production_smoke_and_batch_invariance(tmp_path: Path):
@@ -24,7 +24,7 @@ def test_offline_production_smoke_and_batch_invariance(tmp_path: Path):
     config = run_smoke(tmp_path)
     cfg = load_land_reporting_config(config)
     manifest = json.loads(cfg.manifest_path.read_text())
-    from human.activity_and_effort.land_reporting_opportunity.modeling import (
+    from human.legacy.activity.land_reporting_opportunity.modeling import (
         load_weekly,
     )
 
@@ -97,10 +97,10 @@ def test_offline_production_smoke_and_batch_invariance(tmp_path: Path):
 def test_sparse_dense_reference_remote_extension_and_partition_resume(tmp_path, monkeypatch):
     import rasterio
 
-    from human.activity_and_effort.land_reporting_opportunity import (
+    from human.legacy.activity.land_reporting_opportunity import (
         access_kernel as module,
     )
-    from human.viewshed.prepare.area.raster_stack import (
+    from human.legacy.viewshed.prepare.area.raster_stack import (
         ensure_canonical_raster_stack,
     )
 

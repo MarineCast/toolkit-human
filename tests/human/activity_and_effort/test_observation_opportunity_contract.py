@@ -8,10 +8,10 @@ import pytest
 import yaml
 from pydantic import ValidationError
 
-from human.activity_and_effort.land_reporting_opportunity.config import (
+from human.legacy.activity.land_reporting_opportunity.config import (
     load_land_reporting_config,
 )
-from human.activity_and_effort.observation_opportunity_contract import (
+from human.legacy.activity.observation_opportunity_contract import (
     CONTROLLED_STATES,
     STATIC_PAIR_CANONICAL_MAPPING,
     ComponentState,
@@ -23,7 +23,7 @@ from human.activity_and_effort.observation_opportunity_contract import (
     validate_component_state_values,
     validate_component_table,
 )
-from human.activity_and_effort.water_observation_opportunity.config import (
+from human.legacy.activity.water_observation_opportunity.config import (
     load_water_observation_config,
 )
 

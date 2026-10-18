@@ -15,6 +15,7 @@ calendar:
 population:
   manifest_pointer: data/static-work/source-manifest-path.txt
   specification: config/census-sources.v1.json
+  local_specification: data/raw/statcan/2021/census-sources.local.json
   cache_workspace: data/static-work/independent-review-20261017
 native:
   acquire: true

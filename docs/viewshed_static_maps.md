@@ -6,7 +6,7 @@ finalized static-weight artifacts from
 `data/processed/domain/human/viewshed/RES7/` and writes interactive HTML pages:
 
 ```bash
-python -m human.viewshed.cli.main \
+python -m human.legacy.viewshed.cli.main \
   export-static-maps \
   --config config/modeling/effort/viewshed.yaml
 ```
@@ -14,7 +14,7 @@ python -m human.viewshed.cli.main \
 Use `--overwrite` after changing the config or when intentionally replacing an
 existing map export.
 
-The complete legacy workflow is also available through `human.viewshed.run_viewshed`;
+The complete legacy workflow is also available through `human.legacy.viewshed.run_viewshed`;
 review its stage and cleanup settings before execution.
 
 ## Configured location

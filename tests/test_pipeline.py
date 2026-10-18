@@ -12,11 +12,11 @@ import yaml
 from shapely.geometry import box
 
 from human import get_human_data
-from human.collection import MissingHumanSources, collect_assets
-from human.final_delivery import digest, read_catalog, finalize_delivery
-from human.validation import validate_delivery, product_contract
-from human.demography_and_presence.population.static import PopulationSources
-from human.demography_and_presence.population.static.sources import write_sources
+from human.pipelines.native.collection import MissingHumanSources, collect_assets
+from human.pipelines.delivery.finalize import digest, read_catalog, finalize_delivery
+from human.pipelines.delivery.validation import validate_delivery, product_contract
+from human.pipelines.population.static import PopulationSources
+from human.pipelines.population.static.sources import write_sources
 from tests.test_static_delivery import fixture_study
 from tests.test_native_features import specification
 
@@ -82,8 +82,8 @@ def test_missing_inputs_fail_before_population_and_preserve_current(tmp_path,mon
     recipe,config=setup_pipeline(tmp_path)
     result=get_human_data(workspace=tmp_path);before={p:digest(p) for p in result.directory.iterdir()}
     spec=json.loads((tmp_path/'native.json').read_text());Path(spec['launches']['facilities']).unlink()
-    import human.static_delivery
-    monkeypatch.setattr(human.static_delivery,'get_population',lambda **kw:pytest.fail('Population must not run without native sources'))
+    import human.pipelines.population.delivery as population_delivery
+    monkeypatch.setattr(population_delivery,'get_population',lambda **kw:pytest.fail('Population must not run without native sources'))
     with pytest.raises(MissingHumanSources,match='Unresolved native'):get_human_data(workspace=tmp_path)
     assert {p:digest(p) for p in result.directory.iterdir()}==before
     assert not list((tmp_path/'work').iterdir()) and not list(tmp_path.glob('.Human*'))
@@ -92,7 +92,7 @@ def test_missing_inputs_fail_before_population_and_preserve_current(tmp_path,mon
 def test_validation_failure_leaves_current_and_receipts_intact(tmp_path,monkeypatch):
     recipe,config=setup_pipeline(tmp_path);result=get_human_data(workspace=tmp_path)
     before={p:digest(p) for p in result.directory.iterdir()};receipts=set((tmp_path/'receipts').iterdir())
-    import human.pipeline as pipeline
+    import human.main as pipeline
     real=pipeline.validate_delivery
     def fail_candidate(root,**kw):
         if Path(root)!=result.directory:raise ValueError('injected validation failure')
@@ -107,7 +107,7 @@ def test_validation_failure_leaves_current_and_receipts_intact(tmp_path,monkeypa
 def test_publication_readback_failure_rolls_back_current(tmp_path,monkeypatch):
     recipe,config=setup_pipeline(tmp_path);result=get_human_data(workspace=tmp_path)
     before={p:digest(p) for p in result.directory.iterdir()}
-    import human.pipeline as pipeline
+    import human.main as pipeline
     real=pipeline.validate_delivery;calls=0
     def fail_final(root,**kw):
         nonlocal calls
@@ -168,7 +168,7 @@ def test_packaged_timezone_conversion_ignores_host_rules():
     from datetime import datetime,timezone
     from importlib.resources import files
     from zoneinfo import ZoneInfo
-    from human.temporal_context.calendar.lookup import build_calendar_lookup
+    from human.pipelines.calendar.lookup import build_calendar_lookup
     with files('tzdata.zoneinfo').joinpath('America','Vancouver').open('rb') as handle:zone=ZoneInfo.from_file(handle,key='America/Vancouver')
     frame=build_calendar_lookup('2026-12-01','2026-12-02',as_of='2026-10-16')
     expected=pd.Timestamp(datetime(2026,12,1,tzinfo=zone).astimezone(timezone.utc))
@@ -176,12 +176,12 @@ def test_packaged_timezone_conversion_ignores_host_rules():
 
 
 def test_live_domain_collection_preserves_originals_and_uses_run_owned_outputs(tmp_path,monkeypatch):
-    from human.collection import collect_native
-    import human.collection as collection
+    from human.pipelines.native.collection import collect_native
+    import human.pipelines.native.collection as collection
     from types import SimpleNamespace
     calls=[]
     def module(name):
-        group='launches' if 'boat_launch_access' in name else 'shore_access' if 'public_shore_access' in name else 'places'
+        group='launches' if 'boat_launches' in name else 'shore_access' if 'shore_access' in name else 'places'
         def download(config,overwrite=False):
             cfg=yaml.safe_load(Path(config).read_text());raw=Path(cfg['raw']['manifest_path']);raw.parent.mkdir(parents=True,exist_ok=True)
             original=raw.parent/'original.bin';original.write_bytes(b'unique source')
@@ -239,7 +239,7 @@ def test_cli_runs_only_the_supported_pipeline(tmp_path,capsys):
 def test_retained_population_cache_is_read_only_and_identity_verified(tmp_path,monkeypatch):
     recipe,config=setup_pipeline(tmp_path)
     from human import get_population
-    import human.static_delivery
+    import human.pipelines.population.delivery as population_delivery
     cell=pd.read_parquet(recipe['infrastructure']['path']).h3_index.iloc[0]
     cache=tmp_path/'retained-calculation'
     result=get_population(target_h3=[cell],h3_res=7,radii_km=(25,50,100),include_bands=False,
@@ -250,7 +250,7 @@ def test_retained_population_cache_is_read_only_and_identity_verified(tmp_path,m
     def require_read_only(**kwargs):
         assert kwargs['cache_only'] and kwargs['workspace']==cache
         return get_population(**kwargs)
-    monkeypatch.setattr(human.static_delivery,'get_population',require_read_only)
+    monkeypatch.setattr(population_delivery,'get_population',require_read_only)
     delivery=get_human_data(workspace=tmp_path)
     assert all(digest(p)==sha for p,sha in hashes.items())
     before={p:digest(p) for p in delivery.directory.iterdir()}

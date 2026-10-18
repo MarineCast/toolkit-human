@@ -16,12 +16,12 @@ from affine import Affine
 from shapely.geometry import Point
 
 from human.core.geo.h3 import cell_to_polygon
-from human.viewshed.config import load_app_config
-from human.viewshed.config.loader import BatchContext
-from human.viewshed.prepare.area import batching as area
-from human.viewshed.prepare.area import validation as batch_validation
-from human.viewshed.weights import canopy_visibility
-from human.viewshed.weights.terrain import (
+from human.legacy.viewshed.config import load_app_config
+from human.legacy.viewshed.config.loader import BatchContext
+from human.legacy.viewshed.prepare.area import batching as area
+from human.legacy.viewshed.prepare.area import validation as batch_validation
+from human.legacy.viewshed.weights import canopy_visibility
+from human.legacy.viewshed.weights.terrain import (
     batches,
     cleanup,
     gdal,

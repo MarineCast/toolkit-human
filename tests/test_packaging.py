@@ -8,7 +8,7 @@ from pathlib import Path
 
 from human.cli import initialize_workspace
 from human.core.config.paths import project_root
-from human.product_scope import LEGACY_MODELING_MODULES
+from human.legacy.scope import LEGACY_MODELING_MODULES
 
 
 def test_runtime_has_no_application_imports():
@@ -43,7 +43,7 @@ def test_initialization_preserves_edits_and_includes_routing_profile(tmp_path):
     config.write_text('custom configuration\n')
     assert initialize_workspace(tmp_path) == []
     assert config.read_text() == 'custom configuration\n'
-    assert files('human').joinpath('accessibility/land_transport_access/road_only.lua').is_file()
+    assert files('human').joinpath('legacy/accessibility/land_transport_access/road_only.lua').is_file()
 
 
 def test_initialization_excludes_modeling_configs_and_preserves_legacy_edits(tmp_path):
@@ -76,7 +76,7 @@ def test_packaged_configuration_matches_checkout():
 @pytest.mark.legacy
 def test_viewshed_artifact_api_is_packaged():
     from human.core.artifacts import ArtifactRef, RunManifest
-    from human.viewshed.finalize import final_artifacts
+    from human.legacy.viewshed.finalize import final_artifacts
 
     assert ArtifactRef
     assert RunManifest

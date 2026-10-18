@@ -6,10 +6,10 @@ import numpy as np
 import rasterio
 from rasterio.transform import from_origin
 
-from human.viewshed.prepare.vegetation.rasters import (
+from human.legacy.viewshed.prepare.vegetation.rasters import (
     _canopy_metadata_matches_policy,
 )
-from human.viewshed.prepare.vegetation.sources import (
+from human.legacy.viewshed.prepare.vegetation.sources import (
     _canopy_config,
     existing_canopy_30m_is_valid,
 )

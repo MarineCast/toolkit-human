@@ -11,9 +11,9 @@ Run from the repository root with the provisioned Python environment:
 ```bash
 export ORCA_PY=python
 export MPLCONFIGDIR=/tmp/orca-land-mpl
-"$ORCA_PY" -m human.activity_and_effort.land_reporting_opportunity.smoke --output-dir outputs/validation/land_observation_opportunity_smoke
-"$ORCA_PY" -m human.activity_and_effort.land_reporting_opportunity.build --config outputs/validation/land_observation_opportunity_smoke/land.yaml --allow-partial --overwrite
-"$ORCA_PY" -m human.activity_and_effort.land_reporting_opportunity.inspect --config outputs/validation/land_observation_opportunity_smoke/land.yaml
+"$ORCA_PY" -m human.legacy.activity.land_reporting_opportunity.smoke --output-dir outputs/validation/land_observation_opportunity_smoke
+"$ORCA_PY" -m human.legacy.activity.land_reporting_opportunity.build --config outputs/validation/land_observation_opportunity_smoke/land.yaml --allow-partial --overwrite
+"$ORCA_PY" -m human.legacy.activity.land_reporting_opportunity.inspect --config outputs/validation/land_observation_opportunity_smoke/land.yaml
 ```
 
 The smoke command writes an explicit `land.yaml` and `viewshed.yaml`, synthetic source inputs and manifests, then runs the real canonical raster preparation, isolated-observer GDAL LOS, source-budget builder, dynamic sparse builder, weekly aggregation, immutable generation publication, and inspection. It does not mock LOS or preparation. The two public sites are a represented beach line and a pier point; a restricted headland shares the beach's source cell. A CHM obstruction, unequal modeled child-water areas, and seven UTC dates with one weather region absent are included.
@@ -27,12 +27,12 @@ The general-land fixture diagnostic includes the restricted headland. Primary sa
 Rebuild public-access facilities if the existing generation does not retain original represented geometry. Existing facility points remain usable as points; richer geometry is never fabricated.
 
 ```bash
-"$ORCA_PY" -m human.accessibility.public_shore_access.build --allow-partial --overwrite
-"$ORCA_PY" -m human.viewshed.cli.main build-dual-surface-canopy-weights --config config/modeling/effort/viewshed.yaml --overwrite
-"$ORCA_PY" -m human.viewshed.cli.main finalize-viewshed-lookups --config config/modeling/effort/viewshed.yaml --overwrite
-"$ORCA_PY" -m human.activity_and_effort.land_reporting_opportunity.download --overwrite
-"$ORCA_PY" -m human.activity_and_effort.land_reporting_opportunity.build --allow-partial --overwrite
-"$ORCA_PY" -m human.activity_and_effort.land_reporting_opportunity.inspect
+"$ORCA_PY" -m human.pipelines.native.shore_access.build --allow-partial --overwrite
+"$ORCA_PY" -m human.legacy.viewshed.cli.main build-dual-surface-canopy-weights --config config/modeling/effort/viewshed.yaml --overwrite
+"$ORCA_PY" -m human.legacy.viewshed.cli.main finalize-viewshed-lookups --config config/modeling/effort/viewshed.yaml --overwrite
+"$ORCA_PY" -m human.legacy.activity.land_reporting_opportunity.download --overwrite
+"$ORCA_PY" -m human.legacy.activity.land_reporting_opportunity.build --allow-partial --overwrite
+"$ORCA_PY" -m human.legacy.activity.land_reporting_opportunity.inspect
 ```
 
 These require the existing DEM, canopy, water/land geometry, H3 preparation, source-target lookup, transport, population/travel, and daily-condition inputs. They do not download a new provider. The land `download` entry point records checksums of its processed inputs and prerequisites. `--overwrite` alone is not a cache migration: algorithm versions and scientific input content identities invalidate affected canopy surfaces and land partitions, and final static metadata rejects prior canopy assumptions. Old immutable land generations are retained.

@@ -6,7 +6,7 @@ are required by the pilot. Broader publication requires independent review.
 
 ## Supported conversion
 
-`human.activity_and_effort.ferry.utc_schedule.summarize_utc_schedule(frame)` accepts
+`human.legacy.activity.ferry.utc_schedule.summarize_utc_schedule(frame)` accepts
 normalized WSF records and returns a route/direction UTC-day table plus an unresolved
 time ledger. Inputs must have unique nonempty sailing identities and explicit
 `departure_time_source == scheduled`. Local naive timestamps mean America/Los_Angeles.

@@ -10,12 +10,12 @@ import pandas as pd
 import pytest
 import requests
 
-from human.accessibility.land_transport_access.routing import (
+from human.legacy.accessibility.land_transport_access.routing import (
     OSRM_ROOT,
     classify_pair,
     population_demand,
 )
-from human.accessibility.population_travel_time.build import build_components
+from human.legacy.accessibility.population_travel_time.build import build_components
 
 
 def test_disconnected_is_not_failed_routing():
@@ -76,7 +76,7 @@ def test_missing_origin_cannot_inflate_evaluated_fraction():
 
 
 def test_origin_snapshot_rejects_changed_context_before_publication(tmp_path):
-    from human.accessibility.land_transport_access.context_snapshot import snapshot
+    from human.legacy.accessibility.land_transport_access.context_snapshot import snapshot
     from human.utils.artifacts import sha256_file
 
     population = (
@@ -139,7 +139,7 @@ def test_partial_population_lower_bound_is_explicit_and_never_complete():
 
 
 def test_partial_city_context_is_not_labeled_complete():
-    from human.accessibility.land_transport_access.build import (
+    from human.legacy.accessibility.land_transport_access.build import (
         build_components as transport_components,
     )
 
@@ -164,7 +164,7 @@ def test_snap_cannot_cross_water_even_within_same_land_polygon():
     import shapely
     from shapely.geometry import Point, Polygon
 
-    from human.accessibility.land_transport_access.route_demand import (
+    from human.legacy.accessibility.land_transport_access.route_demand import (
         same_land_polygon,
     )
 
@@ -182,7 +182,7 @@ def test_native_profile_excludes_ferry_and_shuttle_train(tmp_path: Path, kind: s
     """Route between road segments; prohibited connectors must leave them disconnected."""
     profiles = tmp_path / "profiles"
     shutil.copytree(OSRM_ROOT / "share/osrm/profiles", profiles)
-    from human.accessibility.land_transport_access import routing
+    from human.legacy.accessibility.land_transport_access import routing
 
     shutil.copy2(Path(routing.__file__).with_name("road_only.lua"), profiles / "road_only.lua")
     tags = (
@@ -257,7 +257,7 @@ def test_native_profile_excludes_ferry_and_shuttle_train(tmp_path: Path, kind: s
 
 
 def test_native_runtime_prefix_can_be_configured(tmp_path, monkeypatch):
-    from human.accessibility.land_transport_access.routing import resolve_osrm_root
+    from human.legacy.accessibility.land_transport_access.routing import resolve_osrm_root
 
     monkeypatch.setenv("HUMAN_OSRM_ROOT", str(tmp_path))
     monkeypatch.setattr(shutil, "which", lambda _: pytest.fail("explicit prefix must win"))
@@ -265,7 +265,7 @@ def test_native_runtime_prefix_can_be_configured(tmp_path, monkeypatch):
 
 
 def test_native_runtime_prefix_follows_executable_symlink(tmp_path, monkeypatch):
-    from human.accessibility.land_transport_access.routing import resolve_osrm_root
+    from human.legacy.accessibility.land_transport_access.routing import resolve_osrm_root
 
     prefix = tmp_path / "versioned-install"
     executable = prefix / "bin/osrm-extract"

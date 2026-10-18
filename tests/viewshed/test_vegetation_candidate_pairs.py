@@ -4,17 +4,17 @@ from pathlib import Path
 
 import polars as pl
 
-from human.viewshed.weights.vegetation.candidate_pairs import (
+from human.legacy.viewshed.weights.vegetation.candidate_pairs import (
     candidate_pair_counts,
     materialize_candidate_pairs,
 )
-from human.viewshed.weights.vegetation.pair_chunks import (
+from human.legacy.viewshed.weights.vegetation.pair_chunks import (
     iter_candidate_pair_chunks,
 )
-from human.viewshed.weights.vegetation.path_config import (
+from human.legacy.viewshed.weights.vegetation.path_config import (
     VegetationPathConfig,
 )
-from human.viewshed.weights.vegetation.summarize import (
+from human.legacy.viewshed.weights.vegetation.summarize import (
     cleanup_vegetation_intermediates,
 )
 

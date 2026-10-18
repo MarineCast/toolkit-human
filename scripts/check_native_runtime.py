@@ -24,7 +24,7 @@ def main() -> None:
         print(f"Rasterio: {rasterio.__version__}; GDAL: {rasterio.__gdal_version__}")
         subprocess.run(["gdal_viewshed", "--utility_version"], check=True)
     else:
-        from human.accessibility.land_transport_access.routing import OSRM_ROOT
+        from human.legacy.accessibility.land_transport_access.routing import OSRM_ROOT
 
         for name in ("extract", "partition", "customize", "routed"):
             version = subprocess.check_output(

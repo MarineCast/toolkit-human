@@ -10,9 +10,9 @@ import rasterio
 from rasterio.transform import from_origin
 from shapely.geometry import box
 
-from human.viewshed.config import load_app_config
-from human.viewshed.prepare.area import raster_stack
-from human.viewshed.prepare.elevation import terrain
+from human.legacy.viewshed.config import load_app_config
+from human.legacy.viewshed.prepare.area import raster_stack
+from human.legacy.viewshed.prepare.elevation import terrain
 
 
 def _write_raster(path: Path, values: np.ndarray, *, nodata: float) -> Path:

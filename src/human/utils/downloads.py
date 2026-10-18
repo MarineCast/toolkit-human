@@ -21,6 +21,13 @@ def _pin(value):
     return value
 
 
+def _placement_hint(path, expected_sha256):
+    message = f"Place the unchanged provider original at {path} before retrying; verified local files are reused before downloading."
+    if expected_sha256:
+        message += f" Expected SHA256: {expected_sha256}."
+    return message
+
+
 def obtain(path, url, *, expected_sha256=None, mode, budget, allowed_hosts=None):
     """Keep originals immutable; publish only complete, verified HTTPS responses.
 
@@ -34,11 +41,14 @@ def obtain(path, url, *, expected_sha256=None, mode, budget, allowed_hosts=None)
     if path.exists():
         if not path.is_file():
             raise ValueError(f'Original source must be a regular file: {path}')
-        if expected_sha256 and digest(path) != expected_sha256:
-            raise ValueError(f'Source checksum mismatch: {path}')
+        if expected_sha256:
+            actual = digest(path)
+            if actual != expected_sha256:
+                raise ValueError(f'Source checksum mismatch: {path}; expected {expected_sha256}, got {actual}. '
+                    'The existing original was preserved; do not substitute new bytes for a pinned source.')
         return path
     if mode != 'live' or not url:
-        raise MissingHumanSources(f'Unresolved source: {path}; configure a retained location or an exact source URL/checksum')
+        raise MissingHumanSources(f'Unresolved source: {path}. ' + _placement_hint(path, expected_sha256))
     expected_sha256 = _pin(expected_sha256)
     parsed = urlparse(url)
     if parsed.scheme != 'https' or not parsed.hostname or parsed.username or parsed.password:
@@ -58,7 +68,7 @@ def obtain(path, url, *, expected_sha256=None, mode, budget, allowed_hosts=None)
         try:
             with requests.get(url, stream=True, timeout=(15, 120), allow_redirects=False) as response:
                 if response.status_code != 200:
-                    raise ValueError(f'Source response must be HTTP 200 (got {response.status_code}): {url}')
+                    raise ValueError(f'Source response must be HTTP 200 (got {response.status_code}): {url}. ' + _placement_hint(path, expected_sha256))
                 for block in response.iter_content(1024 * 1024):
                     budget['bytes'] -= len(block)
                     if budget['bytes'] < 0:

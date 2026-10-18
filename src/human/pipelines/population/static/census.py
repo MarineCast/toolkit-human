@@ -11,7 +11,7 @@ import pandas as pd
 import shapely
 from shapely.geometry import box
 
-from human.demography_and_presence.population.canada.statcan import read_population_table
+from human.pipelines.population.tables import read_population_table
 from .sources import PopulationSources, checksum, write_sources, bundle_inventory
 
 LOGGER = logging.getLogger(__name__)
@@ -77,6 +77,14 @@ def prepare_census_sources(*, workspace, source_extent, specification, mode="off
             inputs.append({"path": str(path), "sha256": checksum(path), "role": label,
                            "jurisdiction": entry["jurisdiction"], "url": entry.get(label + "_url"),
                            "bytes": path.stat().st_size})
+            provenance=entry.get(label+"_provenance")
+            if provenance:
+                from human.pipelines.population.local_sources import verify_provenance
+                receipt=_resolve(workspace,provenance['receipt'])
+                verify_provenance({**provenance,'receipt':str(receipt)},path,entry[label+'_sha256'])
+                inputs[-1]['provenance']={**provenance,'receipt':str(receipt)}
+                inputs.append({'path':str(receipt),'sha256':provenance['receipt_sha256'],
+                    'role':'extracted_source_receipt','source_role':label,'bytes':receipt.stat().st_size})
     # Optional complete administrative inventory diagnoses required unsupported jurisdictions.
     inventories = []
     for record in specification.get("jurisdiction_inventories", []):
@@ -117,6 +125,9 @@ def prepare_census_sources(*, workspace, source_extent, specification, mode="off
                     raise ValueError('StatCan GAF is a Canadian population source')
                 from human.pipelines.population.gaf import read_gaf_da_counts
                 population = read_gaf_da_counts(population_path, province_code=code)
+            elif entry.get('population_format') == 'statcan_profile_2021':
+                from human.pipelines.population.tables import read_statcan_profile
+                population = read_statcan_profile(population_path)
             else:
                 population = read_population_table(population_path)
             join_id = entry.get("population_id", "geoid20" if country == "US" else "geo_id")

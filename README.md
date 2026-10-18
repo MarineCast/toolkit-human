@@ -45,3 +45,7 @@ The supported catalog describes exactly these three products. Previous family CL
 See [pipeline configuration and lifecycle](docs/get-human-data.md), [scientific delivery details](docs/static-delivery.md), and [validation commands](docs/WORKFLOWS.md).
 
 Supported code is organized under `human/pipelines/delivery`, `population`, `native` and `calendar`. The population allocation engine is under `pipelines/population/static`. Shared artifact/checksum/download/study helpers live in `human/utils`. Earlier module paths are compatibility imports; they do not duplicate the producers. See [architecture](docs/ARCHITECTURE.md).
+
+Local Canadian archive placement, official URLs, exact hashes and reuse/error behavior are documented in [retained census sources](docs/census-sources.md).
+
+Package organization and deliberate internal import changes are described in [architecture](docs/ARCHITECTURE.md) and [import migration](docs/import-migration.md).

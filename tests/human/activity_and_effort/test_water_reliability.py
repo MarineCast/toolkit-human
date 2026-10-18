@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 import pytest
-from human.activity_and_effort.water_observation_opportunity.pipeline import (
+from human.legacy.activity.water_observation_opportunity.pipeline import (
     condition_arrays,
     propagated_condition_summaries,
     propagate_component,
@@ -124,10 +124,10 @@ def test_fine_distance_bins_and_unequal_canonical_water_areas():
 def test_dates_outside_ais_source_support_stay_unavailable(tmp_path):
     from types import SimpleNamespace
     from datetime import date
-    from human.activity_and_effort.water_observation_opportunity.build import (
+    from human.legacy.activity.water_observation_opportunity.build import (
         _read_ais_year,
     )
-    from human.activity_and_effort.water_observation_opportunity.pipeline import (
+    from human.legacy.activity.water_observation_opportunity.pipeline import (
         AIS_ACTIVITY_COLUMNS,
         COMMERCIAL_INPUT_COLUMNS,
     )

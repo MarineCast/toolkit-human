@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from human.activity_and_effort.ferry.wsf_vessel_history import normalize_vessel_history
+from human.legacy.activity.ferry.wsf_vessel_history import normalize_vessel_history
 
 
 def epoch(text):

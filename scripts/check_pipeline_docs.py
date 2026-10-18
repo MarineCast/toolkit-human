@@ -5,7 +5,7 @@ from urllib.parse import unquote,urlparse
 
 ROOT=Path(__file__).resolve().parents[1]
 ACTIVE=('README.md','AGENTS.md','docs/ARCHITECTURE.md','docs/WORKFLOWS.md',
-        'docs/get-human-data.md','docs/product-scope.md','docs/final-delivery.md','docs/static-delivery.md')
+        'docs/get-human-data.md','docs/import-migration.md','docs/census-sources.md','docs/product-scope.md','docs/final-delivery.md','docs/static-delivery.md')
 
 
 def anchors(text):

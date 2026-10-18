@@ -7,11 +7,11 @@ import pytest
 import yaml
 
 from human.core.config.paths import project_root
-from human.viewshed.config import (
+from human.legacy.viewshed.config import (
     apply_source_type_policy,
     load_app_config,
 )
-from human.viewshed.config.paths import (
+from human.legacy.viewshed.config.paths import (
     dem_path_from_config,
     output_dir_from_config,
     raw_dem_dir_from_config,

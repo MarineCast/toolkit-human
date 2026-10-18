@@ -7,10 +7,10 @@ import pandas as pd
 import polars as pl
 from scipy import sparse
 
-from human.activity_and_effort.land_reporting_opportunity.config import (
+from human.legacy.activity.land_reporting_opportunity.config import (
     load_land_reporting_config,
 )
-from human.activity_and_effort.land_reporting_opportunity.dynamic import (
+from human.legacy.activity.land_reporting_opportunity.dynamic import (
     STREAM_COMPONENTS,
     DynamicBasis,
     _add_daily_v2_columns,
@@ -18,7 +18,7 @@ from human.activity_and_effort.land_reporting_opportunity.dynamic import (
     aggregate_weekly,
     compute_dynamic_chunk,
 )
-from human.activity_and_effort.observation_opportunity_contract import (
+from human.legacy.activity.observation_opportunity_contract import (
     LINEAGE_COLUMNS,
     lineage_values,
 )

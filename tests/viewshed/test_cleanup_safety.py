@@ -6,13 +6,13 @@ import polars as pl
 import yaml
 
 from human.core.artifacts import checksum_path
-from human.viewshed.config import (
+from human.legacy.viewshed.config import (
     load_yaml,
     stable_config_hash,
     write_metadata_sidecar,
 )
-from human.viewshed.finalize import cleanup as finalize_cleanup
-from human.viewshed.finalize.final_artifacts import (
+from human.legacy.viewshed.finalize import cleanup as finalize_cleanup
+from human.legacy.viewshed.finalize.final_artifacts import (
     _effective_physical_assumptions,
     _static_input_paths,
     cleanup_data_contract,

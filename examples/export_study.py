@@ -6,7 +6,7 @@ import logging
 import yaml
 
 from human import get_population
-from human.study import export_study
+from human.legacy.study import export_study
 
 
 def main():

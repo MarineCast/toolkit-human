@@ -59,3 +59,7 @@ result = get_human_data(start_date='2021-01-01', end_date='2021-01-31',
 ```
 
 Human does not append dates or add a REBUILD option. Every invocation stages and validates the complete three-product result for the requested calendar, reusing verified original inputs/calculation caches where configured. The existing `overwrite=False` / `--no-overwrite` guard can require an empty destination. Use a scratch destination for experiments; editing .env alone runs nothing.
+
+Local Canadian archive placement, official URLs, exact hashes and reuse/error behavior are documented in [retained census sources](census-sources.md).
+
+For user-supplied extracted StatCan downloads, `population.local_specification` selects a separately pinned local source recipe on raw-source fallback. It does not replace the official ZIP pins or a valid retained normalized bundle. See the census source guide for registration, member checks and the remaining original-archive provenance limit.

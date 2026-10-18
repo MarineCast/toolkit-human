@@ -2,7 +2,7 @@
 
 Current file layout is defined in [final-only delivery](final-delivery.md): `Data/Human` contains only `static.parquet`, `dynamic-calendar.parquet` and `static-native.parquet`. Embedded metadata and toolkit-managed external receipts replace public sidecar files. Earlier filenames below describe the historical input contract.
 
-`python -m human.static_delivery` builds a Human-only product from the approved
+`python -m human.pipelines.population.delivery` builds a Human-only product from the approved
 shared study registry. It never selects targets from a historical rectangle. It
 verifies the exact mask, registry manifest and membership hashes, preserves all
 positive-area reporting members, and pins the study identity again after building.
@@ -74,7 +74,7 @@ Convert a timestamp into its applicable local date before the jurisdiction/date
 join. There are no calendar-effort, viewing-season or human-presence scores.
 The active feature catalog advertises this lookup and excludes calendar-effort weights.
 Legacy direct calendar helpers and `human build calendar` retain their existing
-output compatibility; use `python -m human.static_delivery` for this product.
+output compatibility; use `python -m human.pipelines.population.delivery` for this product.
 
 ## Reproducible commands
 
@@ -85,7 +85,7 @@ python examples/prepare_static_study.py \
   --study-config ../../config/study.v1.json \
   --workspace data/static-work \
   --specification data/static-work/source-specification.json
-python -m human.static_delivery \
+python -m human.pipelines.population.delivery \
   --study-config ../../config/study.v1.json \
   --workspace data/static-work \
   --source-manifest /absolute/path/from/collection-plan/source_manifest/sources.json \
@@ -171,10 +171,10 @@ or unrelated fields.
 
 ## Native infrastructure and destinations
 
-`python -m human.native_features --source-specification <source-specification.json>
+`python -m human.pipelines.native.features --source-specification <source-specification.json>
 --extend-static <current-delivery-directory> --output-dir <empty-staging-directory>`
 extends a verified static delivery using retained checksum-bound launch, shore and
-place sources. `human.static_delivery --native-source-specification` accepts the
+place sources. `human.pipelines.population.delivery --native-source-specification` accepts the
 same specification for future full exports. Neither operation acquires new inputs.
 The source specification and source manifests remain checksum-linked in the native
 companion and current catalog. The delivered `static-native.parquet` uses

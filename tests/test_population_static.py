@@ -14,8 +14,8 @@ from pyproj import Transformer
 from shapely.ops import transform
 
 from human import get_population
-from human.demography_and_presence.population.static import PopulationSources, PopulationCoverageError, write_sources
-from human.demography_and_presence.population.static.geometry import cell_polygon, radius_polygon, GEOD
+from human.pipelines.population.static import PopulationSources, PopulationCoverageError, write_sources
+from human.pipelines.population.static.geometry import cell_polygon, radius_polygon, GEOD
 
 CELL = h3.latlng_to_cell(48, -123, 7)
 
@@ -138,7 +138,7 @@ def test_resolution_uses_own_center_and_density_full_area(tmp_path):
 
 def test_offline_cache_no_network_and_input_invalidation(tmp_path,monkeypatch):
     import requests
-    from human.demography_and_presence.population.static import engine
+    from human.pipelines.population.static import engine
     monkeypatch.setattr(requests.sessions.Session,'request',lambda *a,**k: pytest.fail('network in offline mode'))
     source=fixture_sources()
     manifest=write_sources(source,tmp_path/'inputs')
@@ -195,7 +195,7 @@ def test_geometry_refinement(tmp_path):
 
 
 def test_dry_run_cli_export_and_population_imports(tmp_path,monkeypatch,capsys):
-    from human.demography_and_presence.population.static.cli import main
+    from human.pipelines.population.static.cli import main
     manifest=write_sources(fixture_sources(),tmp_path/'inputs')
     plan=get_population(target_h3=[CELL],workspace=tmp_path/'new',dry_run=True)
     assert not plan['source_available'] and plan['missing_work']
@@ -207,12 +207,12 @@ def test_dry_run_cli_export_and_population_imports(tmp_path,monkeypatch,capsys):
     with pytest.raises(FileExistsError):
         query(tmp_path).to_parquet(output)
     import subprocess
-    subprocess.run([sys.executable, '-c', "import human,sys; from human.demography_and_presence.population.static import get_population; assert not any(m.startswith(('human.viewshed','human.activity_and_effort.ais')) for m in sys.modules)"], check=True)
+    subprocess.run([sys.executable, '-c', "import human,sys; from human.pipelines.population.static import get_population; assert not any(m.startswith(('human.legacy.viewshed','human.legacy.activity')) for m in sys.modules)"], check=True)
 
 
 def test_prepare_census_retains_missing_zero_and_unclipped_geometry(tmp_path):
-    from human.demography_and_presence.population.static.census import prepare_census_sources
-    from human.demography_and_presence.population.static.sources import read_sources
+    from human.pipelines.population.static.census import prepare_census_sources
+    from human.pipelines.population.static.sources import read_sources
     source=gpd.GeoDataFrame({'GEOID20':['a','b'],'STATEFP20':['53','53'],'POP20':[0,None]},geometry=[box(-123,48,-122,49),box(-122,48,-121,49)],crs=4326)
     raw=tmp_path/'raw.parquet';source.to_parquet(raw)
     spec={'us':[{'jurisdiction':'US-WA','state_fips':'53','geography':str(raw),'population_column':'POP20'}]}
@@ -226,7 +226,7 @@ def test_prepare_census_retains_missing_zero_and_unclipped_geometry(tmp_path):
 
 
 def test_explicit_cross_border_quarantine_preserves_denominator_and_unknown(tmp_path):
-    from human.demography_and_presence.population.static.sources import quarantine_cross_border_overlaps
+    from human.pipelines.population.static.sources import quarantine_cross_border_overlaps
     source=fixture_sources([box(-123.02,47.99,-123,48.01),box(-123.01,47.99,-122.99,48.01)],[100,200])
     source.geographies.loc[1,['country','vintage','jurisdiction']]=['CA',2021,'synthetic_CA']
     reconciled=quarantine_cross_border_overlaps(source)
@@ -244,7 +244,7 @@ def test_explicit_cross_border_quarantine_preserves_denominator_and_unknown(tmp_
 
 def test_configuration_defaults_and_source_geometry_cache_invalidation(tmp_path):
     import yaml
-    from human.demography_and_presence.population.static import engine
+    from human.pipelines.population.static import engine
     config=tmp_path/'population.yaml'
     config.write_text(yaml.safe_dump({'h3_resolution':6,'radii_km':[10,20]}))
     cell=h3.cell_to_parent(CELL,6)
@@ -275,7 +275,7 @@ def test_nearby_custom_radii_share_boundary_azimuths(tmp_path):
 def test_prepared_coverage_is_owned_by_querying_thread():
     from concurrent.futures import ThreadPoolExecutor
     import threading
-    from human.demography_and_presence.population.static.engine import CoverageIndex
+    from human.pipelines.population.static.engine import CoverageIndex
     coverage=gpd.GeoDataFrame(geometry=[box(0,0,10,10)],crs=3857)
     index=CoverageIndex(coverage,box(-1,-1,11,11),1)
     barrier=threading.Barrier(4)
@@ -289,7 +289,7 @@ def test_prepared_coverage_is_owned_by_querying_thread():
 
 
 def test_coverage_cache_reuses_union_and_verifies_checksum(tmp_path,monkeypatch):
-    from human.demography_and_presence.population.static.engine import CoverageIndex
+    from human.pipelines.population.static.engine import CoverageIndex
     frame=gpd.GeoDataFrame(geometry=[box(0,0,10,10)],crs=3857)
     path=tmp_path/'coverage.wkb'
     first=CoverageIndex(frame,box(-1,-1,11,11),1,cache_path=path)
@@ -318,7 +318,7 @@ def test_target_h3_case_variants_have_one_canonical_identity(tmp_path):
 
 
 def test_distinct_national_counts_survive_cartographic_overlap(tmp_path):
-    from human.demography_and_presence.population.static.sources import retain_distinct_national_counts
+    from human.pipelines.population.static.sources import retain_distinct_national_counts
     source=fixture_sources([box(-123.02,47.99,-123,48.01),box(-123.01,47.99,-122.99,48.01)],[100,200])
     source.geographies.loc[1,['country','vintage','jurisdiction']]=['CA',2021,'synthetic_CA']
     revised=retain_distinct_national_counts(source)

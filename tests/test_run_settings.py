@@ -88,7 +88,7 @@ def test_calendar_override_changes_dates_only_and_records_effective_settings(tmp
 
 def test_bad_dates_fail_before_study_or_sources(tmp_path,monkeypatch):
     from human import get_human_data
-    import human.pipelines.delivery.run as pipeline
+    import human.main as pipeline
     recipe,config=setup_pipeline(tmp_path)
     (tmp_path/'.env').write_text('START_DATE=bad\nEND_DATE=bad\nDATA_DIR=out\n')
     monkeypatch.setattr(pipeline,'load_static_study',lambda *a:pytest.fail('study opened'))

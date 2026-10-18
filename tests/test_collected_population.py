@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from human.collected_population import add_collected_population,FIELD,BASE,METHOD,display_contract
+from human.pipelines.population.collected import add_collected_population,FIELD,BASE,METHOD,display_contract
 
 
 def test_collected_sum_keeps_raw_unknowns_and_distinguishes_imputed_zero():
@@ -30,7 +30,7 @@ def test_corrupt_subtotal_is_not_silently_zeroed():
 
 
 def test_collected_metrics_share_policy_and_preserve_raw_unknowns():
-    from human.collected_population import BASES
+    from human.pipelines.population.collected import BASES
     table=pd.DataFrame({'cell_area_km2':[2.,4.]})
     for i,base in enumerate(BASES,1):
         table[base]=[float(i),None]
@@ -54,7 +54,7 @@ def test_collected_metrics_share_policy_and_preserve_raw_unknowns():
 
 
 def test_public_projection_removes_only_duplicate_scalars_and_is_idempotent():
-    from human.collected_population import BASES, PUBLIC_BASES, DISPLAY_LABELS, public_population_delivery, public_distance_delivery
+    from human.pipelines.population.collected import BASES, PUBLIC_BASES, DISPLAY_LABELS, public_population_delivery, public_distance_delivery
     table = pd.DataFrame({'h3_index': ['a', 'b'], 'cell_area_km2': [2., 4.]})
     for base in BASES:
         table[base] = [1., None]
@@ -65,7 +65,7 @@ def test_public_projection_removes_only_duplicate_scalars_and_is_idempotent():
     table['population_density_per_km2'] = [.5, None]
     table['places__CATALOG_RECORD_COUNT'] = [3., None]
     collected, metadata = add_collected_population(table, {'fields': {b: {} for b in [*BASES, 'population_density_per_km2']}})
-    from human.collected_population import REMOVED_POPULATION_COVERAGE_FIELDS
+    from human.pipelines.population.collected import REMOVED_POPULATION_COVERAGE_FIELDS
     for name in REMOVED_POPULATION_COVERAGE_FIELDS:
         collected[name] = ['complete', 'partial']
         metadata['fields'][name.removesuffix('__coverage_status')]['coverage_status'] = name
@@ -85,13 +85,13 @@ def test_public_projection_removes_only_duplicate_scalars_and_is_idempotent():
 
 @pytest.mark.parametrize('base', ['population_count', 'population_density_per_km2', *[f'population_within_{r}km' for r in (25, 50, 100)]])
 def test_public_projection_refuses_to_discard_an_unreplaced_value(base):
-    from human.collected_population import public_population_delivery
+    from human.pipelines.population.collected import public_population_delivery
     with pytest.raises(ValueError, match='without its collected estimate'):
         public_population_delivery(pd.DataFrame({base: [12.]}), {'fields': {base: {}}})
 
 
 def test_default_contract_has_no_removed_distance_coverage_reference():
-    from human.collected_population import REMOVED_DISTANCE_COVERAGE_FIELDS
+    from human.pipelines.population.collected import REMOVED_DISTANCE_COVERAGE_FIELDS
     import json
     assert all(name not in json.dumps(display_contract()) for name in REMOVED_DISTANCE_COVERAGE_FIELDS)
     assert 'coverage_status_field' not in display_contract()

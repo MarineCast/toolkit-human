@@ -6,13 +6,13 @@ import polars as pl
 import pytest
 from affine import Affine
 
-from human.viewshed.weights.distance.compute import (
+from human.legacy.viewshed.weights.distance.compute import (
     DistanceWeightConfig,
     distance_weight_values,
 )
-from human.viewshed.weights.terrain import summarize
-from human.viewshed.weights.terrain.accumulators import TiledAccumulator
-from human.viewshed.weights.terrain.summarize import (
+from human.legacy.viewshed.weights.terrain import summarize
+from human.legacy.viewshed.weights.terrain.accumulators import TiledAccumulator
+from human.legacy.viewshed.weights.terrain.summarize import (
     _accumulate_visible,
     add_terrain_visibility_support,
 )

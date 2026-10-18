@@ -7,9 +7,9 @@ from shapely.geometry import box
 import shapely
 import pytest
 from human import get_population
-from human.demography_and_presence.population.static import PopulationSources
-from human.demography_and_presence.population.static.geometry import cell_polygon
-from human.static_water_support import load_qualified_water, qualify_water_support
+from human.pipelines.population.static import PopulationSources
+from human.pipelines.population.static.geometry import cell_polygon
+from human.pipelines.population.water_support import load_qualified_water, qualify_water_support
 CELL=h3.latlng_to_cell(48,-123,7)
 
 

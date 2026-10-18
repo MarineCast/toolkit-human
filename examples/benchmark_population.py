@@ -10,7 +10,7 @@ import pandas as pd
 from shapely.geometry import box
 
 from human import get_population
-from human.demography_and_presence.population.static import PopulationSources
+from human.pipelines.population.static import PopulationSources
 
 
 def main():

@@ -1,21 +1,30 @@
-# Architecture
+# Human package structure
 
-The supported API is `human.get_human_data`; its CLI is `human get-human-data`. Supported source is grouped by pipeline:
+The supported product is the three-Parquet dataset built by `human.get_human_data()`. The package root has only `__init__.py`, `__main__.py`, `main.py` and `cli.py`; implementations live in their owning folders.
 
 ```text
-human/pipelines/
-  delivery/    run.py, settings.py, finalize.py, validation.py
-  population/  delivery.py, collection.py, collected.py, water_support.py, gaf.py
-    static/    api.py, census.py, sources.py, geometry.py, engine.py
-  native/      collection.py, features.py, summary.py
-  calendar/    lookup.py
-human/utils/   artifact/checksum publication, bounded downloads, shared study reader
+human/
+  main.py                  # collect/build/validate/publish orchestration
+  cli.py                   # CLI parsing, workspace initialization, preflight
+  pipelines/
+    population/            # census acquisition, extracted-input registration, streaming tables, allocation, water support
+      static/              # query engine and spatial source contracts
+    calendar/              # jurisdiction/local-civil-date lookup
+    native/                # original source inventory and native features
+      boat_launches/       # WA/BC/OSM source collection and facility/H3 builder
+      shore_access/        # facilities and classification geometry
+      places/              # destinations and park source context
+    delivery/              # settings, exact schemas, serialization and validation
+  utils/                   # reusable downloads, source I/O, checksums, study resolution
+  core/                    # typed configuration, geometry/data/artifact infrastructure
+  resources/               # packaged configs, output contract and feature catalog
+  legacy/                  # retained research producers, outside supported output scope
 ```
 
-Delivery composes collection, scientific producers, exact schema validation, staged publication/rollback and run-owned cleanup. Population retains the original full-polygon allocation engine and explicit source/support qualifiers. Native collection retains original snapshots and receipts outside output. Calendar retains jurisdiction/local civil-date support; it is not an H3 UTC-day product. New code imports canonical pipeline paths. Earlier root/domain paths are thin module compatibility imports, preserving direct callers and module-level patch behavior without maintaining duplicate implementations. Historical domain/research modules remain outside the supported output surface.
+Pipeline-specific code remains with its pipeline: census tables/errors are in population; native classification/summary rules are in native; local-day construction is in calendar. Shared acquisition, artifact and registry helpers do not import legacy research. Active code does not depend on `human.legacy`.
 
-`human/utils` contains genuinely shared artifact/checksum, download and study helpers; population algorithms and native classification remain in their pipelines. The retained legacy study exporter and supported population delivery use the same Parquet writer. The independent Canada Profile reader remains a domain helper shared with its retained research producer. No application import or app export is used.
+The native collector keeps configuration file paths separate from Python module paths. Existing source/configured data paths, dataset/schema identifiers, numerical definitions and source pins remain unchanged by the code layout. The Canadian archive placement change is separately documented in [census sources](census-sources.md).
 
-The generated catalog describes only the three final products. Workspace initialization installs the supported recipe, five-source acquisition specification and safe environment example. Runtime settings are pure preflight with explicit arguments > process environment > .env; dates affect calendar only. No Meteorology append/rebuild behavior is borrowed. See [the pipeline guide](get-human-data.md).
+`human.legacy` groups the older population harmonization, ferry/activity, routing, reporting-opportunity and viewshed research implementations. These remain directly importable by their new names for tests and research; they are not extra supported outcomes of the main pipeline. Unimplemented `.gitkeep` roadmap packages were removed. Their roadmaps remain in `docs/legacy/`.
 
-Other family/research modules are compatibility code, not supported products or CLI routes. AIS remains absent. Viewshed, ferry, routing and model proxies are excluded from this delivery. Common infrastructure under `human.core` remains local; independent installations provide the approved study/registry/physical-context artifacts and census source inputs. The MarineCast paths are a deployment recipe, never sibling Python imports.
+The pass-through modules from the earlier refactor were removed rather than retained as a second import tree. See [import migration](import-migration.md) for intentional internal-path changes. The public `human.get_human_data`, `human.get_population`, `human.HumanData`, `human` command and `python -m human` remain available. Source imports/configuration never require an application checkout. Data publication/cleanup and external source qualification remain in [the run guide](get-human-data.md) and [final delivery](final-delivery.md).

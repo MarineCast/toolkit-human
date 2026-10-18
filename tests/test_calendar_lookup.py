@@ -3,7 +3,7 @@ import pandas as pd
 import pytest
 import tzdata
 
-from human.temporal_context.calendar.lookup import build_calendar_lookup
+from human.pipelines.calendar.lookup import build_calendar_lookup
 
 
 def test_actual_observed_and_future():
@@ -42,7 +42,7 @@ def test_invalid_calendar_identity():
 def test_active_catalog_advertises_lookup_without_effort_scores():
     from importlib.resources import files
     import yaml
-    catalog = yaml.safe_load(files('human').joinpath('feature_catalog.yaml').read_text())
+    catalog = yaml.safe_load(files('human').joinpath('resources/feature_catalog.yaml').read_text())
     assert catalog['collections']['dynamic_calendar']['primary_key'] == ['date', 'jurisdiction']
     for name in ['dynamic_calendar']:
         assert not any('effort' in f['name'] for f in catalog['collections'][name]['features'])

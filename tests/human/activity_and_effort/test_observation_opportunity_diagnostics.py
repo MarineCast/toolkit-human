@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from human.activity_and_effort.water_observation_opportunity.diagnostics import (
+from human.legacy.activity.water_observation_opportunity.diagnostics import (
     apply_platform_pathways,
     classify_observation_platforms,
     join_sighting_components,

@@ -8,13 +8,13 @@ import pandas as pd
 import polars as pl
 import pytest
 
-from human.activity_and_effort.water_observation_opportunity.build import (
+from human.legacy.activity.water_observation_opportunity.build import (
     _expand_ais_to_r7_sources,
 )
-from human.activity_and_effort.water_observation_opportunity.inspect import (
+from human.legacy.activity.water_observation_opportunity.inspect import (
     _available_case_dominant_component,
 )
-from human.activity_and_effort.water_observation_opportunity.pipeline import (
+from human.legacy.activity.water_observation_opportunity.pipeline import (
     add_distance_bins,
     aggregate_weekly,
     apply_coverage_semantics,
@@ -196,7 +196,7 @@ def test_weekly_builder_deduplicates_overlapping_coverage_selectors(tmp_path):
     """Dynamic coverage is both a condition field and a *_COVERAGE field."""
     from datetime import date
     from types import SimpleNamespace
-    from human.activity_and_effort.water_observation_opportunity.build import _build_weekly
+    from human.legacy.activity.water_observation_opportunity.build import _build_weekly
     cfg = SimpleNamespace(source_daily_path=tmp_path / 'source.parquet',
                           target_daily_path=tmp_path / 'target.parquet',
                           source_weekly_path=tmp_path / 'source-week.parquet',
@@ -215,14 +215,14 @@ def test_weekly_builder_deduplicates_overlapping_coverage_selectors(tmp_path):
 
 def test_diagnostics_select_pinned_land_generation_without_workspace_defaults(tmp_path, monkeypatch):
     import json
-    from human.activity_and_effort.water_observation_opportunity.diagnostics import _land_daily_for_join, _land_member
+    from human.legacy.activity.water_observation_opportunity.diagnostics import _land_daily_for_join, _land_member
     from human.utils.artifacts import sha256_file
     daily = tmp_path / 'selected-daily.parquet'
     pl.DataFrame({'PHYSICAL_VIEWABILITY_RAW': [1.0], 'PHYSICAL_VIEWABILITY_STATE': ['positive']}).write_parquet(daily)
     item = {'dataset_id': 'human.activity_and_effort.land_reporting_opportunity.daily_h3_r6',
             'path': str(daily), 'sha256': sha256_file(daily)}
     manifest = tmp_path / 'manifest.json'
-    payload = dict(manifest_schema_version=1, product='human.activity_and_effort.land_reporting_opportunity',
+    payload = dict(manifest_schema_version=1, product='human.legacy.activity.land_reporting_opportunity',
                    stage='build', run_id='fixture', build_time_utc='2026-01-01T00:00:00Z',
                    config_path='synthetic', config_hash='fixture', resolved_config={}, sources=[],
                    inputs=[dict(item, dataset_id='input.land_static_weights')], artifacts=[item],

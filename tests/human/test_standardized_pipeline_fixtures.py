@@ -29,13 +29,13 @@ def _source(url: str, status: str = "observed") -> dict[str, str]:
 
 def test_places_download_build_inspect_fixture(tmp_path, monkeypatch) -> None:
     download_module = importlib.import_module(
-        "human.demography_and_presence.places.download"
+        'human.pipelines.native.places.download'
     )
     build_module = importlib.import_module(
-        "human.demography_and_presence.places.build"
+        'human.pipelines.native.places.build'
     )
     inspect_module = importlib.import_module(
-        "human.demography_and_presence.places.inspect"
+        'human.pipelines.native.places.inspect'
     )
     raw = tmp_path / "raw"
     processed = tmp_path / "processed"
@@ -120,13 +120,13 @@ def test_places_download_build_inspect_fixture(tmp_path, monkeypatch) -> None:
 
 def test_population_download_build_inspect_fixture(tmp_path, monkeypatch) -> None:
     download_module = importlib.import_module(
-        "human.demography_and_presence.population.download"
+        'human.legacy.population.download'
     )
     build_module = importlib.import_module(
-        "human.demography_and_presence.population.build"
+        'human.legacy.population.build'
     )
     inspect_module = importlib.import_module(
-        "human.demography_and_presence.population.inspect"
+        'human.legacy.population.inspect'
     )
     base = yaml.safe_load(
         Path("config/data/human/demography_and_presence/population.yaml").read_text(
@@ -258,14 +258,14 @@ def test_population_download_build_inspect_fixture(tmp_path, monkeypatch) -> Non
 
 def test_ferry_download_build_inspect_fixture(tmp_path, monkeypatch) -> None:
     download_module = importlib.import_module(
-        "human.activity_and_effort.ferry.download"
+        'human.legacy.activity.ferry.download'
     )
-    build_module = importlib.import_module("human.activity_and_effort.ferry.build")
+    build_module = importlib.import_module('human.legacy.activity.ferry.build')
     config_module = importlib.import_module(
-        "human.activity_and_effort.ferry.config"
+        'human.legacy.activity.ferry.config'
     )
     inspect_module = importlib.import_module(
-        "human.activity_and_effort.ferry.inspect"
+        'human.legacy.activity.ferry.inspect'
     )
     supplied = tmp_path / "supplied"
     supplied.mkdir()

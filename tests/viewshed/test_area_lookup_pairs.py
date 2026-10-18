@@ -6,9 +6,9 @@ from types import SimpleNamespace
 import polars as pl
 from shapely.geometry import box
 
-from human.viewshed.prepare.area import domains
-from human.viewshed.prepare.area import lookup as area_lookup
-from human.viewshed.prepare.area.config import (
+from human.legacy.viewshed.prepare.area import domains
+from human.legacy.viewshed.prepare.area import lookup as area_lookup
+from human.legacy.viewshed.prepare.area.config import (
     _configured_path_content_sha256,
 )
 
