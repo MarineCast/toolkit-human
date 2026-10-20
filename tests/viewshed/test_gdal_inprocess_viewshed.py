@@ -14,8 +14,8 @@ import rasterio
 from rasterio.crs import CRS
 from rasterio.transform import from_origin
 
-from human.viewshed.config.loader import BatchContext
-from human.viewshed.weights.terrain import los
+from human.legacy.viewshed.config.loader import BatchContext
+from human.legacy.viewshed.weights.terrain import los
 
 
 def _fixture_context(tmp_path: Path) -> tuple[BatchContext, SimpleNamespace, float, float]:
@@ -255,7 +255,7 @@ def test_canopy_fixed_observer_is_independent_of_other_observers(tmp_path: Path)
     """Exercise the real GDAL dispatch, with an obstructing second observer pixel."""
     from dataclasses import replace
 
-    from human.viewshed.prepare.elevation.canopy import (
+    from human.legacy.viewshed.prepare.elevation.canopy import (
         build_canonical_canopy_base_surface,
         build_observer_grounded_canopy_surface_from_base,
     )
@@ -307,7 +307,7 @@ def test_canonical_ground_two_source_elevations_one_coarse_void_is_batch_invaria
 
     from shapely.geometry import Point
 
-    from human.viewshed.prepare.elevation.terrain import (
+    from human.legacy.viewshed.prepare.elevation.terrain import (
         repair_observer_endpoint_nodata,
     )
 

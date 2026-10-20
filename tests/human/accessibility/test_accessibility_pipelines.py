@@ -29,13 +29,13 @@ def _source(source_type: str, jurisdiction: str) -> dict[str, str]:
 
 def test_boat_launch_download_build_inspect_with_osm(tmp_path, monkeypatch) -> None:
     download_module = importlib.import_module(
-        "human.accessibility.boat_launch_access.download"
+        'human.pipelines.native.boat_launches.download'
     )
     build_module = importlib.import_module(
-        "human.accessibility.boat_launch_access.build"
+        'human.pipelines.native.boat_launches.build'
     )
     inspect_module = importlib.import_module(
-        "human.accessibility.boat_launch_access.inspect"
+        'human.pipelines.native.boat_launches.inspect'
     )
     raw = tmp_path / "raw"
     processed = tmp_path / "processed"
@@ -150,7 +150,7 @@ def test_boat_launch_download_build_inspect_with_osm(tmp_path, monkeypatch) -> N
 )
 def test_wa_boat_launch_source_domain(source_value, expected_capability) -> None:
     build_module = importlib.import_module(
-        "human.accessibility.boat_launch_access.build"
+        'human.pipelines.native.boat_launches.build'
     )
     assert build_module._boolean_state(source_value) is True
     assert build_module._ramp_state(source_value) == expected_capability
@@ -158,13 +158,13 @@ def test_wa_boat_launch_source_domain(source_value, expected_capability) -> None
 
 def test_public_shore_keeps_unmapped_access_null(tmp_path, monkeypatch) -> None:
     download_module = importlib.import_module(
-        "human.accessibility.public_shore_access.download"
+        'human.pipelines.native.shore_access.download'
     )
     build_module = importlib.import_module(
-        "human.accessibility.public_shore_access.build"
+        'human.pipelines.native.shore_access.build'
     )
     inspect_module = importlib.import_module(
-        "human.accessibility.public_shore_access.inspect"
+        'human.pipelines.native.shore_access.inspect'
     )
     raw = tmp_path / "raw"
     processed = tmp_path / "processed"
@@ -267,7 +267,7 @@ def test_public_shore_keeps_unmapped_access_null(tmp_path, monkeypatch) -> None:
 
 def test_public_shore_denominator_mismatch_is_null_not_clipped() -> None:
     build_module = importlib.import_module(
-        "human.accessibility.public_shore_access.build"
+        'human.pipelines.native.shore_access.build'
     )
     facilities = gpd.GeoDataFrame(
         {
@@ -302,14 +302,14 @@ def test_public_shore_denominator_mismatch_is_null_not_clipped() -> None:
 )
 def test_osm_pedestrian_access_uses_explicit_foot_override(access, foot, expected) -> None:
     build_module = importlib.import_module(
-        "human.accessibility.public_shore_access.build"
+        'human.pipelines.native.shore_access.build'
     )
     assert build_module.pedestrian_access_state(access, foot) == expected
 
 
 def test_osm_conditional_access_is_not_promoted_to_public() -> None:
     build_module = importlib.import_module(
-        "human.accessibility.public_shore_access.build"
+        'human.pipelines.native.shore_access.build'
     )
     assert (
         build_module.pedestrian_access_state("yes", None, "no @ (sunset-sunrise)", None)
@@ -319,7 +319,7 @@ def test_osm_conditional_access_is_not_promoted_to_public() -> None:
 
 def test_bc_recreation_sites_require_shorezone_proximity_and_no_closure() -> None:
     build_module = importlib.import_module(
-        "human.accessibility.public_shore_access.build"
+        'human.pipelines.native.shore_access.build'
     )
     wa = gpd.GeoDataFrame({"ECYBEACHID": []}, geometry=[], crs="EPSG:4326")
     osm = gpd.GeoDataFrame({"OSM_TYPE": [], "OSM_ID": []}, geometry=[], crs="EPSG:4326")
@@ -362,7 +362,7 @@ def test_bc_recreation_sites_require_shorezone_proximity_and_no_closure() -> Non
 
 def test_osm_shore_candidates_require_reference_shoreline_proximity() -> None:
     build_module = importlib.import_module(
-        "human.accessibility.public_shore_access.build"
+        'human.pipelines.native.shore_access.build'
     )
     wa = gpd.GeoDataFrame({"ECYBEACHID": []}, geometry=[], crs="EPSG:4326")
     osm = gpd.GeoDataFrame(
@@ -394,7 +394,7 @@ def test_osm_shore_candidates_require_reference_shoreline_proximity() -> None:
 
 def test_optional_osm_outage_is_unavailable_not_zero(tmp_path, monkeypatch) -> None:
     download_module = importlib.import_module(
-        "human.accessibility.boat_launch_access.download"
+        'human.pipelines.native.boat_launches.download'
     )
     raw = tmp_path / "raw"
     osm_source = _source("overpass", "cross_border")

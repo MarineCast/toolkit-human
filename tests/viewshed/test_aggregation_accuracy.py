@@ -14,8 +14,8 @@ from rasterio.transform import xy
 from shapely.geometry import Polygon, mapping
 from shapely.ops import transform as shapely_transform
 
-from human.viewshed.finalize.final_artifacts import FINAL_SCHEMAS
-from human.viewshed.weights.terrain import pixel_index, summarize
+from human.legacy.viewshed.finalize.final_artifacts import FINAL_SCHEMAS
+from human.legacy.viewshed.weights.terrain import pixel_index, summarize
 
 
 def _write_reference_raster(path: Path, shape: tuple[int, int]) -> None:

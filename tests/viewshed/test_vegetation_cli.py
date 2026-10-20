@@ -1,6 +1,6 @@
 import pytest
 
-from human.viewshed.prepare.vegetation.cli import main
+from human.legacy.viewshed.prepare.vegetation.cli import main
 
 
 def test_landcover_cli_rejects_unimplemented_methods():

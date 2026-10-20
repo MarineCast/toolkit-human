@@ -1,91 +1,51 @@
-# Human Toolkit
+# toolkit human
 
-<img src="docs/assets/human-toolkit-banner.png" alt="Ink panorama of a coastal harbor with roads, marina, ferries, ships, and navigation lines" width="100%">
+`get_human_data()` collects Human inputs, builds and validates the dataset, publishes three final Parquets, and removes the run's intermediate files:
 
-Python distribution `toolkit-human`, import package `human`, command `human`.
-Extracted from OrcaCast on 2026-09-16 with current local edits preserved. This is a
-research package with offline validation, not a claim of regional or production readiness.
-
-## Install and initialize
-
-```bash
-python -m pip install -e '.[test]'
-human --workspace /path/to/human-workspace init
-human families
-human --workspace /path/to/human-workspace build calendar --help
-python -m pytest -q
-```
-
-Python 3.11+ is declared; CI covers Python 3.11 and 3.14. Configuration and data
-resolve against `HUMAN_WORKSPACE`, or the calling directory when it is unset. `init` copies
-packaged configuration without replacing existing files. A wheel includes configuration,
-source documentation and the road-routing Lua profile. Neither installation nor `init`
-downloads source data. Review configured paths before running a producer.
-
-Install `.[acquisition]` for provider clients. GDAL's Python bindings and native libraries
-and the `gdal_viewshed` CLI are additionally needed for terrain execution and the full
-test suite. Follow the [native setup and validation commands](docs/WORKFLOWS.md#native-validation-environments),
-including the matching-binding preflight, before running tests.
-The optional `.[meteorology]` extra uses the independent `meteorology` daylight API when
-that workflow is selected. These toolkits may need installation from their own checkouts
-or wheels until published; no sibling directory layout is required.
-
-## Products and boundaries
-
-| Area | Implemented capabilities |
-| --- | --- |
-| Demography and presence | US/Canada population harmonization and public places |
-| Accessibility | Boat launches, public shore access, land transport, population travel time |
-| Temporal context | Jurisdiction-aware holiday and calendar features |
-| Activity and effort | AIS aggregates, ferry proxies, observer effort, land/water reporting opportunity |
-| Legacy observation geometry | Migrated viewshed and access-kernel implementation used by existing reporting products |
-
-`human.viewshed` preserves the originating observation-geometry implementation and tests.
-It is not an alias for `viewshed_toolkit`, and numerical interchangeability has not been
-established. MarineCast's standalone physical-viewability toolkit remains `toolkit-viewshed`.
-AIS and ferry processing moved here with the human domain; `toolkit-ais` remains a scaffold.
-Future consolidation requires an explicit contract and equivalence tests.
-
-Human presence, access, reporting opportunity, physical viewability, vessel pressure and
-species occurrence are distinct quantities. Retain unavailable, partial and observed-zero
-states. Research feature availability does not establish fitness for ecological inference.
-
-- [Architecture and ownership](docs/ARCHITECTURE.md)
-- [Scientific and input contracts](docs/CONTRACTS.md)
-- [Workflows and validation](docs/WORKFLOWS.md)
-- [Static resident population API and neighborhood counts](docs/population.md)
-- [Static H3 matrix export](docs/static-matrix.md)
-- [Migration scope and evidence](docs/MIGRATION.md)
-- [Executed checks and limitations](docs/VALIDATION.md)
-- [Domain source notes](src/human/README.md) and [remaining research work](src/human/TODO.txt)
-- [Agent and Graphify guidance](AGENTS.md)
-
-## Static population and study exports
-
-The standalone population API estimates residents in full H3 cells and within
-25, 50, 100 and 250 km of their centers. Prepare an explicit normalized census
-source manifest using the [population guide](docs/population.md), then query it:
+- `static.parquet`: R7 population and infrastructure summaries.
+- `dynamic-calendar.parquet`: local civil date × jurisdiction, with explicit UTC day boundaries.
+- `static-native.parquet`: native launches, shore sites, places, shoreline classifications and park context in GeoParquet.
 
 ```python
-from human import get_population
+from human import get_human_data
 
-result = get_population(
-    bbox=(-125.8, 46.85, -121.6, 50.0), h3_res=7,
-    source_manifest="/path/to/sources.json", workspace="./human-workspace",
-    mode="offline", include_bands=True,
-)
-result.to_parquet("./population-r7-static.parquet")
+result = get_human_data()  # config/human.yaml in HUMAN_WORKSPACE or cwd
+print(result.static, result.calendar, result.native)
 ```
 
-Strict coverage is the default. Explicit `allow_partial=True` preserves incomplete
-canonical totals as null and reports available-source subtotals separately. Run
-`python examples/population_offline.py --workspace /tmp/synthetic-human-example`
-for a complete synthetic example without provider access.
+Install with `python -m pip install -e '.[test]'`. From another directory, pass `workspace='/path/to/toolkit-human'` or set `HUMAN_WORKSPACE`. The package has no application import dependency.
 
-`human.study.export_study` and [examples/export_study.py](examples/export_study.py)
-write static location features, a non-spatial calendar, and native spatial activity
-Parquets with metadata and a catalog. The executed workspace study used the configured
-2020–2030 calendar period; retained activity ends on 2026-08-31. See the
-[study output contract](docs/population.md#static-and-regional-exports) and
-[executed validation record](docs/VALIDATION.md#static-population-implementation-2026-10-14)
-for file names, coverage limits and checks.
+```sh
+human init                            # creates two configs and .env.example; preserves edits
+human get-human-data                  # collect missing sources; build all three
+human get-human-data --mode offline   # rebuild from retained verified snapshots
+human validate /path/to/Data/Human
+```
+
+For local defaults, copy `.env.example` to `.env` in the toolkit workspace:
+
+```dotenv
+DATA_DIR=../../Data/Human/
+START_DATE=2009-01-01
+END_DATE=2026-12-31
+VERBOSITY=True
+```
+
+Explicit API/CLI arguments override process environment, then `.env`, then recipe defaults for file-free Python calls. A present `.env` requires all three date/output settings from the file or overrides. File-relative `DATA_DIR` resolves beside `.env`; explicit/process-relative paths use the Human workspace. Only known settings are read, without changing process environment or loading credentials. Existing private files are never overwritten. Run `human preflight` to check date syntax/order and output-parent access without study reads, source calls or writes.
+
+Dates are inclusive **local civil dates** and select the jurisdiction calendar output. They do not change the US 2020 / Canada 2021 static census baseline or imply daily observations. Human stages all three products for the requested calendar range, validates them and replaces the destination together; it has no weather-style append or `REBUILD` setting. `start_date`, `end_date`, `output_dir`, `env_file` and `verbosity` are available on `get_human_data` and corresponding CLI flags.
+
+The shipped recipe uses the approved MarineCast study and verified census polygons, and collects a fresh native inventory from WA/BC/OSM/Natural Earth. H3 summaries use that same inventory. Existing verified snapshots are reused; a new `source_store` directory selects another native vintage. The tracked `config/census-sources.v1.json` supplies five official census inputs with full SHA256 pins, relative original-source paths and shared download/byte limits. Missing normalized-manifest locations fall back to this recipe; corrupt present bundles fail. The Canadian provider endpoints returned HTTP 403 in the latest check, so original-source acquisition remains externally blocked without accessible matching archives. The current deployment can still calculate from its verified retained normalized bundle. See [the pipeline guide](docs/get-human-data.md).
+Original source snapshots and immutable provenance receipts remain outside the final output directory. Only run-owned normalization files, calculations, temporary configuration, staging and superseded publication backups are cleaned. Existing source stores, caches and user files are never swept. Existing final products are replaced only after a complete staged validation, with rollback if publication readback fails.
+
+Population retains collected count/density and 25/50/100 km totals with missing-source/zero-imputation qualifiers. There is no 250 km field. The three misleading legacy shoreline summary fields remain withheld from selection; raw audit values are preserved. Calendar dates remain local jurisdiction dates. Native geometry and access classifications remain source evidence, without guarantees of current public access, operation, activity or visitation.
+
+The supported catalog describes exactly these three products. Previous family CLI routes, ferry, routing, legacy calendar-effort, viewshed and modeling products are retired from the supported interface. Their direct modules and source configuration remain for existing research compatibility; `get_population` also remains a lower-level compatibility API. AIS belongs to toolkit-ais. No distance-to-features addition is included.
+
+See [pipeline configuration and lifecycle](docs/get-human-data.md), [scientific delivery details](docs/static-delivery.md), and [validation commands](docs/WORKFLOWS.md).
+
+Supported code is organized under `human/pipelines/delivery`, `population`, `native` and `calendar`. The population allocation engine is under `pipelines/population/static`. Shared artifact/checksum/download/study helpers live in `human/utils`. Earlier module paths are compatibility imports; they do not duplicate the producers. See [architecture](docs/ARCHITECTURE.md).
+
+Local Canadian archive placement, official URLs, exact hashes and reuse/error behavior are documented in [retained census sources](docs/census-sources.md).
+
+Package organization and deliberate internal import changes are described in [architecture](docs/ARCHITECTURE.md) and [import migration](docs/import-migration.md).

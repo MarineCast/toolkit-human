@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import yaml
 
-from human.temporal_context.calendar.build import build
-from human.temporal_context.calendar.download import download
-from human.temporal_context.calendar.inspect import inspect
+from human.legacy.calendar.build import build
+from human.legacy.calendar.download import download
+from human.legacy.calendar.inspect import inspect
 from human.utils.artifacts import load_manifest
 
 

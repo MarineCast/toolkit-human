@@ -5,8 +5,8 @@ from types import SimpleNamespace
 
 import polars as pl
 
-from human.viewshed.finalize.final_artifacts import FINAL_SCHEMAS
-from human.viewshed.weights.terrain import cleanup
+from human.legacy.viewshed.finalize.final_artifacts import FINAL_SCHEMAS
+from human.legacy.viewshed.weights.terrain import cleanup
 
 
 def test_combine_partitions_preserves_complete_clear_sky_contract(

@@ -6,7 +6,7 @@ import pandas as pd
 import pytest
 from scipy.special import expit
 
-from human.activity_and_effort.land_reporting_opportunity.utc_context import (
+from human.legacy.activity.land_reporting_opportunity.utc_context import (
     civil_calendar_segments, daylight_intervals, integrate_land_context,
     solar_altitude_deg, timezone_provenance,
 )

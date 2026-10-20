@@ -6,16 +6,16 @@ import pandas as pd
 import polars as pl
 import pytest
 
-from human.viewshed.finalize.final_artifacts import (
+from human.legacy.viewshed.finalize.final_artifacts import (
     FINAL_SCHEMAS,
     final_artifact_paths_from_raw,
 )
-from human.viewshed.weights.canopy_visibility import (
+from human.legacy.viewshed.weights.canopy_visibility import (
     CANOPY_VISIBILITY_CONTRACT_VERSION,
     compose_dual_surface_artifacts,
     scan_terrain_partitions,
 )
-from human.viewshed.weights.terrain.gdal import (
+from human.legacy.viewshed.weights.terrain.gdal import (
     _terrain_weight_partition_for_storage,
 )
 

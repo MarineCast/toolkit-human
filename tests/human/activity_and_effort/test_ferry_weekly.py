@@ -3,7 +3,7 @@ from __future__ import annotations
 import h3
 import pandas as pd
 
-from human.activity_and_effort.ferry.build import build_weekly_r6
+from human.legacy.activity.ferry.build import build_weekly_r6
 
 
 def test_ferry_weekly_r6_conserves_effort_and_flags_fallback() -> None:

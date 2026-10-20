@@ -43,7 +43,7 @@ Run from the repository root:
 export ORCA_PY=python
 export MPLCONFIGDIR=/tmp/orca-mpl
 export XDG_CACHE_HOME=/tmp/orca-cache
-"$ORCA_PY" -m human.activity_and_effort.land_reporting_opportunity.smoke --output-dir outputs/validation/land_observation_opportunity_followup_final
+"$ORCA_PY" -m human.legacy.activity.land_reporting_opportunity.smoke --output-dir outputs/validation/land_observation_opportunity_followup_final
 "$ORCA_PY" -m pytest tests/domains/human tests/viewshed -q
 git diff --check
 ```

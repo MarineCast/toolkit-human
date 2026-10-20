@@ -8,13 +8,13 @@ import pytest
 from shapely import from_wkt
 from shapely.geometry import MultiPolygon, Point, Polygon
 
-from human.viewshed.config.loader import H3Config
-from human.viewshed.prepare.area import (
+from human.legacy.viewshed.config.loader import H3Config
+from human.legacy.viewshed.prepare.area import (
     calculate_source_sample_count,
     prepare_source_samples,
     sample_points_in_source_geometry,
 )
-from human.viewshed.weights.terrain.gdal import (
+from human.legacy.viewshed.weights.terrain.gdal import (
     _metadata_values_match,
     _terrain_partition_config_hash,
     expected_partition_metadata,

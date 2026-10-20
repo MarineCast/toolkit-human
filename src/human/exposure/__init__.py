@@ -1,1 +1,0 @@
-"""Human-generated exposure products."""

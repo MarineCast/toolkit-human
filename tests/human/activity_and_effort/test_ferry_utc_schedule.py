@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from human.activity_and_effort.ferry.utc_schedule import summarize_utc_schedule
+from human.legacy.activity.ferry.utc_schedule import summarize_utc_schedule
 
 
 def records(times, values):

@@ -1,108 +1,27 @@
 # toolkit-human agent guidance
 
-## Scope and current state
+## Supported product and layout
 
-Population, access, recreation, infrastructure, and human-presence indicators.
+`human.get_human_data()` and `human get-human-data` own exactly `static.parquet`, `dynamic-calendar.parquet` and `static-native.parquet`. Read [the run guide](docs/get-human-data.md), [architecture](docs/ARCHITECTURE.md), [source placement](docs/census-sources.md), [contracts](docs/CONTRACTS.md) and [workflows](docs/WORKFLOWS.md) before changes or execution.
 
-This repository contains the installable `human` package extracted on 2026-09-16.
-Read docs/ARCHITECTURE.md for ownership/import changes, docs/CONTRACTS.md for scientific
-changes, and docs/WORKFLOWS.md before pipeline execution. See docs/MIGRATION.md for scope.
-Preserve unrelated changes and read deeper instructions before editing a subdirectory.
+The root contains real orchestration in `main.py`, CLI parsing in `cli.py`, package exports and `__main__.py`. Put supported implementations under `pipelines/population`, `calendar`, `native` or `delivery`; native source builders have their own boat_launches/shore_access/places folders. Pipeline-specific functions stay with their pipeline. Shared helpers belong in `utils`; typed config/geometry/artifact infrastructure remains in `core`. Package configs, exact schemas and the feature catalog under `resources`. Avoid forwarding-only modules and do not restore the removed alias tree; intentional changes are documented in [import migration](docs/import-migration.md).
 
-## Shared MarineCast context
+Real historical research is grouped under `human.legacy`, outside the supported pipeline. Do not expose extra ferry/routing/viewshed/modeling outputs through the active CLI/catalog. AIS is owned by toolkit-ais. No 250 km population metric or distance-to-features feature is currently approved. Keep unimplemented plans in documentation rather than empty package stubs.
 
-Before changing repository boundaries, dependencies, shared schemas, provenance, or application
-integration, read the MarineCast [infrastructure guide](https://github.com/MarineCast/.github/blob/HEAD/INFRASTRUCTURE.md).
-Resolve local paths from this toolkit's checkout root, not the agent's working directory.
-For `MarineCast/Toolkits/toolkit-*`, use `../../.github/INFRASTRUCTURE.md`;
-for a flat `MarineCast/toolkit-*` layout, use `../.github/INFRASTRUCTURE.md`.
-Prefer that local copy when present; in an independent checkout, read the linked document. If it
-cannot be retrieved, report that limitation and use the local contracts below; do not invent a
-shared standard. These instructions explicitly request that reading; a sibling repository's
-`AGENTS.md` is not automatically inherited.
+## Shared context and scientific contracts
 
-The infrastructure guide owns cross-repository context. This repository owns its implementation
-and scientific contracts. Surface conflicts before changing an interface; do not silently replace
-an existing local contract with a proposed ecosystem convention.
+Before changing boundaries, dependencies, shared schema/provenance or consumers, read `../../.github/INFRASTRUCTURE.md` from this checkout, or the [organization guide](https://github.com/MarineCast/.github/blob/HEAD/INFRASTRUCTURE.md) in an independent clone. Do not import sibling applications. Preserve unrelated dirty files and inspect branch/status before work.
 
-## Domain contracts
+Keep source dates, units, spatial support, source rights and missingness explicit. Activity, mapped access, reporting and ecological response are distinct. Preserve dataset/schema/method identifiers when moving code; Python paths are not scientific identities. Calendar is jurisdiction/local civil date with timezone boundaries, not H3 UTC-day observations. Population retains its collected-source qualifications and census vintages; the three misleading raw shoreline summaries remain withheld, not scientifically corrected.
 
-Keep population, accessibility, recreation proxies, observed activity, and reporting effort
-separate. Preserve source dates, spatial support, coverage, and proxy limitations. Physical access
-does not establish that people were present or reported sightings. Avoid committing individual
-location records or restricted source data.
+## Source and storage boundaries
 
-## Implementation boundaries
+Canadian originals live in ignored `data/raw/statcan/2021/`, as pinned in both census recipe copies. If only extracted downloads remain, register them with `human.pipelines.population.local_sources`; keep their private local recipe/member receipts distinct from original ZIP identity. Never claim repacking recovers an upstream hash. Reuse exact local files before requests; mismatches fail without replacement. Verify provider ZIP bytes/CRC and vintage before moving originals. Never repack extracted folders to claim an original hash, commit raw bytes, duplicate bulk inputs, or sweep pre-existing caches. Source receipts remain outside final output. Clean only owned processing/staging/backups; preserve approved data until separately authorized publication.
 
-- Keep this toolkit species-neutral and independently installable; do not require an OrcaCast
-  checkout or import through sibling filesystem paths.
-- Before adding a pipeline, define source rights, input/output grain, units, spatial and temporal
-  support, missingness, provenance, and validation in the repository documentation.
-- Add dependency declarations and runnable setup/validation commands with the implementation;
-  do not copy viewshed's GDAL stack or commands unless this toolkit actually needs them.
-- Prefer deterministic calculations and small synthetic/offline fixtures. Keep credentials,
-  downloads, and large generated products out of tracked source.
-- Keep unknown and unavailable values distinct from observed zero. Validate uniqueness and join
-  cardinality rather than silently dropping conflicting records.
+Private `.env` stays ignored. Read only START_DATE, END_DATE, DATA_DIR and optional VERBOSITY, with argument > process > file precedence. Preserve existing values/secrets and do not echo unknown keys. Dates affect inclusive civil calendar rows only. There is no append/REBUILD setting. `human preflight` must not make provider/study writes.
 
-## Validation and completion
+## Validation
 
-For documentation-only work, inspect `git status --short` and the diff, verify references, and run
-`git diff --check` from this repository. Provision the native runtime using `docs/WORKFLOWS.md#native-validation-environments`.
-Run `python scripts/check_native_runtime.py gdal` before the full suite and
-`python scripts/check_native_runtime.py osrm` before the native road-profile fixture.
-Install `python -m pip install -e '.[test]'` and run `python -m pytest -q`.
-Set `PYTHONTZPATH=''` for the full suite to use packaged timezone rules consistently,
-as documented in the native validation workflow.
-Validate a regular wheel from outside the checkout. Keep config/ and
-src/human/resources/config synchronized; workspace paths use HUMAN_WORKSPACE or cwd.
-When adding executable behavior, add appropriate checks and document their exact commands here.
-Report tests actually run, unverified source acquisition, and any unrun integration paths.
+Use synthetic/offline fixtures and existing environments. Run supported checks, Pyflakes and `scripts/check_pipeline_docs.py` as documented in WORKFLOWS; keep config and resource copies synchronized. Validate a regular wheel outside the checkout without inherited PYTHONPATH. The full research suite needs GDAL and OSRM preflights from [native workflows](docs/legacy-workflows.md#native-validation-environments), PYTHONTZPATH='', and an isolated HUMAN_WORKSPACE with shipped configs. Its autouse fixture creates small synthetic water/land inputs; never use a live source deployment for tests. Native OSRM fixtures need a temporary loopback listener. Use a task-owned NUMBA_CACHE_DIR when necessary.
 
-## Codebase navigation
-
-Graphify is optional developer tooling, not a package dependency. Use the checkout's local
-`graphify-out/graph.json` for structural questions; use targeted `rg` when missing or stale.
-Source/tests outrank contracts, architecture docs and graph output. Start with `explain` for
-a known symbol, then direct callers/callees. Use ast-grep for syntax patterns and rg for literals.
-
-```bash
-graphify explain "build_access_kernel"
-graphify affected "build_access_kernel" --relation calls --depth 1
-graphify query "reporting opportunity" --context call --budget 1500
-# Run from this checkout to create or refresh its graph:
-graphify extract . --code-only --no-cluster
-```
-
-Use isolated `graphifyy==0.9.62`; this workspace's installation is in
-`~/.local/share/graphify-venv`. Do not generate graphs at a workspace/grouping root.
-Graphs and caches are disposable local-only files, excluded from Git; never publish them.
-Code-only extraction does not semantically index prose. Review intentional deletions before
-using `--force` to bypass shrink protection. Do not install hooks or overwrite this guidance.
-
-Keep human activity, access, physical viewability, reporting and disturbance distinct.
-`human.viewshed` is the migrated legacy observation geometry, not proven interchangeable
-with `viewshed_toolkit`. Preserve metadata schema keys and validate any scientific replacement.
-Species-specific modeling belongs in the consuming application, never an OrcaCast import here.
-
-Static matrix checks: `PYTHONPATH=src python -m pytest tests/test_static_matrix.py -q`;
-`human export-static-matrix --manifest <native-build-manifest> --output <new-parquet>`.
-The contract is documented in `docs/static-matrix.md`.
-
-Native release checks: `python -m pytest -q tests/test_release.py tests/test_static_matrix.py`.
-See `docs/release-readiness.md` for checksum auditing, immutable research snapshot publication,
-and remaining source/scientific/profile gates. Snapshot integrity is not production eligibility.
-Optional static record-count profile: `python -m pytest -q tests/test_static_profile.py`.
-Ferry UTC normalization: `python -m pytest -q tests/human/activity_and_effort/test_ferry_utc.py`.
-Retain native local service dates; never infer ambiguous DST folds or monthly daily observations.
-
-UTC schedule subset pilot: `python -m pytest -q tests/human/activity_and_effort/test_ferry_utc_schedule.py`.
-See `docs/utc-delivery-pilot.md`; retain unresolved-time records and never treat schedules as actual traffic.
-
-UTC land research method: `python -m pytest -q tests/human/activity_and_effort/test_land_utc_context.py`.
-See `docs/utc-scientific-methods.md`; regional qualification and AIS rights remain open.
-
-Static population checks: `python -m pytest tests/test_population_static.py tests/test_static_matrix.py tests/test_study.py -q`.
-Use `human get population --help` for standalone population queries. See `docs/population.md`
-for bounded preparation, strict coverage, caches, and local study exports. No live acquisition
-is needed for deterministic fixtures.
+Report tests actually run, raw-acquisition versus retained-source qualification, untested regional/application paths and preservation hashes. Do not promote unit tests or historical runs into end-to-end proof. Read and update affected canonical docs/Knowledge notes proportionally, preserving other owners' edits. Graphify is optional; use scoped rg for known paths and do not build a graph for this cleanup alone.

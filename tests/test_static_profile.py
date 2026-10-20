@@ -3,9 +3,9 @@ import h3
 import pandas as pd
 import pytest
 from jsonschema import ValidationError
-from human.release import publish_static, read_json, write_json
-from human.static_matrix import _checksum
-from human.static_profile import record_counts, verify_profile
+from human.legacy.release import publish_static, read_json, write_json
+from human.pipelines.native.summary import _checksum
+from human.legacy.static_profile import record_counts, verify_profile
 
 
 def test_record_counts_preserve_valid_zero_and_unknown():

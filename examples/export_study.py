@@ -6,13 +6,14 @@ import logging
 import yaml
 
 from human import get_population
-from human.study import export_study
+from human.legacy.study import export_study
 
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--workspace',type=Path,required=True)
     parser.add_argument('--output-dir',type=Path,required=True)
+    parser.add_argument('--metadata-dir',type=Path,help='Toolkit-managed receipts outside final data')
     parser.add_argument('--source-manifest',type=Path,required=True)
     parser.add_argument('--common-config',type=Path,default=Path('config/common.yaml'))
     parser.add_argument('--calendar-config',type=Path,default=Path('config/data/human/temporal_context/calendar.yaml'))
@@ -34,14 +35,13 @@ def main():
     dynamic=[]
     if args.dynamic_release:
         for directory,family,date,cell,resolution in [
-            ('ferry','ferry','service_date','source_h3','h3_resolution'),
-            ('land','land-opportunity','DATE','H3_INDEX','H3_RESOLUTION')]:
+            ('ferry','ferry','service_date','source_h3','h3_resolution')]:
             dynamic.append({'manifest':args.dynamic_release/'release.json',
                 'artifact':f'{directory}/regional-native-local-day.parquet',
                 'support_manifest':f'{directory}/test-manifest.json','family':family,
                 'date_column':date,'cell_column':cell,'resolution_column':resolution})
     print(export_study(population=population,output_dir=args.output_dir,
-        calendar_config=args.calendar_config,static_input=static_input,dynamic_inputs=dynamic))
+        calendar_config=args.calendar_config,static_input=static_input,dynamic_inputs=dynamic,metadata_dir=args.metadata_dir))
 
 
 if __name__=='__main__':

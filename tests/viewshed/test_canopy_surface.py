@@ -9,7 +9,7 @@ import rasterio
 from rasterio.transform import from_origin, xy
 from shapely.geometry import Point
 
-from human.viewshed.prepare.elevation.canopy import (
+from human.legacy.viewshed.prepare.elevation.canopy import (
     build_canonical_canopy_base_surface,
     build_canopy_obstacle_surface,
     build_observer_grounded_canopy_surface_from_base,

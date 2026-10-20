@@ -6,7 +6,7 @@ from types import ModuleType
 
 
 def test_static_viewability_dotted_import_resolves_to_module() -> None:
-    module = importlib.import_module("human.viewshed.finalize.final_artifacts")
+    module = importlib.import_module('human.legacy.viewshed.finalize.final_artifacts')
 
     assert isinstance(module, ModuleType)
     assert callable(module.build_static_viewability_lazy)

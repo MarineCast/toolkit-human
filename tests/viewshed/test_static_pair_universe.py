@@ -6,11 +6,11 @@ import polars as pl
 import pytest
 import yaml
 
-from human.activity_and_effort.observation_opportunity_contract import (
+from human.legacy.activity.observation_opportunity_contract import (
     validate_product_contract,
 )
-from human.viewshed.finalize import final_artifacts
-from human.viewshed.finalize.final_artifacts import (
+from human.legacy.viewshed.finalize import final_artifacts
+from human.legacy.viewshed.finalize.final_artifacts import (
     FINAL_SCHEMAS,
     _effective_physical_assumptions,
     build_observation_geometry_lazy,
@@ -19,7 +19,7 @@ from human.viewshed.finalize.final_artifacts import (
     materialize_static_viewability_outputs,
     materialize_vegetation_weights_from_mapping,
 )
-from human.viewshed.weights.vegetation.summarize import (
+from human.legacy.viewshed.weights.vegetation.summarize import (
     build_water_neutral_vegetation_weights,
 )
 

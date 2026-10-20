@@ -5,7 +5,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
 
-from human.viewshed.weights.terrain.gdal import (
+from human.legacy.viewshed.weights.terrain.gdal import (
     _terrain_weight_partition_for_storage,
 )
 

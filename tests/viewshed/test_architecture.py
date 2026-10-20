@@ -4,9 +4,9 @@ import ast
 import importlib.util
 from pathlib import Path
 
-PACKAGE_NAME = "human.viewshed"
+PACKAGE_NAME = 'human.legacy.viewshed'
 PACKAGE_ROOT = (
-    Path(__file__).resolve().parents[2] / "src" / "human" / "viewshed"
+    Path(__file__).resolve().parents[2] / "src" / "human" / "legacy" / "viewshed"
 )
 
 
@@ -34,9 +34,10 @@ def _internal_dependencies(module: str, path: Path, known: set[str]) -> set[str]
                 base = importlib.util.resolve_name(prefix, package)
             else:
                 base = node.module or ""
-            candidates = (
-                [f"{base}.{alias.name}" for alias in node.names] if not node.module else [base]
-            )
+            # Explicit package imports resolve known child modules just as
+            # relative ``from . import child`` imports do.
+            candidates = [f"{base}.{alias.name}" if f"{base}.{alias.name}" in known else base
+                          for alias in node.names]
         else:
             continue
         for candidate in candidates:
@@ -71,6 +72,7 @@ def test_viewshed_uses_explicit_imports_and_layering() -> None:
 
 def test_viewshed_internal_import_graph_is_acyclic() -> None:
     modules = _python_modules()
+    assert len(modules) > 50, "Architecture checks must inspect the real relocated source tree"
     graph = {
         module: _internal_dependencies(module, path, set(modules))
         for module, path in modules.items()

@@ -1,11 +1,5 @@
-"""Human population, activity and access products."""
+"""Human population, civil calendar and native infrastructure products."""
+from .main import HumanData, get_human_data
+from .pipelines.population.static import get_population
 
-
-def get_population(**kwargs):
-    """Estimate static residents in H3 cells and geodesic neighborhoods.
-
-    See :func:`human.demography_and_presence.population.static.get_population` for inputs and result documentation.
-    Imports population dependencies only when called; no AIS/viewshed initialization.
-    """
-    from .demography_and_presence.population.static import get_population as implementation
-    return implementation(**kwargs)
+__all__ = ["get_human_data", "HumanData", "get_population"]

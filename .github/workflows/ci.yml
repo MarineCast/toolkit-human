@@ -1,11 +1,11 @@
-name: Offline package checks
+name: Human pipeline checks
 on: [push, pull_request]
 permissions:
   contents: read
 env:
   PYTHONTZPATH: ""
 jobs:
-  test:
+  pipeline:
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
@@ -16,73 +16,27 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - name: Install native GDAL
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gdal-bin libgdal-dev
       - run: python -m pip install -e '.[test]'
-      - name: Install matching GDAL Python bindings
-        run: |
-          python -m pip install numpy wheel setuptools
-          python -m pip install --no-build-isolation "GDAL[numpy]==$(gdal-config --version).*"
-          python scripts/check_native_runtime.py gdal
       - run: python -m pip check
-      - run: python -m pytest -q
-      - run: human --help
-      - run: human families
+      - name: Supported producer and package tests
+        run: python -m pytest -q -m "not legacy" tests/test_census_acquisition.py tests/test_extracted_census.py tests/test_run_settings.py tests/test_pipeline.py tests/test_static_delivery.py tests/test_native_features.py tests/test_collected_population.py tests/test_static_water_support.py tests/test_calendar_lookup.py tests/test_population_static.py tests/test_population_collection.py tests/test_statcan_gaf.py tests/test_static_matrix.py tests/test_study.py tests/test_packaging.py tests/human/test_feature_catalog.py tests/human/test_structure.py
+      - run: python -m pyflakes src/human/main.py src/human/pipelines src/human/utils/downloads.py src/human/utils/study.py src/human/cli.py tests/test_census_acquisition.py tests/test_extracted_census.py tests/test_run_settings.py
+      - run: python scripts/check_pipeline_docs.py
+      - run: human get-human-data --help
       - run: python -m pip wheel . --no-deps --wheel-dir "$RUNNER_TEMP/dist"
-      - name: Installed wheel smoke test
+      - name: Installed wheel pipeline test
         run: |
           wheel_env="$RUNNER_TEMP/wheel-env"
           python -m venv "$wheel_env"
           "$wheel_env/bin/python" -m pip install "$RUNNER_TEMP"/dist/*.whl pytest
           "$wheel_env/bin/python" -m pip check
           outside="$RUNNER_TEMP/wheel-smoke"
-          workspace="$RUNNER_TEMP/human-workspace"
-          mkdir -p "$outside/native" "$outside/tests/human/activity_and_effort" "$outside/tests/fixtures"
+          mkdir -p "$outside/tests"
           cp scripts/check_installed_wheel.py "$outside/"
-          cp tests/human/activity_and_effort/test_land_utc_context.py "$outside/tests/human/activity_and_effort/"
-          cp tests/fixtures/usno_solar_utc.json "$outside/tests/fixtures/"
-          cp tests/viewshed/test_viewability_import_contract.py "$outside/"
-          cp tests/test_release.py tests/test_static_matrix.py tests/test_static_profile.py "$outside/"
-          cp tests/test_population_static.py tests/test_study.py "$outside/"
-          cp tests/human/activity_and_effort/test_ferry_utc_schedule.py "$outside/"
-          cp tests/viewshed/test_gdal_inprocess_viewshed.py "$outside/native/"
-          cp tests/human/activity_and_effort/test_land_opportunity_smoke.py "$outside/native/"
-          cp tests/conftest.py "$outside/native/"
-          cp scripts/check_native_runtime.py "$outside/"
+          cp tests/test_census_acquisition.py tests/test_extracted_census.py tests/test_run_settings.py tests/test_pipeline.py tests/test_static_delivery.py tests/test_native_features.py tests/test_collected_population.py tests/test_static_water_support.py tests/test_calendar_lookup.py tests/test_population_static.py tests/test_population_collection.py tests/test_statcan_gaf.py "$outside/tests/"
+          touch "$outside/tests/__init__.py"
           cd "$outside"
           unset PYTHONPATH HUMAN_WORKSPACE
           "$wheel_env/bin/python" check_installed_wheel.py
-          "$wheel_env/bin/python" -m pytest -q test_viewability_import_contract.py test_release.py test_static_matrix.py test_static_profile.py test_population_static.py test_study.py test_ferry_utc_schedule.py tests/human/activity_and_effort/test_land_utc_context.py
-          "$wheel_env/bin/human" --help
-          "$wheel_env/bin/human" families
-          "$wheel_env/bin/human" --workspace "$workspace" init
-          test -f "$workspace/config/common.yaml"
-          export HUMAN_WORKSPACE="$workspace"
-          "$wheel_env/bin/python" -m pip install numpy wheel setuptools
-          "$wheel_env/bin/python" -m pip install --no-build-isolation "GDAL[numpy]==$(gdal-config --version).*"
-          "$wheel_env/bin/python" check_native_runtime.py gdal
-          "$wheel_env/bin/python" -m pytest -q native
+          "$wheel_env/bin/python" -m pytest -q --import-mode=importlib tests
       - run: git diff --check
-  native-osrm:
-    runs-on: macos-15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.14'
-      - name: Build the required OSRM 26.8.0 runtime
-        env:
-          HOMEBREW_NO_AUTO_UPDATE: '1'
-        run: |
-          brew tap-new marinecast/ci
-          formula="$(brew --repository marinecast/ci)/Formula/osrm-backend.rb"
-          curl --fail --location --retry 3 \
-            https://raw.githubusercontent.com/Homebrew/homebrew-core/a7aabdcb9b02b53a07fb97dbfff592a89c9a954c/Formula/o/osrm-backend.rb \
-            --output "$formula"
-          brew install --build-from-source marinecast/ci/osrm-backend
-      - run: python -m pip install -e '.[test]'
-      - run: python scripts/check_native_runtime.py osrm
-      - name: Road-only native routing and missingness contracts
-        run: python -m pytest -q tests/human/accessibility/test_road_only_routing.py

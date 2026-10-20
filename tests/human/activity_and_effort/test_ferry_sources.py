@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from human.core.config.paths import project_root
-from human.activity_and_effort.ferry.sources import (
+from human.legacy.activity.ferry.sources import (
     DEFAULT_BC_CACHE_DIR,
     DEFAULT_BC_OUTPUT,
     DEFAULT_BC_PREVIEW_DIR,

@@ -10,8 +10,8 @@ import pytest
 from shapely.geometry import Point, box
 from shapely.ops import transform as shapely_transform
 
-from human.viewshed.config.distance import DistanceWeightConfig
-from human.viewshed.weights.terrain import gdal
+from human.legacy.viewshed.config.distance import DistanceWeightConfig
+from human.legacy.viewshed.weights.terrain import gdal
 
 
 def _app(*, curvature_coefficient: float) -> SimpleNamespace:

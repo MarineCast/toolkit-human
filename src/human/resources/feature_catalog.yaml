@@ -1,0 +1,728 @@
+schema_version: 2
+generated_by: scripts/update_human_feature_catalog.py
+pipeline: human.get_human_data
+default_model_policy: {}
+collections:
+  dynamic_calendar:
+    artifact: dynamic-calendar.parquet
+    schema: human.study.calendar_lookup.v1
+    primary_key:
+    - date
+    - jurisdiction
+    model_policy: evidence_only
+    features:
+    - name: date
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: jurisdiction
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: country
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: subdivision
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: timezone
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: local_day_start_utc
+      arrow_type: timestamp[us, tz=UTC]
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: local_day_end_utc
+      arrow_type: timestamp[us, tz=UTC]
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: day_of_week
+      arrow_type: int64
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: is_weekend
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: is_actual_holiday
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: is_observed_holiday
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: actual_holiday_names
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: observed_holiday_names
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: is_holiday
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: calendar_basis
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: rules_version
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: timezone_rules_version
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: as_of
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+  static_native:
+    artifact: static-native.parquet
+    schema: human.native_features.v1
+    primary_key:
+    - feature_id
+    model_policy: evidence_only
+    features:
+    - name: feature_id
+      arrow_type: string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: record_id
+      arrow_type: string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: group
+      arrow_type: string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: role
+      arrow_type: string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: name
+      arrow_type: string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: category
+      arrow_type: string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: location_method
+      arrow_type: string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: h3_index
+      arrow_type: string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: label_point
+      arrow_type: 'list<element: double>'
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: geometry
+      arrow_type: binary
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: geometry_json
+      arrow_type: string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: properties_json
+      arrow_type: string
+      role: support
+      model_eligible: false
+      selectable: false
+    groups:
+      launches:
+        name: Boat Launch Locations
+        family: Boat Launches
+        geometry: Point
+      shore_access:
+        name: Shore Access Sites
+        family: Shore Access
+        geometry: Point
+      places:
+        name: Named Destinations
+        family: Places
+        geometry: Point
+      access_lines:
+        name: Shoreline Access Classifications
+        family: Shore Access
+        geometry: LineString / MultiLineString
+  static:
+    artifact: static.parquet
+    schema: human.study.static.v1
+    primary_key:
+    - h3_index
+    model_policy: evidence_only
+    features:
+    - name: h3_index
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: h3_resolution
+      arrow_type: int64
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: cell_area_km2
+      arrow_type: double
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_count__available_source_subtotal
+      arrow_type: double
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_count__coverage_status
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_count__missing_sources
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_count__unverified_geographic_support
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_25km__available_source_subtotal
+      arrow_type: double
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_25km__coverage_status
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_25km__missing_sources
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_25km__unverified_geographic_support
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_50km__available_source_subtotal
+      arrow_type: double
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_50km__coverage_status
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_50km__missing_sources
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_50km__unverified_geographic_support
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_100km__available_source_subtotal
+      arrow_type: double
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_100km__coverage_status
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_100km__missing_sources
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_100km__unverified_geographic_support
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_count_collected
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Population Count
+      family: Population
+      limitation: Unavailable source/geographic contributions are assumed zero for
+        this estimate. Source provenance and zero-imputation flags remain available;
+        raw unknown census counts are not overwritten.
+      units: persons
+    - name: population_count_collected__coverage_status
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_count_collected__zero_imputed
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_count_collected__method
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_25km_collected
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Population Within 25km
+      family: Population
+      limitation: Unavailable source/geographic contributions are assumed zero for
+        this estimate. Source provenance and zero-imputation flags remain available;
+        raw unknown census counts are not overwritten.
+      units: persons
+    - name: population_within_25km_collected__zero_imputed
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_25km_collected__method
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_50km_collected
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Population Within 50km
+      family: Population
+      limitation: Unavailable source/geographic contributions are assumed zero for
+        this estimate. Source provenance and zero-imputation flags remain available;
+        raw unknown census counts are not overwritten.
+      units: persons
+    - name: population_within_50km_collected__zero_imputed
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_50km_collected__method
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_100km_collected
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Population Within 100km
+      family: Population
+      limitation: Unavailable source/geographic contributions are assumed zero for
+        this estimate. Source provenance and zero-imputation flags remain available;
+        raw unknown census counts are not overwritten.
+      units: persons
+    - name: population_within_100km_collected__zero_imputed
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_within_100km_collected__method
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_density_per_km2_collected
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Population Density (people/km²)
+      family: Population
+      limitation: Unavailable source/geographic contributions are assumed zero for
+        this estimate. Source provenance and zero-imputation flags remain available;
+        raw unknown census counts are not overwritten.
+      units: persons/km2
+    - name: population_density_per_km2_collected__zero_imputed
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: population_density_per_km2_collected__method
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: boat_launch_access__BOAT_LAUNCH_COUNT
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Boat Launch Source Records
+      family: Boat Launches
+      units: records
+      qualifiers:
+      - boat_launch_access__SOURCE_DATASET_COUNT
+      - boat_launch_access__SOURCE_COVERAGE_COMPLETE
+      - boat_launch_access__MEASUREMENT_STATUS
+      limitation: Retained source records, not a complete regional inventory or guaranteed
+        unique physical sites. Mapped facilities and destinations do not establish
+        current public access, operation or use. Missing attributes remain unknown.
+        Representative locations are not surveyed entrances. No visitation, observer
+        effort or historical activity is inferred. H3 summaries cover only the shared
+        reporting grid. Missing cells are unknown, not zero facilities.
+    - name: boat_launch_access__VERIFIED_PUBLIC_BOAT_LAUNCH_COUNT
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Source-Labeled Public Launch Records
+      family: Boat Launches
+      units: records
+      qualifiers:
+      - boat_launch_access__SOURCE_DATASET_COUNT
+      - boat_launch_access__SOURCE_COVERAGE_COMPLETE
+      - boat_launch_access__MEASUREMENT_STATUS
+      limitation: Retained source records, not a complete regional inventory or guaranteed
+        unique physical sites. Mapped facilities and destinations do not establish
+        current public access, operation or use. Missing attributes remain unknown.
+        Representative locations are not surveyed entrances. No visitation, observer
+        effort or historical activity is inferred. H3 summaries cover only the shared
+        reporting grid. Missing cells are unknown, not zero facilities.
+    - name: boat_launch_access__BOAT_LAUNCHES_WITH_KNOWN_RAMP_CAPABILITY
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Launch Records with Known Ramp Capability
+      family: Boat Launches
+      units: records
+      qualifiers:
+      - boat_launch_access__SOURCE_DATASET_COUNT
+      - boat_launch_access__SOURCE_COVERAGE_COMPLETE
+      - boat_launch_access__MEASUREMENT_STATUS
+      limitation: Retained source records, not a complete regional inventory or guaranteed
+        unique physical sites. Mapped facilities and destinations do not establish
+        current public access, operation or use. Missing attributes remain unknown.
+        Representative locations are not surveyed entrances. No visitation, observer
+        effort or historical activity is inferred. H3 summaries cover only the shared
+        reporting grid. Missing cells are unknown, not zero facilities.
+    - name: boat_launch_access__BOAT_LAUNCHES_WITH_KNOWN_SEASONAL_OPERATION
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Launch Records with Known Seasonal Operation
+      family: Boat Launches
+      units: records
+      qualifiers:
+      - boat_launch_access__SOURCE_DATASET_COUNT
+      - boat_launch_access__SOURCE_COVERAGE_COMPLETE
+      - boat_launch_access__MEASUREMENT_STATUS
+      limitation: Retained source records, not a complete regional inventory or guaranteed
+        unique physical sites. Mapped facilities and destinations do not establish
+        current public access, operation or use. Missing attributes remain unknown.
+        Representative locations are not surveyed entrances. No visitation, observer
+        effort or historical activity is inferred. H3 summaries cover only the shared
+        reporting grid. Missing cells are unknown, not zero facilities.
+    - name: boat_launch_access__WA_SOURCE_RECORD_COUNT
+      arrow_type: double
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: boat_launch_access__BC_SOURCE_RECORD_COUNT
+      arrow_type: double
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: boat_launch_access__SOURCE_DATASET_COUNT
+      arrow_type: double
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: boat_launch_access__SOURCE_COVERAGE_COMPLETE
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: boat_launch_access__MEASUREMENT_STATUS
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: public_shore_access__JURISDICTION
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: public_shore_access__TOTAL_MARINE_SHORELINE_M
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Mapped Marine Shoreline Length
+      family: Shore Access
+      units: m
+      qualifiers:
+      - public_shore_access__ACCESSIBLE_WATERFRONT_RAW_RATIO_QC
+      - public_shore_access__PUBLIC_ACCESS_EVIDENCE_STATE
+      - public_shore_access__SOURCE_COVERAGE_COMPLETE
+      - public_shore_access__FRACTION_DENOMINATOR_MISMATCH_QC
+      - public_shore_access__MEASUREMENT_STATUS
+      limitation: Retained source records, not a complete regional inventory or guaranteed
+        unique physical sites. Mapped facilities and destinations do not establish
+        current public access, operation or use. Missing attributes remain unknown.
+        Representative locations are not surveyed entrances. No visitation, observer
+        effort or historical activity is inferred. H3 summaries cover only the shared
+        reporting grid. Missing cells are unknown, not zero facilities.
+    - name: public_shore_access__PUBLIC_ACCESSIBLE_SHORELINE_M
+      arrow_type: double
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: public_shore_access__ACCESSIBLE_WATERFRONT_FRACTION
+      arrow_type: double
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: public_shore_access__ACCESSIBLE_WATERFRONT_RAW_RATIO_QC
+      arrow_type: double
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: public_shore_access__PUBLIC_ACCESS_STATE
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: public_shore_access__PUBLIC_ACCESS_EVIDENCE_STATE
+      arrow_type: large_string
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Shore Access Evidence
+      family: Shore Access
+      units: category
+      qualifiers:
+      - public_shore_access__ACCESSIBLE_WATERFRONT_RAW_RATIO_QC
+      - public_shore_access__PUBLIC_ACCESS_EVIDENCE_STATE
+      - public_shore_access__SOURCE_COVERAGE_COMPLETE
+      - public_shore_access__FRACTION_DENOMINATOR_MISMATCH_QC
+      - public_shore_access__MEASUREMENT_STATUS
+      limitation: Retained source records, not a complete regional inventory or guaranteed
+        unique physical sites. Mapped facilities and destinations do not establish
+        current public access, operation or use. Missing attributes remain unknown.
+        Representative locations are not surveyed entrances. No visitation, observer
+        effort or historical activity is inferred. H3 summaries cover only the shared
+        reporting grid. Missing cells are unknown, not zero facilities.
+    - name: public_shore_access__PUBLIC_ACCESS_SITE_COUNT
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Shore Access Source Records
+      family: Shore Access
+      units: records
+      qualifiers:
+      - public_shore_access__ACCESSIBLE_WATERFRONT_RAW_RATIO_QC
+      - public_shore_access__PUBLIC_ACCESS_EVIDENCE_STATE
+      - public_shore_access__SOURCE_COVERAGE_COMPLETE
+      - public_shore_access__FRACTION_DENOMINATOR_MISMATCH_QC
+      - public_shore_access__MEASUREMENT_STATUS
+      limitation: Retained source records, not a complete regional inventory or guaranteed
+        unique physical sites. Mapped facilities and destinations do not establish
+        current public access, operation or use. Missing attributes remain unknown.
+        Representative locations are not surveyed entrances. No visitation, observer
+        effort or historical activity is inferred. H3 summaries cover only the shared
+        reporting grid. Missing cells are unknown, not zero facilities.
+    - name: public_shore_access__VERIFIED_PUBLIC_ACCESS_SITE_COUNT
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Authoritative Public Access Records
+      family: Shore Access
+      units: records
+      qualifiers:
+      - public_shore_access__ACCESSIBLE_WATERFRONT_RAW_RATIO_QC
+      - public_shore_access__PUBLIC_ACCESS_EVIDENCE_STATE
+      - public_shore_access__SOURCE_COVERAGE_COMPLETE
+      - public_shore_access__FRACTION_DENOMINATOR_MISMATCH_QC
+      - public_shore_access__MEASUREMENT_STATUS
+      limitation: Retained source records, not a complete regional inventory or guaranteed
+        unique physical sites. Mapped facilities and destinations do not establish
+        current public access, operation or use. Missing attributes remain unknown.
+        Representative locations are not surveyed entrances. No visitation, observer
+        effort or historical activity is inferred. H3 summaries cover only the shared
+        reporting grid. Missing cells are unknown, not zero facilities.
+    - name: public_shore_access__OSM_EXPLICIT_PUBLIC_ACCESS_SITE_COUNT
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: OSM Explicit Public Access Records
+      family: Shore Access
+      units: records
+      qualifiers:
+      - public_shore_access__ACCESSIBLE_WATERFRONT_RAW_RATIO_QC
+      - public_shore_access__PUBLIC_ACCESS_EVIDENCE_STATE
+      - public_shore_access__SOURCE_COVERAGE_COMPLETE
+      - public_shore_access__FRACTION_DENOMINATOR_MISMATCH_QC
+      - public_shore_access__MEASUREMENT_STATUS
+      limitation: Retained source records, not a complete regional inventory or guaranteed
+        unique physical sites. Mapped facilities and destinations do not establish
+        current public access, operation or use. Missing attributes remain unknown.
+        Representative locations are not surveyed entrances. No visitation, observer
+        effort or historical activity is inferred. H3 summaries cover only the shared
+        reporting grid. Missing cells are unknown, not zero facilities.
+    - name: public_shore_access__OSM_SHORE_CANDIDATE_COUNT
+      arrow_type: double
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: public_shore_access__MAPPED_ACCESS_UNKNOWN_SITE_COUNT
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Access-Unknown Site Records
+      family: Shore Access
+      units: records
+      qualifiers:
+      - public_shore_access__ACCESSIBLE_WATERFRONT_RAW_RATIO_QC
+      - public_shore_access__PUBLIC_ACCESS_EVIDENCE_STATE
+      - public_shore_access__SOURCE_COVERAGE_COMPLETE
+      - public_shore_access__FRACTION_DENOMINATOR_MISMATCH_QC
+      - public_shore_access__MEASUREMENT_STATUS
+      limitation: Retained source records, not a complete regional inventory or guaranteed
+        unique physical sites. Mapped facilities and destinations do not establish
+        current public access, operation or use. Missing attributes remain unknown.
+        Representative locations are not surveyed entrances. No visitation, observer
+        effort or historical activity is inferred. H3 summaries cover only the shared
+        reporting grid. Missing cells are unknown, not zero facilities.
+    - name: public_shore_access__RESTRICTED_ACCESS_SITE_COUNT
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Restricted Access Site Records
+      family: Shore Access
+      units: records
+      qualifiers:
+      - public_shore_access__ACCESSIBLE_WATERFRONT_RAW_RATIO_QC
+      - public_shore_access__PUBLIC_ACCESS_EVIDENCE_STATE
+      - public_shore_access__SOURCE_COVERAGE_COMPLETE
+      - public_shore_access__FRACTION_DENOMINATOR_MISMATCH_QC
+      - public_shore_access__MEASUREMENT_STATUS
+      limitation: Retained source records, not a complete regional inventory or guaranteed
+        unique physical sites. Mapped facilities and destinations do not establish
+        current public access, operation or use. Missing attributes remain unknown.
+        Representative locations are not surveyed entrances. No visitation, observer
+        effort or historical activity is inferred. H3 summaries cover only the shared
+        reporting grid. Missing cells are unknown, not zero facilities.
+    - name: public_shore_access__CONDITIONAL_ACCESS_SITE_COUNT
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Conditional Access Site Records
+      family: Shore Access
+      units: records
+      qualifiers:
+      - public_shore_access__ACCESSIBLE_WATERFRONT_RAW_RATIO_QC
+      - public_shore_access__PUBLIC_ACCESS_EVIDENCE_STATE
+      - public_shore_access__SOURCE_COVERAGE_COMPLETE
+      - public_shore_access__FRACTION_DENOMINATOR_MISMATCH_QC
+      - public_shore_access__MEASUREMENT_STATUS
+      limitation: Retained source records, not a complete regional inventory or guaranteed
+        unique physical sites. Mapped facilities and destinations do not establish
+        current public access, operation or use. Missing attributes remain unknown.
+        Representative locations are not surveyed entrances. No visitation, observer
+        effort or historical activity is inferred. H3 summaries cover only the shared
+        reporting grid. Missing cells are unknown, not zero facilities.
+    - name: public_shore_access__SOURCE_COVERAGE_COMPLETE
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: public_shore_access__FRACTION_DENOMINATOR_MISMATCH_QC
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: public_shore_access__MEASUREMENT_STATUS
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: places__CATALOG_RECORD_COUNT
+      arrow_type: double
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Named Destination Records
+      family: Places
+      units: records
+      qualifiers:
+      - places__MEASUREMENT_STATUS
+      - places__SOURCE_COVERAGE_COMPLETE
+      limitation: Retained source records, not a complete regional inventory or guaranteed
+        unique physical sites. Mapped facilities and destinations do not establish
+        current public access, operation or use. Missing attributes remain unknown.
+        Representative locations are not surveyed entrances. No visitation, observer
+        effort or historical activity is inferred. H3 summaries cover only the shared
+        reporting grid. Missing cells are unknown, not zero facilities.
+    - name: places__MEASUREMENT_STATUS
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: places__SOURCE_COVERAGE_COMPLETE
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false

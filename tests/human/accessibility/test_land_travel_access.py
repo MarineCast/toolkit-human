@@ -5,19 +5,19 @@ import math
 import pandas as pd
 import polars as pl
 
-from human.accessibility.land_transport_access.build import (
+from human.legacy.accessibility.land_transport_access.build import (
     build_components as build_transport_components,
 )
-from human.accessibility.land_transport_access.config import (
+from human.legacy.accessibility.land_transport_access.config import (
     load_land_transport_config,
 )
-from human.accessibility.population_travel_time.build import (
+from human.legacy.accessibility.population_travel_time.build import (
     build_components as build_population_travel_components,
 )
-from human.accessibility.population_travel_time.config import (
+from human.legacy.accessibility.population_travel_time.config import (
     load_population_travel_config,
 )
-from human.activity_and_effort.land_reporting_opportunity.build import (
+from human.legacy.activity.land_reporting_opportunity.build import (
     build_source_components,
     build_target_components,
 )

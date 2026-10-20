@@ -7,23 +7,23 @@ import pandas as pd
 import polars as pl
 from shapely.geometry import LineString, Point
 
-from human.activity_and_effort.land_reporting_opportunity.build import (
+from human.legacy.activity.land_reporting_opportunity.build import (
     build_target_components,
 )
-from human.activity_and_effort.land_reporting_opportunity.dynamic import (
+from human.legacy.activity.land_reporting_opportunity.dynamic import (
     STREAM_COMPONENTS,
     _add_daily_v2_columns,
     aggregate_weekly,
 )
-from human.activity_and_effort.land_reporting_opportunity.sites import (
+from human.legacy.activity.land_reporting_opportunity.sites import (
     build_observation_sites,
     sample_observation_sites,
 )
-from human.activity_and_effort.land_reporting_opportunity.support import (
+from human.legacy.activity.land_reporting_opportunity.support import (
     aggregate_supported_children,
     canonical_target_support,
 )
-from human.activity_and_effort.observation_opportunity_contract import (
+from human.legacy.activity.observation_opportunity_contract import (
     lineage_values,
 )
 
@@ -173,13 +173,13 @@ def test_seven_partial_days_remain_partial_for_both_names():
 def _conditioned_result(support, kernel, *, certify=True, missing_weather=(), activities=None):
     from scipy import sparse
 
-    from human.activity_and_effort.land_reporting_opportunity.conditioned_basis import (
+    from human.legacy.activity.land_reporting_opportunity.conditioned_basis import (
         condition_basis,
     )
-    from human.activity_and_effort.land_reporting_opportunity.config import (
+    from human.legacy.activity.land_reporting_opportunity.config import (
         load_land_reporting_config,
     )
-    from human.activity_and_effort.land_reporting_opportunity.dynamic import (
+    from human.legacy.activity.land_reporting_opportunity.dynamic import (
         DynamicBasis,
         compute_dynamic_chunk,
     )
@@ -243,7 +243,7 @@ def _conditioned_result(support, kernel, *, certify=True, missing_weather=(), ac
     for region in missing_weather:
         basis.weather_daily.pop(region, None)
     if certify:
-        from human.activity_and_effort.land_reporting_opportunity.access_kernel import (
+        from human.legacy.activity.land_reporting_opportunity.access_kernel import (
             kernel_digest,
             support_digest,
         )
@@ -270,7 +270,7 @@ def _conditioned_result(support, kernel, *, certify=True, missing_weather=(), ac
 
 
 def _kernel(children, values):
-    from human.activity_and_effort.land_reporting_opportunity.access_kernel import (
+    from human.legacy.activity.land_reporting_opportunity.access_kernel import (
         ACCESS_KERNEL_VERSION,
     )
 

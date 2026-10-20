@@ -5,8 +5,8 @@ import h3
 import pandas as pd
 import pytest
 
-from human.release import audit, publish_static, read_json, verify_static
-from human.static_matrix import _checksum
+from human.legacy.release import audit, publish_static, read_json, verify_static
+from human.pipelines.native.summary import _checksum
 
 
 @pytest.fixture
@@ -50,7 +50,7 @@ def test_audit_missing_and_checksum_mismatch(native):
 
 
 def test_failed_publish_leaves_no_visible_release(native, tmp_path, monkeypatch):
-    import human.release as module
+    import human.legacy.release as module
     manifest, _ = native
     output = tmp_path / 'release'
     def fail(*args, **kwargs):

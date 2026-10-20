@@ -7,11 +7,11 @@ import polars as pl
 import pytest
 import yaml
 
-from human.activity_and_effort.observer_effort.build import (
+from human.legacy.activity.observer_effort.build import (
     _build_dynamic,
     build_parent_kernel,
 )
-from human.activity_and_effort.observer_effort.config import (
+from human.legacy.activity.observer_effort.config import (
     load_observer_effort_config,
 )
 

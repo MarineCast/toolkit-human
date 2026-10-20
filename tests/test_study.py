@@ -6,13 +6,14 @@ from importlib.resources import files
 import geopandas as gpd
 import h3
 import pandas as pd
+import pytest
 import pyarrow.parquet as pq
 from shapely.geometry import box
 import yaml
 
 from human import get_population
-from human.demography_and_presence.population.static import PopulationSources
-from human.study import export_study
+from human.pipelines.population.static import PopulationSources
+from human.legacy.study import export_study
 
 
 def test_study_export(tmp_path):
@@ -37,13 +38,33 @@ def test_study_export(tmp_path):
     output=tmp_path/'export'
     catalog=export_study(population=population,output_dir=output,calendar_config=cfg,dynamic_inputs=[{
         'manifest':manifest,'artifact':native.name,'support_manifest':support.name,'family':'ferry',
-        'date_column':'service_date','cell_column':'source_h3','resolution_column':'h3_resolution'}])
+        'date_column':'service_date','cell_column':'source_h3','resolution_column':'h3_resolution'}],metadata_dir=tmp_path/'receipts')
     metadata=json.loads(catalog.read_text())
     assert len(metadata['products'])==3
-    calendar=pd.read_parquet(output/'calendar-temporal.parquet')
+    assert {p.name for p in output.iterdir()}=={'static.parquet','dynamic-calendar.parquet','dynamic-ferry-r7.parquet'}
+    calendar=pd.read_parquet(output/'dynamic-calendar.parquet')
     assert len(calendar)==2 and not any('h3' in c for c in calendar)
-    dynamic=pd.read_parquet(output/'ferry-r7-dynamic.parquet')
+    dynamic=pd.read_parquet(output/'dynamic-ferry-r7.parquet')
     assert dynamic.value.isna().all()
     assert (dynamic.native_interval_end_utc-dynamic.native_interval_start_utc).dt.total_seconds().iloc[0]==23*3600
-    embedded=json.loads(pq.read_schema(output/'ferry-r7-dynamic.parquet').metadata[b'human_study'])
+    embedded=json.loads(pq.read_schema(output/'dynamic-ferry-r7.parquet').metadata[b'human_study'])
     assert embedded['native_support']['native_calendar_timezone']=='America/Los_Angeles'
+
+
+@pytest.mark.parametrize('family', ['land-opportunity', 'land-reporting-opportunity',
+                                   'water-observation-opportunity', 'observer-effort'])
+def test_study_rejects_modeling_composites_before_writing(tmp_path, family):
+    output = tmp_path / 'human-study'
+    with pytest.raises(ValueError, match='belong to modeling'):
+        export_study(population=None, output_dir=output,
+                     calendar_config=tmp_path / 'unused-calendar.yaml',
+                     dynamic_inputs=[{'family': family}])
+    assert not output.exists()
+
+
+
+def test_study_rejects_ais_owned_by_dedicated_toolkit(tmp_path):
+    with pytest.raises(ValueError, match='AIS belongs to toolkit-ais'):
+        export_study(population=None, output_dir=tmp_path/'study',
+                     calendar_config=tmp_path/'unused.yaml', dynamic_inputs=[{'family':'ais'}])
+    assert not (tmp_path/'study').exists()

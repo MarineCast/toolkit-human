@@ -5,16 +5,16 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from human.activity_and_effort.land_reporting_opportunity.config import (
+from human.legacy.activity.land_reporting_opportunity.config import (
     load_land_reporting_config,
 )
-from human.activity_and_effort.land_reporting_opportunity.generations import (
+from human.legacy.activity.land_reporting_opportunity.generations import (
     OUTPUT_FIELDS,
     new_generation,
     publish,
     switch_generation,
 )
-from human.activity_and_effort.land_reporting_opportunity.modeling import (
+from human.legacy.activity.land_reporting_opportunity.modeling import (
     resolve_weekly,
     shadow_predictions,
 )

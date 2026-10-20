@@ -9,17 +9,17 @@ import rasterio
 from rasterio.transform import from_origin
 from shapely.geometry import Point, box
 
-from human.viewshed.prepare.elevation.acquire import (
+from human.legacy.viewshed.prepare.elevation.acquire import (
     write_dem_source_metadata,
 )
-from human.viewshed.prepare.elevation.terrain import (
+from human.legacy.viewshed.prepare.elevation.terrain import (
     apply_los_dem_nodata_policy,
     clip_raster_to_bounds,
     flatten_water_pixels_to_sea_level,
     rasterize_water_to_match_dem,
     repair_observer_endpoint_nodata,
 )
-from human.viewshed.weights.terrain.los import (
+from human.legacy.viewshed.weights.terrain.los import (
     _gdal_viewshed_fingerprint,
 )
 

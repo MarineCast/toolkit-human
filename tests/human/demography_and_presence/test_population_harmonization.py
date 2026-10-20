@@ -3,10 +3,10 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from human.demography_and_presence.population.build import (
+from human.legacy.population.build import (
     harmonize_population_frames,
 )
-from human.demography_and_presence.population.context import (
+from human.legacy.population.context import (
     CONTEXT_SCOPE,
     build_population_context,
 )

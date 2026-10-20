@@ -1,0 +1,49 @@
+{
+  "canada": [
+    {
+      "geography": "data/raw/statcan/2021/lda_000b21a_e.zip",
+      "jurisdiction": "CA-BC",
+      "population": "data/raw/statcan/2021/98-401-X2021006_BC_CB_eng_CSV.zip",
+      "population_column": "Population, 2021",
+      "population_id": "DGUID",
+      "province_code": "59",
+      "geography_url": "https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lda_000b21a_e.zip",
+      "geography_sha256": "cb8e00a1165d8f309a62884860112944ea5acc177bb926d966b4a51fbd0c9ecb",
+      "population_url": "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/download-telecharger/comp/GetFile.cfm?Lang=E&FILETYPE=CSV&GEONO=006_BC_CB",
+      "population_sha256": "067f53dfefece572dc9c83d24d90226cc7b7e217b90c4f724a21ffd90457f36f"
+    }
+  ],
+  "cross_border_overlap": "retain_distinct_national_counts",
+  "jurisdiction_inventories": [
+    {
+      "id_column": "STATEFP",
+      "path": "data/sources/census-us2020-ca2021/us/tl_2024_us_state.zip",
+      "prefix": "US-",
+      "url": "https://www2.census.gov/geo/tiger/TIGER2024/STATE/tl_2024_us_state.zip",
+      "sha256": "ad00cbe66c7177091b668cee202e93d4a1ddcee271c28d1c9f9874af59c04b92"
+    }
+  ],
+  "max_download_bytes": 5000000000,
+  "max_downloads": 5,
+  "max_sources": 1000000,
+  "us": [
+    {
+      "geography": "data/sources/census-us2020-ca2021/us/tl_2020_53_tabblock20.zip",
+      "jurisdiction": "US-WA",
+      "population_column": "POP20",
+      "state_fips": "53",
+      "geography_url": "https://www2.census.gov/geo/tiger/TIGER2020/TABBLOCK20/tl_2020_53_tabblock20.zip",
+      "geography_sha256": "0ccdbb2b58d4cdc083097411d791ba7a61e599f0937073187617f76740c61689"
+    },
+    {
+      "geography": "data/sources/census-us2020-ca2021/us/tl_2020_41_tabblock20.zip",
+      "jurisdiction": "US-OR",
+      "population_column": "POP20",
+      "state_fips": "41",
+      "geography_url": "https://www2.census.gov/geo/tiger/TIGER2020/TABBLOCK20/tl_2020_41_tabblock20.zip",
+      "geography_sha256": "2a057daf7185823ff5d5195c82f91a984a5d68c2fa4e785ff90f2dc111bad283"
+    }
+  ],
+  "schema": "human.census_sources.v1",
+  "download_budget_note": "Hard upper bound, not a measured transfer-size estimate. No retries or redirects; failed partial downloads are removed."
+}
