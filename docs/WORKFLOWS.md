@@ -34,6 +34,11 @@ The branch must be current with `main`. PRs and resolved review threads remain r
 deletion and force pushes remain blocked. The separate `main-merge-access` ruleset
 continues to restrict who can merge.
 
+On 2026-10-21 the user approved repository write access for the existing
+`main-merge-stevetylda` team so its configured PR-only merge permission applies.
+The team currently contains only `stevetylda`; future members inherit its write
+access. Required checks and the separate safeguards ruleset remain unchanged.
+
 With user approval, these two check names replaced `test (3.11)`, `test (3.14)` and
 `native-osrm` in [the repository ruleset](https://github.com/MarineCast/toolkit-human/rules/24472621).
 The [legacy native workflow](../.github/workflows/legacy-native.yml) remains manually
