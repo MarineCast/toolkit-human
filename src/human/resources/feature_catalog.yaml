@@ -169,6 +169,10 @@ collections:
       model_eligible: false
       selectable: false
     groups:
+      ports:
+        name: Port Locations
+        family: Ports
+        geometry: Point
       launches:
         name: Boat Launch Locations
         family: Boat Launches
@@ -722,6 +726,35 @@ collections:
       model_eligible: false
       selectable: false
     - name: places__SOURCE_COVERAGE_COMPLETE
+      arrow_type: bool
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: ports__SOURCE_RECORD_COUNT
+      arrow_type: int64
+      role: evidence
+      model_eligible: false
+      selectable: true
+      label: Port Source Records
+      family: Ports
+      units: records
+      qualifiers:
+      - ports__MEASUREMENT_STATUS
+      - ports__SOURCE_COVERAGE_COMPLETE
+      limitation: NGA World Port Index physical point references; partial published
+        inventory. Counts are distinct retained source IDs assigned to their containing
+        R7 cell, not port footprints, marina counts, vessel activity, navigation advice
+        or legal authority. Zero means no retained source point in that cell, not
+        absence of a physical facility. Harbor/facility codes and unknown attributes
+        retain their original source values. No proximity-based facility deduplication
+        or distance metric is applied. Local reference use only; source redistribution
+        rights remain uncleared.
+    - name: ports__MEASUREMENT_STATUS
+      arrow_type: large_string
+      role: support
+      model_eligible: false
+      selectable: false
+    - name: ports__SOURCE_COVERAGE_COMPLETE
       arrow_type: bool
       role: support
       model_eligible: false

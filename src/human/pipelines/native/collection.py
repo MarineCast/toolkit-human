@@ -40,6 +40,9 @@ def native_specification(entry, root):
             if key!='summary' and not target.is_file():missing.append(str(target.resolve()))
     if missing:
         raise MissingHumanSources('Unresolved native input locations (not evidence of source loss):\n'+'\n'.join(sorted(set(missing))))
+    if entry.get('ports'):
+        from human.pipelines.native.ports import resolve_entry
+        spec['ports'] = resolve_entry(entry['ports'], root)
     return spec, {'path':str(path),'sha256':digest(path),'path_map':mappings}
 
 
@@ -95,6 +98,9 @@ def collect_native(entry, root, run, source_store, *, mode):
     spec['shore_access']['access_lines']=str(Path(yaml.safe_load((run/'shore_access.yaml').read_text())['raw']['snapshot_dir'])/'wa_public_access_lines.parquet')
     inventory=json.loads(Path(yaml.safe_load((run/'places.yaml').read_text())['raw']['inventory_path']).read_text())
     spec['places']['park_polygons']=inventory['wa_state_parks']
+    if entry.get('ports'):
+        from human.pipelines.native.ports import resolve_entry
+        spec['ports'] = resolve_entry(entry['ports'], root)
     return spec, {'method':'domain_source_adapters.v1','acquisition_receipts':sources,
         'derived_artifacts':'Facility/catalog/build files are temporary derivations; original source snapshots and acquisition receipts are retained.'}
 

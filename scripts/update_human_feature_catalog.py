@@ -11,9 +11,10 @@ from human.pipelines.native.features import summary_fields, GROUPS
 def build_catalog():
     collections={}
     for name, product in product_contract()['products'].items():
-        definitions=summary_fields([c['name'] for c in product['columns']]) if name=='static.parquet' else {}
+        columns = product['columns'] + (product_contract().get('extensions', {}).get('ports', {}).get('columns', []) if name == 'static.parquet' else [])
+        definitions=summary_fields([c['name'] for c in columns]) if name=='static.parquet' else {}
         features=[]
-        for field in product['columns']:
+        for field in columns:
             key=field['name'];definition=definitions.get(key,{})
             selected=key in DISPLAY_LABELS or key in definitions
             if key in DISPLAY_LABELS:

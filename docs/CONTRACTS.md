@@ -15,6 +15,7 @@ observation/reporting-process assumptions belong to consuming modeling work.
 | Calendar | date and jurisdiction/configured period | Calendar context, not measured presence |
 | Population | country and H3 cell at declared census vintage | Census allocation/estimated context |
 | Access | access-site identity or configured H3 cell | Physical/mapped access, not observer counts |
+| Ports | `nga_wpi:<portNumber>`; original EPSG:4326 point plus containing-R7 recorded source count | Physical reference inventory; source harbor/facility codes retained, no legal authority or vessel activity |
 | Ferry | service_date × route_key × source_h3; daily/weekly aggregates | Rider/activity proxy with source availability |
 
 Observation/reporting-opportunity combinations are modeling-owned, excluded from
