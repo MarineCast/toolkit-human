@@ -29,6 +29,7 @@ The packaged five-source census recipe is sufficient configuration for a fresh s
 
 As verified on 2026-10-20, the active `main-safeguards` ruleset requires GitHub Actions
 checks `pipeline (3.11)` and `pipeline (3.14)` from [the supported CI workflow](../.github/workflows/ci.yml).
+Both Python jobs include the four synthetic port regressions in the checkout and installed-wheel suites.
 The branch must be current with `main`. PRs and resolved review threads remain required;
 deletion and force pushes remain blocked. The separate `main-merge-access` ruleset
 continues to restrict who can merge.
