@@ -127,9 +127,16 @@ def _canonical_columns(staging):
         if product['schema']=='human.native_features.v1':continue
         path=staging/product['artifact']['path'];table=pq.read_table(path)
         spec=specs[product['schema']]
-        columns=[c['name'] for c in spec['columns']]
+        fields = list(spec['columns'])
+        extension = product_contract().get('extensions', {}).get('ports', {})
+        if any(c['name'] in table.column_names for c in extension.get('columns', [])):
+            fields += extension['columns']
+        columns=[c['name'] for c in fields]
         if set(table.column_names)!=set(columns):raise ValueError('Source inputs do not supply the full approved schema')
         schema=pa.ipc.read_schema(pa.BufferReader(base64.b64decode(spec['arrow_schema_base64'])))
+        if len(fields) > len(spec['columns']):
+            from human.pipelines.native.ports import FIELDS
+            schema = pa.schema([*schema, *(pa.field(name, kind) for name, kind in FIELDS)])
         table=table.select(columns).cast(schema).replace_schema_metadata(table.schema.metadata)
         pq.write_table(table,path,compression='zstd')
         product['artifact']['sha256']=digest(path)
@@ -230,6 +237,9 @@ def get_human_data(config=None, *, workspace=None, output_dir=None, mode='live',
                 output_dir=staging,retained_static=infrastructure,workers=workers,as_of=cfg['calendar']['as_of'],native_source_specification=spec,
                 population_cache_workspace=cache_workspace,infrastructure_rebuilt=not bool(cfg.get('infrastructure')),
                 calendar_start=settings.start_date,calendar_end=settings.end_date)
+            if spec.get('ports'):
+                from human.pipelines.native.ports import extend_staging
+                extend_staging(staging, spec['ports'])
             _canonical_columns(staging)
             catalog=json.loads(catalog_path.read_text())
             pipeline={'schema':'human.pipeline.run.v1','recipe':recipe,'runtime':_runtime(),'mode':mode,'resolved_settings':settings.public(),

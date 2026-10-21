@@ -18,7 +18,10 @@ from shapely import make_valid
 
 SCHEMA = 'human.native_features.v1'
 FILE = 'human-native-features.geojson'
+from human.pipelines.native.ports import GROUP as PORT_GROUP, LIMITS as PORT_LIMITS
+
 GROUPS = {
+    'ports': PORT_GROUP,
     'launches': {'name': 'Boat Launch Locations', 'family': 'Boat Launches', 'geometry': 'Point'},
     'shore_access': {'name': 'Shore Access Sites', 'family': 'Shore Access', 'geometry': 'Point'},
     'places': {'name': 'Named Destinations', 'family': 'Places', 'geometry': 'Point'},
@@ -127,6 +130,10 @@ def compose_native_features(specification):
             attrs = row.drop(labels=['geometry']).to_dict()
             features.append(feature('access_lines', row.OBJECTID, row.get('BEACH_NAME'), row.get('CLASS_DESC'), row.geometry,
                 attrs, method='original_source_line_label_point_not_entrance'))
+    if spec.get('ports'):
+        from human.pipelines.native.ports import port_features
+        ports, receipt = port_features(spec['ports'])
+        features.extend(ports); receipts.append(receipt)
     if len({f['id'] for f in features}) != len(features): raise ValueError('Duplicate native feature identities')
     for receipt in receipts:
         if checksum(receipt['path']) != receipt['sha256']: raise ValueError('Source changed during native export')
@@ -135,7 +142,7 @@ def compose_native_features(specification):
         records = [f for f in features if f['properties']['group'] == group and f['properties']['role'] == 'record']
         if not records: continue
         groups[group] = {**info, 'records': len(records), 'context_features': sum(f['properties']['group'] == group and f['properties']['role'] == 'source_footprint' for f in features), 'categories': dict(sorted(Counter(str(f['properties']['category']) for f in records).items())),
-            'limitations': LIMITS, 'regional_completeness': 'partial'}
+            'limitations': PORT_LIMITS if group == 'ports' else LIMITS, 'regional_completeness': 'partial'}
     payload = {'type': 'FeatureCollection', 'schema': SCHEMA, 'features': features}
     metadata = {'schema': SCHEMA, 'crs': 'EPSG:4326', 'primary_key': 'feature.id', 'groups': groups,
         'source_receipts': receipts, 'limitations': [LIMITS,
@@ -164,11 +171,15 @@ def summary_fields(columns):
       'public_shore_access__PUBLIC_ACCESS_EVIDENCE_STATE': ('Shore Access Evidence', 'Shore Access', 'category'),
       'places__CATALOG_RECORD_COUNT': ('Named Destination Records', 'Places', 'records'),
     }
-    return {field: {'label': label, 'family': family, 'units': unit,
+    definitions['ports__SOURCE_RECORD_COUNT'] = ('Port Source Records', 'Ports', 'records')
+    result = {field: {'label': label, 'family': family, 'units': unit,
         'qualifiers': [c for c in columns if c.startswith(field.split('__')[0] + '__') and c != 'public_shore_access__PUBLIC_ACCESS_STATE' and
             any(word in c for word in ('STATUS', 'STATE', 'COVERAGE', 'QC', 'SOURCE_DATASET_COUNT'))],
         'limitation': LIMITS + ' H3 summaries cover only the shared reporting grid. Missing cells are unknown, not zero facilities.'}
         for field, (label, family, unit) in definitions.items() if field in columns}
+    if 'ports__SOURCE_RECORD_COUNT' in result:
+        result['ports__SOURCE_RECORD_COUNT']['limitation'] = PORT_LIMITS
+    return result
 
 
 def export_native_features(specification, output_dir):

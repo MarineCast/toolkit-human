@@ -105,7 +105,15 @@ def _native(frame, info):
     bounds=shapely.bounds(geometries)
     _require(np.isfinite(bounds).all() and (bounds[:,0]>=-180).all() and (bounds[:,2]<=180).all() and (bounds[:,1]>=-90).all() and (bounds[:,3]<=90).all(), 'Native geometry exceeds WGS84 coordinate bounds')
     _require(all(shapely.equals_exact(g, shape(json.loads(raw)), 0) for g,raw in zip(geometries,frame.geometry_json)), 'Native JSON/WKB geometry mismatch')
-    _require(set(frame.group)=={'launches','shore_access','places','access_lines'}, 'Native delivery requires all four source groups')
+    _require({'launches','shore_access','places','access_lines'} <= set(frame.group) <= {'launches','shore_access','places','access_lines','ports'}, 'Native delivery requires four base groups and optional ports')
+    ports = frame.loc[frame.group.eq('ports')]
+    _require(all(g.geom_type == 'Point' for g in shapely.from_wkb(ports.geometry.to_numpy())), 'Ports must retain native point geometry')
+    for prop in ports.properties_json.map(json.loads):
+        attrs = prop['attributes']
+        _require(prop['record_id'] == 'nga_wpi:'+str(attrs['portNumber']) == attrs['PORT_ID'], 'Port identity differs from NGA source ID')
+        _require(attrs['SOURCE_DATASET_ID'] == 'nga_world_port_index' and attrs['SOURCE_RECORD_ID'] == str(attrs['portNumber']), 'Invalid port source identity')
+        lon, lat = prop['label_point']
+        _require(prop['h3_index'] == h3.latlng_to_cell(lat, lon, 7), 'Port R7 cell differs from original point')
     _require(frame.role.isin(['record','source_footprint']).all(), 'Invalid native feature role')
     _require(all(h3.is_valid_cell(c) and h3.get_resolution(c)==7 for c in frame.h3_index), 'Native labels require R7 identity')
     records = set(frame.loc[frame.role.eq('record'),'record_id'])
@@ -137,13 +145,25 @@ def validate_delivery(root, *, expected_rows=None):
         _require(info['schema']==spec['schema'], f'Unsupported product schema: {name}')
         _require(info.get('primary_key')==spec['primary_key'], f'Primary key metadata mismatch: {name}')
         _require(info['artifact']['rows']==len(frame), f'Artifact row count mismatch: {name}')
-        _require(table.column_names==[c['name'] for c in spec['columns']], f'Column contract mismatch: {name}')
+        fields = list(spec['columns'])
+        extension = product_contract().get('extensions', {}).get('ports', {})
+        if name == 'static.parquet' and any(c['name'] in table.column_names for c in extension.get('columns', [])):
+            fields += extension['columns']
+        _require(table.column_names==[c['name'] for c in fields], f'Column contract mismatch: {name}')
         _require(not frame.empty and not frame[spec['primary_key']].isna().any().any() and not frame.duplicated(spec['primary_key']).any(), f'Null/duplicate/empty identity: {name}')
-        for field in spec['columns']:
+        for field in fields:
             actual=str(table.schema.field(field['name']).type)
             _require(actual==field['arrow_type'], f'Type contract mismatch: {name}/{field["name"]}: {actual}')
         if expected_rows and name in expected_rows:
             _require(len(frame)==expected_rows[name], f'Unexpected row count: {name}')
         {'static.parquet':_static,'dynamic-calendar.parquet':_calendar,'static-native.parquet':_native}[name](frame,info)
         report[name]={'rows':len(frame),'columns':table.num_columns,'sha256':info['artifact']['sha256']}
+    from human.pipelines.native.ports import COUNT, STATUS, COMPLETE, add_summary
+    static = pq.read_table(root/'static.parquet')
+    native = pq.read_table(root/'static-native.parquet').to_pylist()
+    ports = [dict(properties=json.loads(row['properties_json'])) for row in native if row['group']=='ports']
+    if ports or COUNT in static.column_names:
+        _require(bool(ports) and COUNT in static.column_names, 'Port native/static binding missing')
+        base = static.drop_columns([COUNT, STATUS, COMPLETE])
+        _require(add_summary(base, ports).equals(static, check_metadata=False), 'Port counts/status differ from native source points')
     return report

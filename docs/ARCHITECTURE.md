@@ -14,6 +14,7 @@ human/
       boat_launches/       # WA/BC/OSM source collection and facility/H3 builder
       shore_access/        # facilities and classification geometry
       places/              # destinations and park source context
+      ports.py             # pinned NGA physical point inventory, R7 count and narrow migration
     delivery/              # settings, exact schemas, serialization and validation
   utils/                   # reusable downloads, source I/O, checksums, study resolution
   core/                    # typed configuration, geometry/data/artifact infrastructure
