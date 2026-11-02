@@ -28,7 +28,9 @@ for removed in ('human.pipeline','human.static_matrix','human.shared_study','hum
     assert __import__('importlib').util.find_spec(removed) is None
 assert not any(name.startswith('human.legacy') for name in sys.modules)
 assert root.joinpath('resources/feature_catalog.yaml').is_file()
-assert set(product_contract()['products'])=={'static.parquet','dynamic-calendar.parquet','static-native.parquet'}
+assert set(product_contract()['products'])=={'static.parquet','dynamic-calendar.parquet'}
+assert product_contract()['products']['static.parquet']['schema']=='human.study.static.v6'
+assert len(product_contract()['products']['static.parquet']['columns'])==14
 with tempfile.TemporaryDirectory() as tmp:
     workspace=Path(tmp);created=initialize_workspace(workspace)
     assert [p.relative_to(workspace).as_posix() for p in created]==['config/human.yaml', 'config/census-sources.v1.json', '.env.example']

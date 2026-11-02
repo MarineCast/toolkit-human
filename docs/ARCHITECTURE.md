@@ -1,6 +1,6 @@
 # Human package structure
 
-The supported product is the three-Parquet dataset built by `human.get_human_data()`. The package root has only `__init__.py`, `__main__.py`, `main.py` and `cli.py`; implementations live in their owning folders.
+The supported product is the two-Parquet dataset built by `human.get_human_data()`. The package root has only `__init__.py`, `__main__.py`, `main.py` and `cli.py`; implementations live in their owning folders.
 
 ```text
 human/
@@ -10,11 +10,12 @@ human/
     population/            # census acquisition, extracted-input registration, streaming tables, allocation, water support
       static/              # query engine and spatial source contracts
     calendar/              # jurisdiction/local-civil-date lookup
-    native/                # original source inventory and native features
+    native/                # retained infrastructure sources and H3 summaries
       boat_launches/       # WA/BC/OSM source collection and facility/H3 builder
       shore_access/        # facilities and classification geometry
       places/              # destinations and park source context
-    delivery/              # settings, exact schemas, serialization and validation
+      ports.py             # pinned NGA physical point inventory, R7 count and narrow migration
+    delivery/              # settings, exact schemas, compact static/external audit, validation
   utils/                   # reusable downloads, source I/O, checksums, study resolution
   core/                    # typed configuration, geometry/data/artifact infrastructure
   resources/               # packaged configs, output contract and feature catalog
@@ -28,3 +29,5 @@ The native collector keeps configuration file paths separate from Python module 
 `human.legacy` groups the older population harmonization, ferry/activity, routing, reporting-opportunity and viewshed research implementations. These remain directly importable by their new names for tests and research; they are not extra supported outcomes of the main pipeline. Unimplemented `.gitkeep` roadmap packages were removed. Their roadmaps remain in `docs/legacy/`.
 
 The pass-through modules from the earlier refactor were removed rather than retained as a second import tree. See [import migration](import-migration.md) for intentional internal-path changes. The public `human.get_human_data`, `human.get_population`, `human.HumanData`, `human` command and `python -m human` remain available. Source imports/configuration never require an application checkout. Data publication/cleanup and external source qualification remain in [the run guide](get-human-data.md) and [final delivery](final-delivery.md).
+
+`pipelines/delivery/static.py` owns the 14-column projection, immutable external audit and explicit H3-keyed reconstruction. Full internal population/infrastructure tables remain transient producer inputs; only retained quantities and H3 identity are public columns. Audit arrays/dictionary remain external receipt evidence and are required by validation.

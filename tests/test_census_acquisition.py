@@ -126,7 +126,7 @@ def test_missing_manifest_falls_back_but_corrupt_present_bundle_does_not(tmp_pat
     config.write_text(yaml.safe_dump(recipe))
     from human import get_human_data
     result=get_human_data(workspace=tmp_path)
-    assert len(calls)==5 and set(result.validation)=={'static.parquet','dynamic-calendar.parquet','static-native.parquet'}
+    assert len(calls)==5 and set(result.validation)=={'static.parquet','dynamic-calendar.parquet'}
     corrupt=tmp_path/'missing-bundle.json';corrupt.write_text('not valid JSON')
     calls.clear()
     with pytest.raises(ValueError):get_human_data(workspace=tmp_path)

@@ -174,3 +174,80 @@ catalog was current, all 26 local documentation links/anchors resolved, and
 Linux CI execution are separate checks. No new regional acquisition, activity,
 terrain, routing graph, empirical validation or package release accompanied Git
 integration.
+
+## Human source-product scope (2026-10-15)
+
+Land/water/AIS observation-opportunity combinations were removed from active CLI
+families, default workspace setup, generated feature collections and study exports.
+Legacy imports, templates, native methods and artifacts remain for existing readers;
+no replacement modeling implementation was activated. See [product scope](product-scope.md).
+
+- Focused packaging/catalog/structure/study checks: 24 passed.
+- Full native toolkit suite, after GDAL and OSRM preflights: 451 passed.
+- Regular installed wheel outside the checkout: resource/init checks and all 27
+  active CLI help routes passed with application imports blocked; 38 population,
+  study and import tests plus 2 native legacy-compatibility smoke tests passed.
+  The wheel environment reused the existing scientific dependencies; a fresh
+  independent dependency resolution was not run.
+- The 16 retained feature collections compare exactly with their previous
+  definitions; only the 9 modeling-proxy collections were removed.
+- Local Human study catalogs/date availability exclude the land proxy; current
+  source artifacts and retained legacy Parquets passed checksum checks. Prior
+  catalog/validation inventories were preserved before the scope update.
+
+No new source pull, historical land/AIS rebuild, model fit, replacement consumer
+integration, publication or deployment was performed for this scope change.
+
+## Early WSF route source history (2026-10-15)
+
+The local MarineCast Human history workspace now retains published route totals
+from all 16 already-acquired WSF annual/quarterly PDFs for 2009-2016. The new
+`Data/Human/2009-forward/raw/wsf-route-period-history.parquet` has 950 rows:
+765 route records, 145 overlapping route-group subtotals and 40 system totals.
+Support is eight calendar years and 32 calendar quarters in America/Los_Angeles;
+dates are not relabeled UTC or expanded to daily/H3 observations.
+
+The companion metadata/source contract defines printed rider, vehicle and
+passenger counts, hierarchy, explicit route-label aliases, missingness, source
+rights/attribution and checksums. Historical reporting names retain separate keys
+where equivalence is unverified. Blank fields remain null: 124 vehicle cells and
+145 passenger cells. All 555 available-value hierarchy comparisons match their
+printed parents; missing child fields remain visible. All 40 system rider totals
+agree with the independent system-total extraction, and 11 rendered-source spot
+checks cover the 2009, 2014 and 2016 layouts.
+
+The 570 annual-versus-four-quarter metric comparisons include 214 nonzero source
+differences across routes, subtotals and system totals. Both publications are
+retained; consumers need an explicit benchmark choice. No reconciliation, daily
+reconstruction, vessel-hour inference, H3 allocation or model fit was performed.
+
+Executed checks:
+
+- Six source-extraction guard/regression tests passed, including rejection of
+  duplicate identities, omitted printed-zero rows, changed counts and negatives.
+- All 31 existing ferry source, PDF fallback, pipeline, UTC, schedule and weekly
+  tests passed with `PYTHONTZPATH=''` in the existing Python 3.14 Human runtime.
+- The companion `provenance/validate_wsf_route_history.ipynb` executed top to
+  bottom using a temporary local Jupyter kernel; source/artifact/producer hashes,
+  coverage, hierarchy, arithmetic and comparisons passed.
+- All 2,850 exported count cells match the extraction evidence, preserving nulls.
+  Ten pre-existing data artifacts retain their checksums; active study product
+  descriptors and date availability are unchanged.
+
+The source scripts, contract, detailed validation, test logs and executed notebook
+are under the history workspace's `provenance/`. PDF extraction used pdfplumber
+0.11.9; tabular validation/export used pandas 3.0.3 and PyArrow 24.0.0. This local
+source-data addition changes no toolkit executable interface. The full native
+suite and installed-wheel checks were not repeated for it. No new remote
+acquisition, redistribution or application integration was performed. Early WSF
+daily activity, early BC route history and AIS coverage remain separate gaps;
+the full-period Human inventory remains partial.
+
+
+## Physical port ownership migration (2026-10-19)
+
+The current three-Parquet delivery now includes 84 NGA World Port Index native points, preserving all 84 former Governance R6/R8 source IDs and exact original point WKB. Seventy occupy the existing R7 reporting cells. All 64 prior static arrays, all 32,870 calendar rows and all 6,752 prior native rows match in Arrow values/types/nulls/order; 292 marina destinations remain separate. Static output is 13,461 × 67 and native output is 6,836 × 12. No source acquisition occurred. The full 2,951-row original and rights/provenance remain in the ignored Human source store.
+
+Supported tests: 144 passed, one legacy test deselected, both from an isolated source tree and a regular installed wheel outside the checkout without PYTHONPATH. The wheel API/CLI/import-boundary check and pip check passed. Pyflakes and 11 supported documentation files/30 links plus configuration/resource parity passed. The clean source tree excluded pre-existing Finder `config/.DS_Store`; direct initial configuration parity checks detected that unrelated file. A first isolated-workspace structure check lacked the expected source path; the complete clean tree resolved it. The installed test copy emitted only an unregistered legacy-marker warning. The full legacy terrain/routing suite and live-provider acquisition were not rerun. No Safari or native UI control was taken, and no caffeinate was started.
+
+[Port contract and reproduction](ports.md) records count/zero/partial-inventory semantics, source IDs and source rights. Exact before/after hashes, runtime versions and source selections are in ignored `data/provenance/ports-migration-20261019/validation.json` and `selection.json`; current external receipts are in `data/delivery/ports-migration-20261019`. Successful task-owned publication staging was cleaned after final readback. No commit, push or merge accompanied this migration.

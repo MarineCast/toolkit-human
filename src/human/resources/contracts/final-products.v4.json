@@ -1,0 +1,204 @@
+{
+  "schema": "human.product_contract.v4",
+  "products": {
+    "dynamic-calendar.parquet": {
+      "schema": "human.study.calendar_lookup.v2",
+      "primary_key": [
+        "date",
+        "country",
+        "timezone"
+      ],
+      "columns": [
+        {
+          "name": "date",
+          "arrow_type": "large_string"
+        },
+        {
+          "name": "country",
+          "arrow_type": "large_string"
+        },
+        {
+          "name": "timezone",
+          "arrow_type": "large_string"
+        },
+        {
+          "name": "is_weekend",
+          "arrow_type": "bool"
+        },
+        {
+          "name": "holiday_names",
+          "arrow_type": "large_string"
+        },
+        {
+          "name": "is_holiday",
+          "arrow_type": "bool"
+        },
+        {
+          "name": "iso_year",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "iso_week",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "day_of_year",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "year",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "month",
+          "arrow_type": "int64"
+        }
+      ],
+      "arrow_schema_base64": "/////3gCAAAQAAAAAAAKAAwABgAFAAgACgAAAAABBAAMAAAACAAIAAAABAAIAAAABAAAAAsAAAAcAgAA4AEAALABAACAAQAATAEAABwBAADcAAAApAAAAGwAAAA4AAAABAAAACD+//8AAAECEAAAABgAAAAEAAAAAAAAAAUAAABtb250aAAAADT///8AAAABQAAAAFD+//8AAAECEAAAABgAAAAEAAAAAAAAAAQAAAB5ZWFyAAAAAGT///8AAAABQAAAAID+//8AAAECEAAAABwAAAAEAAAAAAAAAAsAAABkYXlfb2ZfeWVhcgCY////AAAAAUAAAAC0/v//AAABAhAAAAAcAAAABAAAAAAAAAAIAAAAaXNvX3dlZWsAAAAAzP///wAAAAFAAAAA6P7//wAAAQIQAAAAJAAAAAQAAAAAAAAACAAAAGlzb195ZWFyAAAAAAgADAAIAAcACAAAAAAAAAFAAAAAJP///wAAAQYQAAAAHAAAAAQAAAAAAAAACgAAAGlzX2hvbGlkYXkAABj///9Q////AAABFBAAAAAgAAAABAAAAAAAAAANAAAAaG9saWRheV9uYW1lcwAAAEj///+A////AAABBhAAAAAcAAAABAAAAAAAAAAKAAAAaXNfd2Vla2VuZAAAdP///6z///8AAAEUEAAAABwAAAAEAAAAAAAAAAgAAAB0aW1lem9uZQAAAACg////2P///wAAARQQAAAAGAAAAAQAAAAAAAAABwAAAGNvdW50cnkAyP///xAAFAAIAAYABwAMAAAAEAAQAAAAAAABFBAAAAAcAAAABAAAAAAAAAAEAAAAZGF0ZQAAAAAEAAQABAAAAA=="
+    },
+    "static.parquet": {
+      "schema": "human.study.static.v3",
+      "primary_key": [
+        "h3_index"
+      ],
+      "columns": [
+        {
+          "arrow_type": "large_string",
+          "name": "h3_index",
+          "source_name": "h3_index"
+        },
+        {
+          "arrow_type": "int64",
+          "name": "h3_resolution",
+          "source_name": "h3_resolution"
+        },
+        {
+          "arrow_type": "double",
+          "name": "cell_area_km2",
+          "source_name": "cell_area_km2"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_count_coverage_status",
+          "source_name": "population_count__coverage_status"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_count_unverified_geographic_support",
+          "source_name": "population_count__unverified_geographic_support"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_25km_coverage_status",
+          "source_name": "population_within_25km__coverage_status"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_within_25km_unverified_geographic_support",
+          "source_name": "population_within_25km__unverified_geographic_support"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_50km_coverage_status",
+          "source_name": "population_within_50km__coverage_status"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_within_50km_unverified_geographic_support",
+          "source_name": "population_within_50km__unverified_geographic_support"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_100km_coverage_status",
+          "source_name": "population_within_100km__coverage_status"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_within_100km_unverified_geographic_support",
+          "source_name": "population_within_100km__unverified_geographic_support"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_count_collected",
+          "source_name": "population_count_collected"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_within_25km_collected",
+          "source_name": "population_within_25km_collected"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_within_50km_collected",
+          "source_name": "population_within_50km_collected"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_within_100km_collected",
+          "source_name": "population_within_100km_collected"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_density_per_km2_collected",
+          "source_name": "population_density_per_km2_collected"
+        },
+        {
+          "arrow_type": "double",
+          "name": "boat_launch_record_count",
+          "source_name": "boat_launch_access__BOAT_LAUNCH_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "source_public_boat_launch_record_count",
+          "source_name": "boat_launch_access__VERIFIED_PUBLIC_BOAT_LAUNCH_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "mapped_marine_shoreline_length_m",
+          "source_name": "public_shore_access__TOTAL_MARINE_SHORELINE_M"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "shore_access_evidence_state",
+          "source_name": "public_shore_access__PUBLIC_ACCESS_EVIDENCE_STATE"
+        },
+        {
+          "arrow_type": "double",
+          "name": "shore_access_record_count",
+          "source_name": "public_shore_access__PUBLIC_ACCESS_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "verified_public_shore_access_record_count",
+          "source_name": "public_shore_access__VERIFIED_PUBLIC_ACCESS_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "osm_public_shore_access_record_count",
+          "source_name": "public_shore_access__OSM_EXPLICIT_PUBLIC_ACCESS_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "unknown_shore_access_record_count",
+          "source_name": "public_shore_access__MAPPED_ACCESS_UNKNOWN_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "restricted_shore_access_record_count",
+          "source_name": "public_shore_access__RESTRICTED_ACCESS_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "place_record_count",
+          "source_name": "places__CATALOG_RECORD_COUNT"
+        },
+        {
+          "arrow_type": "int64",
+          "name": "port_record_count",
+          "source_name": "ports__SOURCE_RECORD_COUNT"
+        }
+      ],
+      "arrow_schema_base64": "/////yAIAAAQAAAAAAAKAAwABgAFAAgACgAAAAABBAAMAAAACAAIAAAABAAIAAAABAAAABsAAADABwAAbAcAADAHAADoBgAAlAYAAEgGAADsBQAAoAUAAEQFAAD4BAAAnAQAAFgEAAAMBAAAwAMAAHQDAAAkAwAA4AIAAJACAABEAgAABAIAAMABAABsAQAAHAEAANAAAACAAAAARAAAAAQAAAC8+P//AAABAhAAAAAkAAAABAAAAAAAAAARAAAAcG9ydF9yZWNvcmRfY291bnQAAAAA+f//AAAAAUAAAAD4+P//AAABAxAAAAAkAAAABAAAAAAAAAASAAAAcGxhY2VfcmVjb3JkX2NvdW50AAB2+f//AAACADD5//8AAAEDEAAAADgAAAAEAAAAAAAAACQAAAByZXN0cmljdGVkX3Nob3JlX2FjY2Vzc19yZWNvcmRfY291bnQAAAAAwvn//wAAAgB8+f//AAABAxAAAAA0AAAABAAAAAAAAAAhAAAAdW5rbm93bl9zaG9yZV9hY2Nlc3NfcmVjb3JkX2NvdW50AAAACvr//wAAAgDE+f//AAABAxAAAAA4AAAABAAAAAAAAAAkAAAAb3NtX3B1YmxpY19zaG9yZV9hY2Nlc3NfcmVjb3JkX2NvdW50AAAAAFb6//8AAAIAEPr//wAAAQMQAAAAPAAAAAQAAAAAAAAAKQAAAHZlcmlmaWVkX3B1YmxpY19zaG9yZV9hY2Nlc3NfcmVjb3JkX2NvdW50AAAApvr//wAAAgBg+v//AAABAxAAAAAsAAAABAAAAAAAAAAZAAAAc2hvcmVfYWNjZXNzX3JlY29yZF9jb3VudAAAAOb6//8AAAIAoPr//wAAARQQAAAALAAAAAQAAAAAAAAAGwAAAHNob3JlX2FjY2Vzc19ldmlkZW5jZV9zdGF0ZQCg+v//3Pr//wAAAQMQAAAANAAAAAQAAAAAAAAAIAAAAG1hcHBlZF9tYXJpbmVfc2hvcmVsaW5lX2xlbmd0aF9tAAAAAGr7//8AAAIAJPv//wAAAQMQAAAAOAAAAAQAAAAAAAAAJgAAAHNvdXJjZV9wdWJsaWNfYm9hdF9sYXVuY2hfcmVjb3JkX2NvdW50AAC2+///AAACAHD7//8AAAEDEAAAACwAAAAEAAAAAAAAABgAAABib2F0X2xhdW5jaF9yZWNvcmRfY291bnQAAAAA9vv//wAAAgCw+///AAABAxAAAAA4AAAABAAAAAAAAAAkAAAAcG9wdWxhdGlvbl9kZW5zaXR5X3Blcl9rbTJfY29sbGVjdGVkAAAAAEL8//8AAAIA/Pv//wAAAQMQAAAANAAAAAQAAAAAAAAAIQAAAHBvcHVsYXRpb25fd2l0aGluXzEwMGttX2NvbGxlY3RlZAAAAIr8//8AAAIARPz//wAAAQMQAAAANAAAAAQAAAAAAAAAIAAAAHBvcHVsYXRpb25fd2l0aGluXzUwa21fY29sbGVjdGVkAAAAANL8//8AAAIAjPz//wAAAQMQAAAANAAAAAQAAAAAAAAAIAAAAHBvcHVsYXRpb25fd2l0aGluXzI1a21fY29sbGVjdGVkAAAAABr9//8AAAIA1Pz//wAAAQMQAAAALAAAAAQAAAAAAAAAGgAAAHBvcHVsYXRpb25fY291bnRfY29sbGVjdGVkAABa/f//AAACABT9//8AAAEGEAAAAEgAAAAEAAAAAAAAADUAAABwb3B1bGF0aW9uX3dpdGhpbl8xMDBrbV91bnZlcmlmaWVkX2dlb2dyYXBoaWNfc3VwcG9ydAAAADD9//9s/f//AAABFBAAAAA4AAAABAAAAAAAAAAnAAAAcG9wdWxhdGlvbl93aXRoaW5fMTAwa21fY292ZXJhZ2Vfc3RhdHVzAHj9//+0/f//AAABBhAAAABIAAAABAAAAAAAAAA0AAAAcG9wdWxhdGlvbl93aXRoaW5fNTBrbV91bnZlcmlmaWVkX2dlb2dyYXBoaWNfc3VwcG9ydAAAAADQ/f//DP7//wAAARQQAAAAOAAAAAQAAAAAAAAAJgAAAHBvcHVsYXRpb25fd2l0aGluXzUwa21fY292ZXJhZ2Vfc3RhdHVzAAAY/v//VP7//wAAAQYQAAAASAAAAAQAAAAAAAAANAAAAHBvcHVsYXRpb25fd2l0aGluXzI1a21fdW52ZXJpZmllZF9nZW9ncmFwaGljX3N1cHBvcnQAAAAAcP7//6z+//8AAAEUEAAAADgAAAAEAAAAAAAAACYAAABwb3B1bGF0aW9uX3dpdGhpbl8yNWttX2NvdmVyYWdlX3N0YXR1cwAAuP7///T+//8AAAEGEAAAAEAAAAAEAAAAAAAAAC4AAABwb3B1bGF0aW9uX2NvdW50X3VudmVyaWZpZWRfZ2VvZ3JhcGhpY19zdXBwb3J0AAAI////RP///wAAARQQAAAANAAAAAQAAAAAAAAAIAAAAHBvcHVsYXRpb25fY291bnRfY292ZXJhZ2Vfc3RhdHVzAAAAAEz///+I////AAABAxAAAAAkAAAABAAAAAAAAAANAAAAY2VsbF9hcmVhX2ttMgAGAAgABgAGAAAAAAACAMD///8AAAECEAAAACgAAAAEAAAAAAAAAA0AAABoM19yZXNvbHV0aW9uAAAACAAMAAgABwAIAAAAAAAAAUAAAAAQABQACAAGAAcADAAAABAAEAAAAAAAARQQAAAAIAAAAAQAAAAAAAAACAAAAGgzX2luZGV4AAAAAAQABAAEAAAA"
+    }
+  }
+}

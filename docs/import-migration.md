@@ -6,9 +6,9 @@ The supported public calls are unchanged:
 from human import HumanData, get_human_data, get_population
 ```
 
-`human get-human-data`, `human preflight`, `human validate` and `python -m human` retain their behavior. The orchestrator is implemented in `human.main`; it is not another forwarding module. Native producers, calendar, population and delivery validation have one canonical implementation each. No `sys.modules` alias tree is installed.
+`human get-human-data`, `human preflight`, `human validate` and `python -m human` retain their entry points. The orchestrator is implemented in `human.main`; it is not another forwarding module. Native producers, calendar, population and delivery validation have one canonical implementation each. No `sys.modules` alias tree is installed.
 
-The internal compatibility paths below are deliberately removed. Consumers that imported implementation helpers must update to the canonical module. Scientific product/schema identifiers and existing dataset paths are unchanged; do not rewrite historical metadata to match Python module names.
+The internal compatibility paths below are deliberately removed. Consumers that imported implementation helpers must update to the canonical module. The 2026-10-24 delivery review separately versions the compact calendar and final-only contract; do not rewrite historical metadata to match Python module names.
 
 | Removed module | Canonical implementation |
 |---|---|
@@ -39,3 +39,15 @@ Active native adapters moved from `human.accessibility.boat_launch_access`, `hum
 Historical population harmonization uses `human.legacy.population`; ferry/proxy research uses `human.legacy.activity`; routing uses `human.legacy.accessibility`; old calendar builders use `human.legacy.calendar`; terrain/vegetation research uses `human.legacy.viewshed`. The old root-level release/profile/study helpers are now `human.legacy.release`, `human.legacy.static_profile` and `human.legacy.study`. These paths preserve research implementations, not a promise of current production eligibility. The full native suite still tests them; base pipeline CI excludes only the optional legacy packaging import.
 
 The generated feature catalog is packaged at `human/resources/feature_catalog.yaml`; read it with `importlib.resources.files('human').joinpath('resources/feature_catalog.yaml')`. Configuration and output contract resources retain their existing locations. Original source data, approved Data/Human and audit receipts are not moved by this source cleanup.
+
+## Two-product review migration — 2026-10-24
+
+`HumanData.native` and native geometry export/extension helpers are removed. `human.get_human_data()` returns paths for static and calendar products, a receipt and validation. The lower-level population delivery no longer accepts `native_source_specification` / `--native-source-specification`. Infrastructure source configuration remains for static counts. V1 calendar consumers must change from jurisdiction keys and repeated rule columns to the explicit country/timezone union and metadata pins. See [the migration guide](final-delivery.md#review-migration). Historical receipts retain their original identities.
+
+## Compact static review — 2026-10-24
+
+Static schema v6/final-only v7 has 14 columns with consistent single-underscore lower_snake_case names. The preceding compact static v2 remains reconstructible/readable. Removed methods, duplicate/diagnostic arrays and per-cell source IDs live in mandatory external `static-audit.parquet` beside the receipt. Use `restore_static` for audit-aware scientific validation; coverage and cell area are external audit arrays. Consumers must not expect removed arrays in the public table or convert their absence into zero/complete coverage. Historical v1 static inputs remain readable; migrate before normal supported overwrites. See [compact static](final-delivery.md#compact-static).
+
+Public source names changed without changing values or method identity. See the [complete original-to-current column mapping](final-delivery.md#column-names). Raw source/audit columns retain their original names; use `restore_static` when reading full audit evidence.
+
+Static v5 additionally consolidates infrastructure and renames population quantities. `restore_static` restores the original source schema, including strict-versus-collected population distinctions, null masks and port multiplicities. Direct consumers must use product schema/method metadata to distinguish current unsuffixed estimates from historical unsuffixed strict totals. See [the current schema](final-delivery.md#compact-static).

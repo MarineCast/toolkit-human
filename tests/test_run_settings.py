@@ -72,17 +72,16 @@ def test_calendar_override_changes_dates_only_and_records_effective_settings(tmp
     from human.pipelines.delivery.finalize import read_catalog
     setup_pipeline(tmp_path)
     first=get_human_data(workspace=tmp_path)
-    static=pd.read_parquet(first.static);native=pd.read_parquet(first.native)
+    static=pd.read_parquet(first.static)
     (tmp_path/'.env').write_text('DATA_DIR=second\nSTART_DATE=2021-07-03\nEND_DATE=2021-07-05\nVERBOSITY=False\n')
     second=get_human_data(workspace=tmp_path)
     pd.testing.assert_frame_equal(static,pd.read_parquet(second.static))
-    pd.testing.assert_frame_equal(native,pd.read_parquet(second.native))
     calendar=pd.read_parquet(second.calendar)
-    assert len(calendar)==15 and sorted(calendar.date.unique())==['2021-07-03','2021-07-04','2021-07-05']
+    assert len(calendar)==6 and sorted(calendar.date.unique())==['2021-07-03','2021-07-04','2021-07-05']
     info=read_catalog(second.directory)['pipeline']['resolved_settings']
     assert info['START_DATE']=='2021-07-03' and info['END_DATE']=='2021-07-05'
     explicit=get_human_data(workspace=tmp_path,start_date='2021-07-04',end_date='2021-07-04',output_dir='third')
-    assert len(pd.read_parquet(explicit.calendar))==5 and explicit.directory==tmp_path/'third'
+    assert len(pd.read_parquet(explicit.calendar))==2 and explicit.directory==tmp_path/'third'
     assert not list((tmp_path/'work').iterdir())
 
 

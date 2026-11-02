@@ -15,6 +15,7 @@ observation/reporting-process assumptions belong to consuming modeling work.
 | Calendar | date and jurisdiction/configured period | Calendar context, not measured presence |
 | Population | country and H3 cell at declared census vintage | Census allocation/estimated context |
 | Access | access-site identity or configured H3 cell | Physical/mapped access, not observer counts |
+| Ports | `nga_wpi:<portNumber>`; original EPSG:4326 point plus containing-R7 recorded source count | Physical reference inventory; source harbor/facility codes retained, no legal authority or vessel activity |
 | Ferry | service_date × route_key × source_h3; daily/weekly aggregates | Rider/activity proxy with source availability |
 
 Observation/reporting-opportunity combinations are modeling-owned, excluded from
@@ -67,6 +68,12 @@ cartographic overlaps. It still rejects duplicate IDs and same-country overlaps.
 This is an alternative to whole-source quarantine, not a claim of matched boundary
 position. Shared-study collected estimates now cover cell count, full-cell density,
 and 25/50/100 km radii under the same documented missing-contribution policy;
-raw missing counts and all coverage evidence are preserved. Shared-study public delivery exposes only collected count, density and 25/50/100 km quantities; strict duplicate scalar fields remain internal validation results. The machine identifiers keep `_collected`; the display labels are Population Count, Population Density (people/km²), and Population Within 25km/50km/100km, all in the Population family. Source-subtotal and missingness qualifiers are retained. See population.md.
+raw missing counts and all coverage evidence are preserved. Shared-study public delivery exposes only collected count, density and 25/50/100 km quantities; strict duplicate scalar fields remain internal validation results. Internal source/audit identifiers keep `_collected`; current public static aliases remove that suffix without changing the method. The display labels are Population Count, Population Density (people/km²), and Population Within 25km/50km/100km, all in the Population family. Source-subtotal and missingness qualifiers are retained. See population.md.
 
-Native geometry exports identify category and retain original source attributes; they do not derive or publish an `access_state` variable or access-state summaries. Category colors and selection are independent of access evidence. Existing source access attributes remain provenance, not a new display variable.
+The current two-file delivery has no native geometry export. Retained original source categories/access attributes remain provenance for static summaries; they do not establish current public access or activity. The compact calendar union and v2 compatibility change are defined in [final delivery](final-delivery.md).
+
+The 2026-10-24 compact static contract is `human.study.static.v6`: 14 public columns plus a mandatory immutable external audit receipt. Removed scientific/support arrays remain keyed by H3 with exact types/nulls. Population support and full-cell area are retained only in the external audit, with explicit per-metric dictionary references; unavailable collected zeros are not supported zeros, and original unmeasured infrastructure nulls remain in the audit; public counts use the explicit zero-fill policy below. [Final delivery](final-delivery.md#compact-static) defines audit bindings and reconstruction.
+
+The latest review explicitly overrides the earlier unknown-as-null public infrastructure encoding: `boat_launch_count`, `shore_access_site_count` and `place_record_count` are dense int64, all four presence indicators are nonnull int64 0/1, and original masks/counts are retained externally. Population aliases remove `_collected` while retaining the same missing-as-zero method and qualifiers in metadata/audit. [Current static contract](final-delivery.md#compact-static) defines all 14 columns and the exact transformation checks.
+
+The 2026-10-25 review adds three presence counterparts and changes port presence to int64. All four `has_*` fields are nonnull numeric 0/1 indicators; they are recomputed from audited source counts/retained totals during validation. The preceding Boolean-port format remains readable for migration. Counts, population quantities and original support masks are unchanged.

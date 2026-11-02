@@ -1,4 +1,4 @@
-"""Collect, build, validate and publish exactly the three Human products."""
+"""Collect, build, validate and publish exactly the two Human products."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -21,7 +21,7 @@ from human.utils.study import load_static_study
 from human.pipelines.delivery.validation import validate_delivery
 from human.pipelines.delivery.settings import preflight, log
 
-PRODUCTS = ('static.parquet','dynamic-calendar.parquet','static-native.parquet')
+PRODUCTS = ('static.parquet','dynamic-calendar.parquet')
 
 
 @dataclass(frozen=True)
@@ -35,8 +35,6 @@ class HumanData:
     def static(self): return self.directory/'static.parquet'
     @property
     def calendar(self): return self.directory/'dynamic-calendar.parquet'
-    @property
-    def native(self): return self.directory/'static-native.parquet'
 
 
 def _recipe(config, root):
@@ -122,14 +120,20 @@ def _canonical_columns(staging):
     from human.pipelines.delivery.validation import product_contract
     catalog_path=staging/'catalog.json'
     catalog=json.loads(catalog_path.read_text())
-    specs={item['schema']:item for item in product_contract()['products'].values()}
+    specs={item['schema']:item for item in product_contract(version=2)['products'].values()}
     for product in catalog['products']:
-        if product['schema']=='human.native_features.v1':continue
         path=staging/product['artifact']['path'];table=pq.read_table(path)
         spec=specs[product['schema']]
-        columns=[c['name'] for c in spec['columns']]
+        fields = list(spec['columns'])
+        extension = product_contract(version=2).get('extensions', {}).get('ports', {})
+        if any(c['name'] in table.column_names for c in extension.get('columns', [])):
+            fields += extension['columns']
+        columns=[c['name'] for c in fields]
         if set(table.column_names)!=set(columns):raise ValueError('Source inputs do not supply the full approved schema')
         schema=pa.ipc.read_schema(pa.BufferReader(base64.b64decode(spec['arrow_schema_base64'])))
+        if len(fields) > len(spec['columns']):
+            from human.pipelines.native.ports import FIELDS
+            schema = pa.schema([*schema, *(pa.field(name, kind) for name, kind in FIELDS)])
         table=table.select(columns).cast(schema).replace_schema_metadata(table.schema.metadata)
         pq.write_table(table,path,compression='zstd')
         product['artifact']['sha256']=digest(path)
@@ -149,7 +153,7 @@ def _runtime():
 
 def get_human_data(config=None, *, workspace=None, output_dir=None, mode='live', workers=1, overwrite=True,
                    start_date=None, end_date=None, env_file=None, verbosity=None):
-    """Run source collection and produce only static, calendar and native Parquets.
+    """Run source collection and produce only static and compact calendar Parquets.
 
     Paths in config/human.yaml are relative to the explicit workspace (or
     HUMAN_WORKSPACE/cwd). Offline reuses verified original inputs. Live also runs
@@ -174,7 +178,7 @@ def get_human_data(config=None, *, workspace=None, output_dir=None, mode='live',
         defaults={'START_DATE':first,'END_DATE':last,'DATA_DIR':cfg['output_dir']})
     output=settings.output_dir
     expected_rows={**cfg.get('expected_rows',{}),'dynamic-calendar.parquet':
-        ((date.fromisoformat(settings.end_date)-date.fromisoformat(settings.start_date)).days+1)*5}
+        ((date.fromisoformat(settings.end_date)-date.fromisoformat(settings.start_date)).days+1)*2}
     log(settings.verbosity,'Preflight passed: calendar '+settings.start_date+' through '+settings.end_date+'; output '+str(output))
     work=(root/cfg['work_dir']).resolve();sources=(root/cfg['source_store']).resolve();receipts=(root/cfg['metadata_dir']).resolve()
     paths=[output,work,sources,receipts]
@@ -185,7 +189,7 @@ def get_human_data(config=None, *, workspace=None, output_dir=None, mode='live',
     if output.exists() and any(p.name!='.DS_Store' for p in output.iterdir()):
         if not overwrite:raise FileExistsError(output)
         validate_delivery(output)
-        before={name:digest(output/name) for name in PRODUCTS}
+        before={p.name:digest(p) for p in output.iterdir() if p.name!='.DS_Store'}
     study=load_static_study(root/cfg['study_config'])
     if study['identity']['h3_resolution']!=7:raise ValueError('Supported Human delivery requires the approved R7 grain')
     # Acquire the lock before mutable source/processing work, and always release it.
@@ -206,9 +210,6 @@ def get_human_data(config=None, *, workspace=None, output_dir=None, mode='live',
             log(settings.verbosity,'Collecting/verifying native originals and configured assets')
             assets=collect_assets(cfg.get('assets',[]),root,mode=mode,byte_budget=cfg.get('max_download_bytes',0))
             spec,native_collection=collect_native(cfg['native'],root,run,sources/'native',mode=mode)
-            # Verify actual native identities/checksums before the expensive census calculation.
-            from human.pipelines.native.features import compose_native_features
-            compose_native_features(spec)
             infrastructure=_infrastructure(cfg.get('infrastructure'),root,run,spec)
             log(settings.verbosity,'Preparing/verifying original-census inputs')
             manifest=_population(cfg['population'],root,run,study,sources,mode)
@@ -223,13 +224,16 @@ def get_human_data(config=None, *, workspace=None, output_dir=None, mode='live',
                     include_bands=False,workspace=candidate_cache,source_manifest=manifest,
                     mode='offline',allow_partial=True,resource_limits={'workers':workers,'buffer_tolerance_m':0.25},dry_run=True)
                 if plan['cache_available']:cache_workspace=candidate_cache
-            log(settings.verbosity,'Building static census/infrastructure, civil calendar and native geometry products'+(' with a verified population cache' if cache_workspace else ' with uncached population calculation'))
+            log(settings.verbosity,'Building static census/infrastructure, compact civil calendar products'+(' with a verified population cache' if cache_workspace else ' with uncached population calculation'))
             from human.pipelines.population.delivery import _export_static_study
             staging=run/'products'
             catalog_path=_export_static_study(study_config=root/cfg['study_config'],workspace=run/'calculation',source_manifest=manifest,
-                output_dir=staging,retained_static=infrastructure,workers=workers,as_of=cfg['calendar']['as_of'],native_source_specification=spec,
+                output_dir=staging,retained_static=infrastructure,workers=workers,as_of=cfg['calendar']['as_of'],
                 population_cache_workspace=cache_workspace,infrastructure_rebuilt=not bool(cfg.get('infrastructure')),
                 calendar_start=settings.start_date,calendar_end=settings.end_date)
+            if spec.get('ports'):
+                from human.pipelines.native.ports import extend_staging
+                extend_staging(staging, spec['ports'])
             _canonical_columns(staging)
             catalog=json.loads(catalog_path.read_text())
             pipeline={'schema':'human.pipeline.run.v1','recipe':recipe,'runtime':_runtime(),'mode':mode,'resolved_settings':settings.public(),
@@ -243,13 +247,15 @@ def get_human_data(config=None, *, workspace=None, output_dir=None, mode='live',
                 candidate=Path(publication)/'final'
                 published=False
                 try:
-                    log(settings.verbosity,'Validating the complete staged three-product delivery')
+                    log(settings.verbosity,'Validating the complete staged two-product delivery')
                     finalize_delivery(staging,candidate,receipt,final_data_root=output)
+                    if output.exists() and (output/'REVIEW_RESULTS.txt').is_file():
+                        shutil.copy2(output/'REVIEW_RESULTS.txt', candidate/'REVIEW_RESULTS.txt')
                     validation=validate_delivery(candidate,expected_rows=expected_rows)
                     if load_static_study(root/cfg['study_config'])['identity']!=study['identity']:raise ValueError('Study changed during Human run')
                     if before is not None:
                         read_catalog(output)
-                        if {name:digest(output/name) for name in PRODUCTS}!=before:raise ValueError('Current Human data changed during processing')
+                        if {p.name:digest(p) for p in output.iterdir() if p.name!='.DS_Store'}!=before:raise ValueError('Current Human data changed during processing')
                     elif output.exists() and any(p.name!='.DS_Store' for p in output.iterdir()):
                         raise ValueError('Another output appeared during Human processing')
                     backup=Path(publication)/'previous'
@@ -268,7 +274,7 @@ def get_human_data(config=None, *, workspace=None, output_dir=None, mode='live',
                 except BaseException:
                     if not published and receipt.exists():shutil.rmtree(receipt)
                     raise
-            log(settings.verbosity,'Published three validated Parquets; run-owned processing and staging cleaned')
+            log(settings.verbosity,'Published two validated Parquets; run-owned processing and staging cleaned')
             return HumanData(output,receipt/'catalog.json',validation)
     finally:
         lock.rmdir()

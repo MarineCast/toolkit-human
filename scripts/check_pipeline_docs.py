@@ -5,7 +5,7 @@ from urllib.parse import unquote,urlparse
 
 ROOT=Path(__file__).resolve().parents[1]
 ACTIVE=('README.md','AGENTS.md','docs/ARCHITECTURE.md','docs/WORKFLOWS.md',
-        'docs/get-human-data.md','docs/import-migration.md','docs/census-sources.md','docs/product-scope.md','docs/final-delivery.md','docs/static-delivery.md')
+        'docs/get-human-data.md','docs/import-migration.md','docs/census-sources.md','docs/product-scope.md','docs/final-delivery.md','docs/static-delivery.md','docs/ports.md')
 
 
 def anchors(text):
@@ -31,7 +31,7 @@ def main():
             checked+=1
     config=ROOT/'config';resource=ROOT/'src/human/resources/config'
     for source in config.rglob('*'):
-        if source.is_file() and (not (resource/source.relative_to(config)).exists() or source.read_bytes()!=(resource/source.relative_to(config)).read_bytes()):
+        if source.is_file() and source.name != '.DS_Store' and (not (resource/source.relative_to(config)).exists() or source.read_bytes()!=(resource/source.relative_to(config)).read_bytes()):
             errors.append('Configuration/resource mismatch: '+source.relative_to(ROOT).as_posix())
     if (ROOT/'.env.example').read_bytes()!=(ROOT/'src/human/resources/env.example').read_bytes():errors.append('Environment example/resource mismatch')
     env=(ROOT/'.env.example').read_text()

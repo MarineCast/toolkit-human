@@ -65,11 +65,11 @@ def test_packaged_configuration_matches_checkout():
     root = Path(__file__).resolve().parents[1]
     source = root / 'config'
     packaged = root / 'src/human/resources/config'
-    assert {p.relative_to(source) for p in source.rglob('*') if p.is_file()} == {
-        p.relative_to(packaged) for p in packaged.rglob('*') if p.is_file()
+    assert {p.relative_to(source) for p in source.rglob('*') if p.is_file() and p.name != '.DS_Store'} == {
+        p.relative_to(packaged) for p in packaged.rglob('*') if p.is_file() and p.name != '.DS_Store'
     }
     for path in source.rglob('*'):
-        if path.is_file():
+        if path.is_file() and path.name != '.DS_Store':
             assert path.read_bytes() == (packaged / path.relative_to(source)).read_bytes()
 
 

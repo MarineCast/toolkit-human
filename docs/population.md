@@ -1,4 +1,4 @@
-> Current study output layout: [final-only Human delivery](final-delivery.md). Public outputs are `static.parquet`, `dynamic-calendar.parquet` and optional `static-native.parquet`, with metadata embedded and receipts outside the final directory. Older filenames and workspace run tables below are historical evidence. Native ferry activity, when explicitly exported, retains its own dynamic Parquet; AIS belongs to toolkit-ais.
+> Current study output layout: [final-only Human delivery](final-delivery.md). Public outputs are 14-column `static.parquet` and 11-column `dynamic-calendar.parquet`, with metadata embedded and required audit receipts outside the final directory. The standalone `get_population` API retains its full source/support results. Older filenames and workspace run tables below are historical evidence. Native ferry activity, when explicitly exported by legacy research, retains its own dynamic Parquet; AIS belongs to toolkit-ais.
 
 # Static resident population, version 1
 

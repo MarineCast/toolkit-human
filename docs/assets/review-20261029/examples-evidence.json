@@ -1,0 +1,76 @@
+{
+  "delivery_status": "UNVERIFIED DELIVERY: external receipt/audit unavailable",
+  "source_sha256": {
+    "dynamic-calendar.parquet": "7b074434809f49fdb29317deee145606d04675e01bf43f789edc916b12b7ce3a",
+    "static.parquet": "a7ee7fff3c49490f4b9de89114d37eb1221c9464e0b433e33505e416ef6b8cee"
+  },
+  "static_rows": 13461,
+  "statistics": {
+    "population_density_per_km2": {
+      "nulls": 0,
+      "min": 0.0,
+      "max": 14330.488892555271,
+      "mean": 26.536035587111545
+    },
+    "population_within_100km": {
+      "nulls": 0,
+      "min": 9.329242445817771,
+      "max": 5816261.8923587585,
+      "mean": 1201072.169640814
+    },
+    "boat_launch_count": {
+      "nulls": 0,
+      "min": 0.0,
+      "max": 4.0,
+      "mean": 0.024515266324938712
+    },
+    "shore_access_site_count": {
+      "nulls": 0,
+      "min": 0.0,
+      "max": 25.0,
+      "mean": 0.2807369437634648
+    },
+    "place_record_count": {
+      "nulls": 0,
+      "min": 0.0,
+      "max": 9.0,
+      "mean": 0.04553896441571949
+    },
+    "has_port": {
+      "nulls": 0,
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.005200208008320333
+    }
+  },
+  "calendar_monthly_holiday_dates_2025": {
+    "CA": {
+      "1": 1,
+      "2": 1,
+      "3": 0,
+      "4": 1,
+      "5": 1,
+      "6": 0,
+      "7": 1,
+      "8": 1,
+      "9": 2,
+      "10": 1,
+      "11": 1,
+      "12": 1
+    },
+    "US": {
+      "1": 2,
+      "2": 1,
+      "3": 0,
+      "4": 0,
+      "5": 1,
+      "6": 1,
+      "7": 1,
+      "8": 0,
+      "9": 1,
+      "10": 1,
+      "11": 3,
+      "12": 1
+    }
+  }
+}

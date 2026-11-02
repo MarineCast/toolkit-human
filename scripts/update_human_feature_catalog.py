@@ -1,19 +1,23 @@
-"""Generate the supported three-product catalog from the producer's contract."""
+"""Generate the supported two-product catalog from the producer's contract."""
 from __future__ import annotations
 
 from pathlib import Path
 import yaml
 from human.pipelines.delivery.validation import product_contract
-from human.pipelines.population.collected import DISPLAY_LABELS, COLLECTED_LIMITATION
-from human.pipelines.native.features import summary_fields, GROUPS
+from human.pipelines.population.collected import DISPLAY_LABELS as SOURCE_LABELS, COLLECTED_LIMITATION
+from human.pipelines.delivery.names import STATIC_NAMES
+
+DISPLAY_LABELS = {STATIC_NAMES[name]:label for name,label in SOURCE_LABELS.items()}
+from human.pipelines.native.features import delivery_fields
 
 
 def build_catalog():
     collections={}
     for name, product in product_contract()['products'].items():
-        definitions=summary_fields([c['name'] for c in product['columns']]) if name=='static.parquet' else {}
+        columns = product['columns'] + (product_contract().get('extensions', {}).get('ports', {}).get('columns', []) if name == 'static.parquet' else [])
+        definitions=delivery_fields() if name=='static.parquet' else {}
         features=[]
-        for field in product['columns']:
+        for field in columns:
             key=field['name'];definition=definitions.get(key,{})
             selected=key in DISPLAY_LABELS or key in definitions
             if key in DISPLAY_LABELS:
@@ -24,7 +28,6 @@ def build_catalog():
         collections[name.removesuffix('.parquet').replace('-','_')]={
             'artifact':name,'schema':product['schema'],'primary_key':product['primary_key'],
             'model_policy':'evidence_only','features':features}
-    collections['static_native']['groups']=GROUPS
     return {'schema_version':2,'generated_by':'scripts/update_human_feature_catalog.py',
         'pipeline':'human.get_human_data','default_model_policy':{},'collections':collections}
 

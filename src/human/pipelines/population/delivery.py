@@ -1,6 +1,8 @@
 """Human-only static delivery with verified shared selection and civil calendar."""
 from __future__ import annotations
 
+from human.pipelines.delivery.names import COMPACT_SCHEMAS
+
 import argparse
 from datetime import date, timedelta
 import json
@@ -15,13 +17,13 @@ from human.pipelines.population.water_support import load_qualified_water, quali
 import shapely
 from human.utils.study import load_static_study
 from human.utils.artifacts import write_study_parquet as _write
-from human.pipelines.calendar.lookup import build_calendar_lookup
+from human.pipelines.calendar.lookup import build_calendar_lookup, compact_calendar, compact_metadata
 
 ACCESS_PREFIXES = ('boat_launch_access__', 'public_shore_access__', 'places__')
 
 
 def _export_static_study(*, study_config, workspace, source_manifest, output_dir,
-                        retained_static=None, allow_partial=False, workers=1, as_of=None, native_source_specification=None,
+                        retained_static=None, allow_partial=False, workers=1, as_of=None,
                         population_cache_workspace=None, infrastructure_rebuilt=False, calendar_start=None, calendar_end=None):
     """Build one static table and a separate jurisdiction/date calendar lookup.
 
@@ -65,6 +67,13 @@ def _export_static_study(*, study_config, workspace, source_manifest, output_dir
         source = Path(retained_static)
         original_sha = checksum(source)
         native = pd.read_parquet(source)
+        import pyarrow.parquet as pq
+        source_table = pq.read_table(source)
+        source_info = json.loads((source_table.schema.metadata or {}).get(b'human_study', b'{}'))
+        if source_info.get('schema') in COMPACT_SCHEMAS:
+            from human.pipelines.delivery.static import restore_static
+            source_table, _ = restore_static(source_table, source_info)
+            native = source_table.to_pandas()
         if native.h3_index.duplicated().any() or not native.h3_resolution.eq(resolution).all():
             raise ValueError('Retained static identity is invalid')
         columns = [c for c in native if c.startswith(ACCESS_PREFIXES)]
@@ -79,7 +88,6 @@ def _export_static_study(*, study_config, workspace, source_manifest, output_dir
                 'No access values are filled for newly selected cells or unavailable measurements.']}
         # Final-only inputs embed their methods; do not discard ancestry when
         # the receipt deliberately lives outside the public delivery directory.
-        import pyarrow.parquet as pq
         embedded_source = (pq.read_schema(source).metadata or {}).get(b'human_study')
         if embedded_source:
             metadata['retained_static_provenance']['source_metadata'] = json.loads(embedded_source)
@@ -92,19 +100,15 @@ def _export_static_study(*, study_config, workspace, source_manifest, output_dir
             metadata['retained_static_provenance']['companion'] = {
                 'path': str(companion.resolve()), 'sha256': checksum(companion),
                 'role': 'retained native source methods, support, units and provenance'}
-    native = None
-    if native_source_specification is not None:
-        from human.pipelines.native.features import export_native_features, summary_fields
-        native = export_native_features(native_source_specification, output)
-        metadata['native_features'] = native['artifact']
-        metadata['infrastructure_fields'] = summary_fields(frame.columns)
+    from human.pipelines.native.features import summary_fields
+    metadata['infrastructure_fields'] = summary_fields(frame.columns)
     static = _write(frame, output / f'human-r{resolution}-static.parquet', metadata)
     time_cfg = study['config']['time']
     today = str(as_of or date.today())
     first=calendar_start or time_cfg['start']
     end_exclusive=(date.fromisoformat(calendar_end)+timedelta(days=1)).isoformat() if calendar_end else time_cfg['end_exclusive']
     calendar = build_calendar_lookup(first, end_exclusive, as_of=today)
-    temporal = _write(calendar, output / 'calendar-temporal.parquet', {
+    temporal = _write(compact_calendar(calendar), output / 'calendar-temporal.parquet', compact_metadata({
         'schema': 'human.study.calendar_lookup.v1', 'primary_key': ['date', 'jurisdiction'],
         'spatial_support': 'jurisdiction_reference; no H3 expansion', 'study': study['identity'],
         'temporal_support': {'start': first, 'end_exclusive': end_exclusive,
@@ -117,11 +121,11 @@ def _export_static_study(*, study_config, workspace, source_manifest, output_dir
             'is_actual_holiday means nominal rule date; is_observed_holiday means additional shifted observance.',
             'Convert a timestamp to its own local date before joining; reference timezones are not jurisdiction-wide timezone maps.',
             'Future dates are rule-based and may change with legislation.'],
-    })
+    }))
     # Fail if shared selection changed while a potentially long computation ran.
     if load_static_study(study_config)['identity'] != study['identity']:
         raise ValueError('Study configuration changed during computation')
-    catalog = {'schema': 'human.study.v1', 'products': [static, temporal, *([native] if native else [])],
+    catalog = {'schema': 'human.study.v1', 'products': [static, temporal],
         'requested_calendar_start': first,
         'requested_calendar_end': (date.fromisoformat(end_exclusive)-timedelta(days=1)).isoformat(),
         'study': study['identity'], 'model_eligible': False,
@@ -138,7 +142,7 @@ def _export_static_study(*, study_config, workspace, source_manifest, output_dir
 
 def export_static_study(*, study_config, workspace, source_manifest, output_dir,
                         retained_static=None, allow_partial=False, workers=1, as_of=None,
-                        native_source_specification=None, metadata_dir=None):
+                        metadata_dir=None):
     """Publish final-only Parquets; stage processing and receipts in the workspace."""
     import hashlib
     import tempfile
@@ -154,7 +158,7 @@ def export_static_study(*, study_config, workspace, source_manifest, output_dir,
         staging=Path(temporary)/'products'
         _export_static_study(study_config=study_config,workspace=workspace,source_manifest=source_manifest,
             output_dir=staging,retained_static=retained_static,allow_partial=allow_partial,
-            workers=workers,as_of=as_of,native_source_specification=native_source_specification)
+            workers=workers,as_of=as_of)
         return finalize_delivery(staging,output,receipts)
 
 
@@ -164,7 +168,6 @@ def main():
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--metadata-dir', type=Path, help='Toolkit-managed receipts outside the final output directory')
     parser.add_argument('--retained-static', type=Path)
-    parser.add_argument('--native-source-specification', type=Path, help='Checksum-bound retained launch/shore/place sources')
     parser.add_argument('--allow-partial', action='store_true')
     parser.add_argument('--workers', type=int, default=1)
     parser.add_argument('--as-of')

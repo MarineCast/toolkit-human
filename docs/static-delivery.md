@@ -1,6 +1,8 @@
+> Current static schema: `human.study.static.v6`, exactly 14 columns. Cell area and all eight population coverage/geographic-support columns are external audit evidence; the stored density still uses full-cell area.  The 2026-10-24 compact-static migration moves omitted per-cell columns and their original dictionary into a checksum-bound audit Parquet beside the external receipt. The historical full-width details below describe source/audit evidence; see [compact static](final-delivery.md#compact-static) for the public projection.
+
 # Static Human study delivery
 
-Current file layout is defined in [final-only delivery](final-delivery.md): `Data/Human` contains only `static.parquet`, `dynamic-calendar.parquet` and `static-native.parquet`. Embedded metadata and toolkit-managed external receipts replace public sidecar files. Earlier filenames below describe the historical input contract.
+Current file layout is defined in [final-only delivery](final-delivery.md): `Data/Human` contains only `static.parquet` and `dynamic-calendar.parquet`. Embedded metadata and toolkit-managed external receipts replace public sidecar files. Earlier filenames below describe the historical input contract.
 
 `python -m human.pipelines.population.delivery` builds a Human-only product from the approved
 shared study registry. It never selects targets from a historical rectangle. It
@@ -50,31 +52,9 @@ available-source subtotals with an explicit missing-contribution-as-zero assumpt
 
 ## Calendar migration
 
-`dynamic-calendar.parquet` (formerly `calendar-temporal.parquet`) is `human.study.calendar_lookup.v1`, with primary
-key `(date, jurisdiction)`. Consumers of the older single-date calendar must select
-one jurisdiction or join on both fields. The current map adapter consumes only the
-static table, so its interface is preserved without application changes.
+Current `dynamic-calendar.parquet` is `human.study.calendar_lookup.v2`, keyed by `(date, country, timezone)`. It unions actual and shifted observed holiday names across configured federal/WA/OR or federal/BC calendars. Local civil date, weekend, holiday names/flag, ISO year/week, day of year, civil year and month are columns; rule pins, jurisdictions and as-of stay in metadata. This is regional context, not nationwide observance, empirical attendance or measured activity. Reference zones do not cover all subregions. See the authoritative [compact calendar and migration](final-delivery.md#compact-calendar).
 
-Rows cover each configured civil date, with an exclusive end date, for US federal,
-Washington, Oregon, Canada federal and British Columbia reference calendars. Regional
-rows follow applicable state/provincial rules; they are not the union of all
-federal employment holidays. `is_actual_holiday` identifies the rule's calendar
-date; `is_observed_holiday` identifies an additional shifted observance returned by
-the rules library (including coincident observances). Actual does not mean empirical
-attendance was observed. Employer-specific substitute days are not inferred.
-Names, rules-library version and as-of date are retained; future entries are labeled
-`rule_based_future`. Past entries are also rule-generated, not source event records.
-
-Date labels are local civil dates, not UTC day labels. Reference timezone columns
-and aware UTC day boundaries preserve 23/24/25-hour days under the packaged IANA
-rules. Their `timezone_rules_version` is retained in rows and the companion,
-independent of the host operating system database. Reference zones are America/Los_Angeles and America/Vancouver; they are not
-a complete timezone map of each jurisdiction (parts of Oregon use Mountain time).
-Convert a timestamp into its applicable local date before the jurisdiction/date
-join. There are no calendar-effort, viewing-season or human-presence scores.
-The active feature catalog advertises this lookup and excludes calendar-effort weights.
-Legacy direct calendar helpers and `human build calendar` retain their existing
-output compatibility; use `python -m human.pipelines.population.delivery` for this product.
+The old v1 jurisdiction lookup and UTC-boundary columns are historical. Consumers must update their join and field selection explicitly; a UTC-date join remains invalid. Source-backed static values are preserved. The map reader accepts both final-only delivery versions and no longer gets native overlays from current products.
 
 ## Reproducible commands
 
@@ -112,7 +92,7 @@ Calendar rule references: [US federal holiday scope and observance](https://www.
 
 ## Collected-source 100 km display estimate
 
-The current app-default field is `population_within_100km_collected`, labeled
+The current app-default field is `population_within_100km`; its source/audit counterpart is `population_within_100km_collected`, labeled
 “Population Within 100km”. It reuses the existing 100 km available-source
 subtotal and replaces an absent subtotal with zero. Unavailable source/geographic
 contributions are explicitly assumed zero for this derived estimate only. The
@@ -171,42 +151,9 @@ or unrelated fields.
 
 ## Native infrastructure and destinations
 
-`python -m human.pipelines.native.features --source-specification <source-specification.json>
---extend-static <current-delivery-directory> --output-dir <empty-staging-directory>`
-extends a verified static delivery using retained checksum-bound launch, shore and
-place sources. `human.pipelines.population.delivery --native-source-specification` accepts the
-same specification for future full exports. Neither operation acquires new inputs.
-The source specification and source manifests remain checksum-linked in the native
-companion and current catalog. The delivered `static-native.parquet` uses
-EPSG:4326 native points, lines and source areas in GeoParquet with namespaced feature identities.
-Primary records and optional context footprints have separate counts.
+Native source collection remains necessary for static launch, shore, destination and port counts. Sources, classifications, geometry and unknowns stay in the retained original store with provenance; they are partial inventories and do not establish present public access, operation, visitation or a unique physical-site count. Native geometry export, park display repair and native extension commands are removed from delivery after the 2026-10-24 review. `static-native.parquet` is no longer produced. Static summaries retain their original spatial support and nulls.
 
-The retained snapshot has 367 launch records, 4,095 shore-site records, 750 named
-destinations and 1,480 WA shoreline classifications. It is a partial source
-inventory, not necessarily a unique count of physical sites. Native geometry
-is not replaced with H3 centers. Original facility/access/source attributes and
-unknown values remain attached. Retained destination selection scores are selection
-evidence, not activity or visitation. Vintages vary and include legacy BC launch
-data circa 2004; a current export timestamp does not make those source records new.
-
-Sixty selected WA park footprints are available as optional context. Marine-facing
-representative destination points are not surveyed entrances. Nine invalid source
-park polygons are repaired only in the display copy with `make_valid`; original
-geometry validity and WKB checksums remain explicit and original source files are
-unchanged. Footprints do not establish legal access boundaries.
-
-The WA access-line source includes public-evidence, restricted, conditional,
-watercraft-only and unknown classes; source CLASS and CLASS_DESC remain attached.
-The legacy all-line accessible-length/fraction summaries included nonpublic classes
-and are therefore withheld from explorer selection. Their raw values remain
-unchanged for audit. Useful mapped-record counts and total marine shoreline length
-remain separate H3 summaries, limited to the shared reporting grid. Missing cells
-are unknown, never an inferred absence of facilities. Mapping or a public label does
-not guarantee current public access, operation, safe access or observed use.
-
-Validation: `PYTHONTZPATH='' python -m pytest -q tests/test_native_features.py`
-checks source checksums, identity, restrictions, representative points, optional
-source geometry, deterministic exports and exact population/calendar preservation.
+The historical snapshot had 367 launch records, 4,095 shore sites, 750 destinations, 1,480 WA classification lines and 84 NGA port points. Those counts describe that inventory, not current completeness or a newly collected run. Withheld shoreline length/fraction/state summaries remain audit-only. See [current delivery](final-delivery.md) and [port source counts](ports.md).
 
 
 The public delivery also excludes `population_density_per_km2_collected__coverage_status`.
