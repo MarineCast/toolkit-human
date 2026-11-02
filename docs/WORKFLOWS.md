@@ -1,7 +1,7 @@
 # Workflows
 
 Install the package in the documented Python environment, configure `config/human.yaml`, and run `human get-human-data` or `from human import get_human_data; get_human_data()`.
-`human get-human-data` collects missing configured sources. `--mode offline` requires retained verified snapshots. `human validate /path/to/Data/Human` checks the three final products. See [the pipeline guide](get-human-data.md) for source acquisition, missing-input behavior, pinned calendar rules and cleanup.
+`human get-human-data` collects missing configured sources. `--mode offline` requires retained verified snapshots. `human validate /path/to/Data/Human` checks the two final products. See [the pipeline guide](get-human-data.md) for source acquisition, missing-input behavior, pinned calendar rules and cleanup.
 
 Run supported pipeline checks with:
 
@@ -15,7 +15,7 @@ python -m pip wheel --no-deps --no-build-isolation . -w /path/to/small/wheel-sta
 
 Validate a regular wheel outside the checkout with `scripts/check_installed_wheel.py` and the copied `tests/test_census_acquisition.py`, `tests/test_run_settings.py`, `tests/test_pipeline.py` plus its fixture modules (`test_static_delivery.py`, `test_native_features.py`) under a `tests` package. A wheel test must not inherit the checkout's PYTHONPATH.
 
-Tests use synthetic source fixtures and fake bounded HTTP responses. They verify all three output grains, source checksums, cleanup on success/failure, publication rollback, immutable receipts, semantic rejection and preserved scientific ancestry. They do not qualify live source availability, current source rights, historical snapshot recovery or a regional reproduction.
+Tests use synthetic source fixtures and fake bounded HTTP responses. They verify both output grains, the exact 14-column projection, lossless external audit reconstruction, audit identity/tamper rejection, source checksums, cleanup on success/failure, publication rollback, immutable receipts, semantic rejection and preserved scientific ancestry. They do not qualify live source availability, current source rights, historical snapshot recovery or a regional reproduction.
 
 The base dependency check excludes tests marked `legacy`; the legacy viewshed packaging import is still exercised by the full native suite.
 

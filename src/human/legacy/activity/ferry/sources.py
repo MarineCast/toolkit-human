@@ -39,6 +39,7 @@ import re
 import shutil
 import sys
 import subprocess
+import tempfile
 import zipfile
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
@@ -302,7 +303,15 @@ def read_hyper(config: Config, hyper_path: Path) -> pd.DataFrame:
                OR "Veh Traf per Sailing" IS NOT NULL)
     """
 
-    with HyperProcess(Telemetry.DO_NOT_SEND_USAGE_DATA_TO_TABLEAU) as process:
+    # Isolate this invocation's diagnostics; close Hyper before removing its logs.
+    config.cache_dir.mkdir(parents=True, exist_ok=True)
+    with (
+        tempfile.TemporaryDirectory(prefix="hyper-logs-", dir=config.cache_dir) as log_dir,
+        HyperProcess(
+            Telemetry.DO_NOT_SEND_USAGE_DATA_TO_TABLEAU,
+            parameters={"log_dir": log_dir},
+        ) as process,
+    ):
         with Connection(process.endpoint, str(hyper_path)) as connection:
             try:
                 rows = connection.execute_list_query(query)

@@ -1,23 +1,19 @@
 """Qualified retained Human locations and source geometry, independent of applications."""
 from __future__ import annotations
 
-import argparse
 from collections import Counter
 import copy
 import hashlib
 import json
 from pathlib import Path
-import shutil
 
 import geopandas as gpd
 import h3
 import pandas as pd
-import pyarrow.parquet as pq
 from shapely.geometry import Point, mapping
 from shapely import make_valid
 
 SCHEMA = 'human.native_features.v1'
-FILE = 'human-native-features.geojson'
 from human.pipelines.native.ports import GROUP as PORT_GROUP, LIMITS as PORT_LIMITS
 
 GROUPS = {
@@ -156,6 +152,13 @@ def compose_native_features(specification):
 
 def summary_fields(columns):
     """Only interpretable retained summaries; do not relabel unqualified length as public."""
+    from human.pipelines.delivery.names import STATIC_NAMES_V4 as STATIC_NAMES
+    inverse = {value:key for key,value in STATIC_NAMES.items()}
+    public_names = any(name in inverse and name != inverse[name] for name in columns)
+    if public_names:
+        original = [inverse.get(name,name) for name in columns]
+        return {STATIC_NAMES.get(name,name): {**info, 'qualifiers':[STATIC_NAMES.get(q,q) for q in info['qualifiers']]}
+            for name,info in summary_fields(original).items()}
     definitions = {
       'boat_launch_access__BOAT_LAUNCH_COUNT': ('Boat Launch Source Records', 'Boat Launches', 'records'),
       'boat_launch_access__VERIFIED_PUBLIC_BOAT_LAUNCH_COUNT': ('Source-Labeled Public Launch Records', 'Boat Launches', 'records'),
@@ -182,76 +185,29 @@ def summary_fields(columns):
     return result
 
 
-def export_native_features(specification, output_dir):
-    output = Path(output_dir);output.mkdir(parents=True, exist_ok=True)
-    path = output / FILE
-    if path.exists() or path.with_suffix('.metadata.json').exists(): raise FileExistsError(path)
-    payload, metadata = compose_native_features(specification)
-    path.write_text(json.dumps(payload, ensure_ascii=False, sort_keys=True, allow_nan=False, separators=(',', ':')))
-    metadata['artifact'] = {'path': FILE, 'sha256': checksum(path), 'bytes': path.stat().st_size,
-        'rows': sum(g['records'] for g in metadata['groups'].values()), 'features': len(payload['features']),
-        'context_features': sum(g['context_features'] for g in metadata['groups'].values())}
-    path.with_suffix('.metadata.json').write_text(json.dumps(metadata, indent=2, sort_keys=True, ensure_ascii=False))
-    return metadata
-
-
-def _extend_static_delivery(input_dir, specification, output_dir):
-    """Extend an existing verified current delivery without touching population values."""
-    source, output = Path(input_dir), Path(output_dir)
-    if output.exists() and any(output.iterdir()): raise FileExistsError('Use an empty staging directory')
-    catalog = json.loads((source/'catalog.json').read_text());name = 'human-r7-static.parquet'
-    old = json.loads((source/'human-r7-static.metadata.json').read_text())
-    table = pq.read_table(source/name)
-    if old['artifact']['sha256'] != checksum(source/name) or old not in catalog['products']:
-        raise ValueError('Static source binding mismatch')
-    native = export_native_features(specification, output)
-    metadata = {k: copy.deepcopy(v) for k, v in old.items() if k != 'artifact'}
-    metadata['infrastructure_fields'] = summary_fields(table.column_names)
-    metadata['native_features'] = native['artifact']
-    schema_meta = dict(table.schema.metadata or {})
-    schema_meta[b'human_study'] = json.dumps(metadata, sort_keys=True).encode()
-    pq.write_table(table.replace_schema_metadata(schema_meta), output/name, compression='zstd')
-    metadata['artifact'] = {**old['artifact'], 'sha256': checksum(output/name)}
-    (output/'human-r7-static.metadata.json').write_text(json.dumps(metadata, indent=2, sort_keys=True))
-    assert pq.read_table(output/name).equals(table, check_metadata=False)
-    catalog['products'] = [metadata if product == old else product for product in catalog['products'] if product.get('schema') != SCHEMA]
-    catalog['products'].append(native)
-    for product in catalog['products']:
-        path = product['artifact']['path']
-        if path not in (name, FILE):
-            shutil.copy2(source/path, output/path)
-            companion = (source/path).with_suffix('.metadata.json')
-            if companion.exists(): shutil.copy2(companion, output/companion.name)
-    (output/'catalog.json').write_text(json.dumps(catalog, indent=2, sort_keys=True))
-    if checksum(source/name) != old['artifact']['sha256']: raise ValueError('Current source changed during extension')
-    return output/'catalog.json'
-
-
-def extend_static_delivery(input_dir, specification, output_dir, *, metadata_dir=None):
-    """Extend legacy or final-only input and publish only final Parquets."""
-    import tempfile
-    from human.pipelines.delivery.finalize import finalize_delivery, materialize_legacy
-    output=Path(output_dir)
-    if output.exists() and any(output.iterdir()): raise FileExistsError('Use an empty final delivery directory')
-    identity=hashlib.sha256(str(output.resolve()).encode()).hexdigest()[:16]
-    receipts=Path(metadata_dir) if metadata_dir else Path.cwd()/'data/delivery-metadata'/identity
-    receipts.parent.mkdir(parents=True,exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix='human-native-',dir=receipts.parent) as temporary:
-        legacy,staging=Path(temporary)/'legacy',Path(temporary)/'extended'
-        materialize_legacy(input_dir,legacy)
-        _extend_static_delivery(legacy,specification,staging)
-        return finalize_delivery(staging,output,receipts)
-
-
-def main():
-    parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--source-specification',type=Path,required=True)
-    parser.add_argument('--output-dir',type=Path,required=True)
-    parser.add_argument('--extend-static',type=Path)
-    parser.add_argument('--metadata-dir',type=Path,help='Toolkit-managed receipts outside final data')
-    args=parser.parse_args()
-    result=extend_static_delivery(args.extend_static,args.source_specification,args.output_dir,metadata_dir=args.metadata_dir) if args.extend_static else export_native_features(args.source_specification,args.output_dir)
-    print(result if isinstance(result,Path) else json.dumps(result['artifact']))
-
-
-if __name__=='__main__':main()
+def delivery_fields():
+    """Reviewed totals and port presence with explicit unknown-as-zero encoding."""
+    from human.pipelines.delivery.names import STATIC_NAMES, TRANSFORMED_SOURCE_COLUMNS, PRESENCE_FROM_COUNTS
+    source = summary_fields(list(TRANSFORMED_SOURCE_COLUMNS))
+    labels = {'boat_launch_count':'Boat Launches', 'shore_access_site_count':'Shore Access Sites',
+        'place_record_count':'Named Destination Records', 'has_port':'Port Present'}
+    result = {}
+    for raw, public in STATIC_NAMES.items():
+        if raw not in TRANSFORMED_SOURCE_COLUMNS: continue
+        info = {**source[raw], 'label':labels[public], 'qualifiers':[],
+            'units':'0/1' if public=='has_port' else 'records',
+            'source_count_field':raw, 'null_fill_value':0,
+            'null_fill_policy':'unknown_as_zero_user_review_20261024',
+            'limitation':source[raw]['limitation']+' Public counts encode missing source support as zero by user instruction; originals and null masks remain in the external audit. Zero does not establish physical absence.'}
+        if public=='has_port':
+            info['derivation']='int64(fill_null(source_count, 0) > 0)'
+            info['measurement_type']='binary_presence'
+        else: info['derivation']='fill_null(source_count, 0), checked nonnegative integral int64'
+        if public=='shore_access_site_count':
+            info['limitation']+=' Uses the existing all-site total, including unknown, public, conditional and restricted records; category subtotals are not added again.'
+        result[public]=info
+    labels={'has_boat_launch':'Boat Launch Present','has_shore_access_site':'Shore Access Site Present','has_place':'Place Present'}
+    for presence,count in PRESENCE_FROM_COUNTS.items():
+        result[presence]={**result[count], 'label':labels[presence], 'units':'0/1',
+            'derived_from':count, 'derivation':'int64('+count+' > 0)', 'measurement_type':'binary_presence'}
+    return result

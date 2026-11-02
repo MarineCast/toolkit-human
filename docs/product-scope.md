@@ -1,6 +1,6 @@
 # Supported Human product
 
-The supported outcome is exactly `static.parquet`, `dynamic-calendar.parquet` and `static-native.parquet`, produced by `human.get_human_data`. It includes collected resident population, source-derived infrastructure summaries, jurisdiction/local-date calendar context, native launches, shore sites, places, shoreline classifications and park context. See [the pipeline](get-human-data.md).
+The supported outcome is exactly `static.parquet` and `dynamic-calendar.parquet`, produced by `human.get_human_data`. It includes collected resident population, source-derived infrastructure summaries, compact country/reference-timezone/local-date calendar context. Native launches, shore sites, places, classifications and ports remain retained sources for static summaries; native geometry is no longer exported. See [the pipeline](get-human-data.md).
 
 The catalog and CLI advertise only this product. Existing direct family helpers, ferry, viewshed, routing, old population surfaces, calendar-effort and reporting-opportunity code/configuration remain legacy compatibility. They are not pipeline stages or additional supported deliveries. AIS is owned by toolkit-ais. New effects/pressure/tourism/fishing products and the distance-to-features TODO are deferred.
 

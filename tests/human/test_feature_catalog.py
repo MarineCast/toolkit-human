@@ -1,8 +1,11 @@
 import runpy
 from importlib.resources import files
 import yaml
-from human.pipelines.population.collected import DISPLAY_LABELS
-from human.pipelines.native.features import summary_fields
+from human.pipelines.population.collected import DISPLAY_LABELS as SOURCE_LABELS
+from human.pipelines.delivery.names import STATIC_NAMES
+
+DISPLAY_LABELS = {STATIC_NAMES[name]:label for name,label in SOURCE_LABELS.items()}
+from human.pipelines.native.features import delivery_fields
 from human.pipelines.delivery.validation import product_contract
 
 
@@ -14,7 +17,7 @@ def test_catalog_describes_only_supported_outputs():
     assert all(not f['model_eligible'] for p in catalog['collections'].values() for f in p['features'])
     static=catalog['collections']['static']['features']
     selected={f['name'] for f in static if f['selectable']}
-    assert selected==set(DISPLAY_LABELS)|set(summary_fields([f['name'] for f in static]))
+    assert selected==set(DISPLAY_LABELS)|set(delivery_fields())
     assert not any('250km' in f['name'] for f in static)
 
 

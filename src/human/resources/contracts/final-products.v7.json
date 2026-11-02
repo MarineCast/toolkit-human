@@ -1,0 +1,142 @@
+{
+  "schema": "human.product_contract.v7",
+  "products": {
+    "dynamic-calendar.parquet": {
+      "schema": "human.study.calendar_lookup.v2",
+      "primary_key": [
+        "date",
+        "country",
+        "timezone"
+      ],
+      "columns": [
+        {
+          "name": "date",
+          "arrow_type": "large_string"
+        },
+        {
+          "name": "country",
+          "arrow_type": "large_string"
+        },
+        {
+          "name": "timezone",
+          "arrow_type": "large_string"
+        },
+        {
+          "name": "is_weekend",
+          "arrow_type": "bool"
+        },
+        {
+          "name": "holiday_names",
+          "arrow_type": "large_string"
+        },
+        {
+          "name": "is_holiday",
+          "arrow_type": "bool"
+        },
+        {
+          "name": "iso_year",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "iso_week",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "day_of_year",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "year",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "month",
+          "arrow_type": "int64"
+        }
+      ],
+      "arrow_schema_base64": "/////3gCAAAQAAAAAAAKAAwABgAFAAgACgAAAAABBAAMAAAACAAIAAAABAAIAAAABAAAAAsAAAAcAgAA4AEAALABAACAAQAATAEAABwBAADcAAAApAAAAGwAAAA4AAAABAAAACD+//8AAAECEAAAABgAAAAEAAAAAAAAAAUAAABtb250aAAAADT///8AAAABQAAAAFD+//8AAAECEAAAABgAAAAEAAAAAAAAAAQAAAB5ZWFyAAAAAGT///8AAAABQAAAAID+//8AAAECEAAAABwAAAAEAAAAAAAAAAsAAABkYXlfb2ZfeWVhcgCY////AAAAAUAAAAC0/v//AAABAhAAAAAcAAAABAAAAAAAAAAIAAAAaXNvX3dlZWsAAAAAzP///wAAAAFAAAAA6P7//wAAAQIQAAAAJAAAAAQAAAAAAAAACAAAAGlzb195ZWFyAAAAAAgADAAIAAcACAAAAAAAAAFAAAAAJP///wAAAQYQAAAAHAAAAAQAAAAAAAAACgAAAGlzX2hvbGlkYXkAABj///9Q////AAABFBAAAAAgAAAABAAAAAAAAAANAAAAaG9saWRheV9uYW1lcwAAAEj///+A////AAABBhAAAAAcAAAABAAAAAAAAAAKAAAAaXNfd2Vla2VuZAAAdP///6z///8AAAEUEAAAABwAAAAEAAAAAAAAAAgAAAB0aW1lem9uZQAAAACg////2P///wAAARQQAAAAGAAAAAQAAAAAAAAABwAAAGNvdW50cnkAyP///xAAFAAIAAYABwAMAAAAEAAQAAAAAAABFBAAAAAcAAAABAAAAAAAAAAEAAAAZGF0ZQAAAAAEAAQABAAAAA=="
+    },
+    "static.parquet": {
+      "schema": "human.study.static.v6",
+      "primary_key": [
+        "h3_index"
+      ],
+      "columns": [
+        {
+          "name": "h3_index",
+          "source_name": "h3_index",
+          "arrow_type": "large_string"
+        },
+        {
+          "name": "h3_resolution",
+          "source_name": "h3_resolution",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "population_count",
+          "source_name": "population_count_collected",
+          "arrow_type": "double"
+        },
+        {
+          "name": "population_within_25km",
+          "source_name": "population_within_25km_collected",
+          "arrow_type": "double"
+        },
+        {
+          "name": "population_within_50km",
+          "source_name": "population_within_50km_collected",
+          "arrow_type": "double"
+        },
+        {
+          "name": "population_within_100km",
+          "source_name": "population_within_100km_collected",
+          "arrow_type": "double"
+        },
+        {
+          "name": "population_density_per_km2",
+          "source_name": "population_density_per_km2_collected",
+          "arrow_type": "double"
+        },
+        {
+          "name": "boat_launch_count",
+          "source_name": "boat_launch_access__BOAT_LAUNCH_COUNT",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "shore_access_site_count",
+          "source_name": "public_shore_access__PUBLIC_ACCESS_SITE_COUNT",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "place_record_count",
+          "source_name": "places__CATALOG_RECORD_COUNT",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "has_port",
+          "source_name": "ports__SOURCE_RECORD_COUNT",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "has_boat_launch",
+          "arrow_type": "int64",
+          "derived_from": "boat_launch_count",
+          "derivation": "int64(count > 0)"
+        },
+        {
+          "name": "has_shore_access_site",
+          "arrow_type": "int64",
+          "derived_from": "shore_access_site_count",
+          "derivation": "int64(count > 0)"
+        },
+        {
+          "name": "has_place",
+          "arrow_type": "int64",
+          "derived_from": "place_record_count",
+          "derivation": "int64(count > 0)"
+        }
+      ],
+      "arrow_schema_base64": "/////7ADAAAQAAAAAAAKAAwABgAFAAgACgAAAAABBAAMAAAACAAIAAAABAAIAAAABAAAAA4AAABQAwAA/AIAALwCAAB8AgAAPAIAAPwBAAC4AQAAeAEAADQBAAD0AAAAvAAAAIAAAAA8AAAABAAAAPj8//8AAAECEAAAABwAAAAEAAAAAAAAAAkAAABoYXNfcGxhY2UAAAA0/f//AAAAAUAAAAAs/f//AAABAhAAAAAoAAAABAAAAAAAAAAVAAAAaGFzX3Nob3JlX2FjY2Vzc19zaXRlAAAAdP3//wAAAAFAAAAAbP3//wAAAQIQAAAAIAAAAAQAAAAAAAAADwAAAGhhc19ib2F0X2xhdW5jaACs/f//AAAAAUAAAACk/f//AAABAhAAAAAcAAAABAAAAAAAAAAIAAAAaGFzX3BvcnQAAAAA4P3//wAAAAFAAAAA2P3//wAAAQIQAAAAJAAAAAQAAAAAAAAAEgAAAHBsYWNlX3JlY29yZF9jb3VudAAAHP7//wAAAAFAAAAAFP7//wAAAQIQAAAAKAAAAAQAAAAAAAAAFwAAAHNob3JlX2FjY2Vzc19zaXRlX2NvdW50AFz+//8AAAABQAAAAFT+//8AAAECEAAAACQAAAAEAAAAAAAAABEAAABib2F0X2xhdW5jaF9jb3VudAAAAJj+//8AAAABQAAAAJD+//8AAAEDEAAAACwAAAAEAAAAAAAAABoAAABwb3B1bGF0aW9uX2RlbnNpdHlfcGVyX2ttMgAAFv///wAAAgDQ/v//AAABAxAAAAAoAAAABAAAAAAAAAAXAAAAcG9wdWxhdGlvbl93aXRoaW5fMTAwa20AUv///wAAAgAM////AAABAxAAAAAoAAAABAAAAAAAAAAWAAAAcG9wdWxhdGlvbl93aXRoaW5fNTBrbQAAjv///wAAAgBI////AAABAxAAAAAoAAAABAAAAAAAAAAWAAAAcG9wdWxhdGlvbl93aXRoaW5fMjVrbQAAyv///wAAAgCE////AAABAxAAAAAoAAAABAAAAAAAAAAQAAAAcG9wdWxhdGlvbl9jb3VudAAABgAIAAYABgAAAAAAAgDA////AAABAhAAAAAoAAAABAAAAAAAAAANAAAAaDNfcmVzb2x1dGlvbgAAAAgADAAIAAcACAAAAAAAAAFAAAAAEAAUAAgABgAHAAwAAAAQABAAAAAAAAEUEAAAACAAAAAEAAAAAAAAAAgAAABoM19pbmRleAAAAAAEAAQABAAAAA=="
+    }
+  }
+}

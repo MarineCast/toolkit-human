@@ -77,7 +77,7 @@ def test_local_recipe_preferred_but_present_corruption_never_falls_back(tmp_path
     recipe['population']={'source_manifest':str(tmp_path/'missing-normalized.json'),'specification':str(official),'local_specification':str(local)}
     config.write_text(yaml.safe_dump(recipe))
     from human import get_human_data
-    assert len(get_human_data(workspace=tmp_path).validation)==3 and len(calls)==5
+    assert len(get_human_data(workspace=tmp_path).validation)==2 and len(calls)==5
     calls.clear();local.write_text('corrupt local recipe')
     with pytest.raises(ValueError):get_human_data(workspace=tmp_path)
     assert not calls

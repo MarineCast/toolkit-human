@@ -4,6 +4,8 @@ Reads a checksum-pinned original GeoParquet; never downloads or imports Governan
 """
 from __future__ import annotations
 
+from human.pipelines.delivery.names import COMPACT_SCHEMAS
+
 from collections import Counter
 import copy
 import json
@@ -100,31 +102,19 @@ def add_summary(table, features):
     return table
 
 
+def summary_binding(features):
+    """Small source-ID/cell binding for validation without a delivered point file."""
+    return {str(f['properties']['attributes']['SOURCE_RECORD_ID']): f['properties']['h3_index'] for f in features}
+
+
 def extend_staging(staging, entry):
-    """Reconcile native ports and append static summaries in a private legacy stage."""
-    from human.pipelines.delivery.finalize import native_payload
+    """Append static port counts and retained source provenance, without a native export."""
     from human.pipelines.native.features import summary_fields
     staging = Path(staging)
     catalog_path = staging/'catalog.json'
     catalog = json.loads(catalog_path.read_text())
     static = next(p for p in catalog['products'] if p['schema'] == 'human.study.static.v1')
-    native = next(p for p in catalog['products'] if p['schema'] == 'human.native_features.v1')
     features, receipt = port_features(entry)
-    path = staging/native['artifact']['path']
-    payload = native_payload(path)
-    existing = [f for f in payload['features'] if f['properties']['group'] == 'ports']
-    if existing and existing != features:
-        raise ValueError('Existing Human ports differ from pinned inventory; explicit reconciliation required')
-    if not existing:
-        payload['features'].extend(features)
-    ids = [f['id'] for f in payload['features']]
-    if len(ids) != len(set(ids)):
-        raise ValueError('Duplicate native identity during ports migration')
-    path.write_text(json.dumps(payload, ensure_ascii=False, sort_keys=True, allow_nan=False, separators=(',', ':')))
-    native['groups']['ports'] = group_metadata(features)
-    native['source_receipts'] = [r for r in native['source_receipts'] if r.get('source_id') != 'nga_world_port_index'] + [receipt]
-    native['artifact'].update(sha256=digest(path), bytes=path.stat().st_size,
-                              rows=sum(g['records'] for g in native['groups'].values()), features=len(payload['features']))
     static_path = staging/static['artifact']['path']
     table = pq.read_table(static_path)
     if COUNT not in table.column_names:
@@ -133,12 +123,12 @@ def extend_staging(staging, entry):
         base = table.drop_columns([name for name, _ in FIELDS])
         if not add_summary(base, features).equals(table, check_metadata=False):
             raise ValueError('Existing Human port summaries differ')
-    static.update(native_features=native['artifact'], ports=receipt,
+    static.update(ports=receipt, port_h3_by_source_id=summary_binding(features),
                   infrastructure_fields=summary_fields(table.column_names))
     metadata = {k: v for k, v in static.items() if k != 'artifact'}
     pq.write_table(table.replace_schema_metadata({**(table.schema.metadata or {}), b'human_study': json.dumps(metadata, sort_keys=True).encode()}), static_path, compression='zstd')
     static['artifact'].update(sha256=digest(static_path))
-    for product in (static, native):
+    for product in (static,):
         (staging/product['artifact']['path']).with_suffix('.metadata.json').write_text(json.dumps(product, indent=2, sort_keys=True))
     catalog['ports_migration'] = {'method': 'nga-physical-port-ownership-1', 'source': receipt, 'limitations': LIMITS}
     catalog_path.write_text(json.dumps(catalog, indent=2, sort_keys=True))
@@ -158,21 +148,28 @@ def migrate_delivery(root, entry, *, metadata_dir):
     try:
         validate_delivery(root)
         before = {p.name: digest(p) for p in root.iterdir() if p.suffix == '.parquet'}
-        if 'ports' in next(p for p in read_catalog(root)['products'] if p['schema'] == 'human.native_features.v1')['groups']:
+        if 'ports' in next(p for p in read_catalog(root)['products'] if p['schema'] in ('human.study.static.v1', *COMPACT_SCHEMAS)):
             raise ValueError('Ports already present; inspect current source binding before migration')
         with tempfile.TemporaryDirectory(prefix='.'+root.name+'-ports-', dir=root.parent) as temporary:
             stage, candidate, backup = (Path(temporary)/name for name in ('legacy', 'candidate', 'previous'))
             materialize_legacy(root, stage)
             extend_staging(stage, entry)
             finalize_delivery(stage, candidate, metadata_dir, final_data_root=root)
+            if (root/'REVIEW_RESULTS.txt').is_file():
+                import shutil
+                shutil.copy2(root/'REVIEW_RESULTS.txt', candidate/'REVIEW_RESULTS.txt')
             report = validate_delivery(candidate)
             for name in ('static.parquet', 'dynamic-calendar.parquet'):
                 old, new = pq.read_table(root/name), pq.read_table(candidate/name)
-                if not old.equals(new.select(old.column_names), check_metadata=False):
+                if name=='static.parquet':
+                    from human.pipelines.delivery.static import restore_static
+                    old_info=next(p for p in read_catalog(root)['products'] if p['artifact']['path']==name)
+                    new_info=next(p for p in read_catalog(candidate)['products'] if p['artifact']['path']==name)
+                    if old_info['schema'] in COMPACT_SCHEMAS: old,_=restore_static(old,old_info)
+                    new,_=restore_static(new,new_info)
+                columns=[c for c in old.column_names if name!='static.parquet' or c not in {n for n,_ in FIELDS}]
+                if not old.select(columns).equals(new.select(columns), check_metadata=False):
                     raise ValueError('Non-port Human values changed')
-            old, new = pq.read_table(root/'static-native.parquet'), pq.read_table(candidate/'static-native.parquet')
-            if not old.equals(new.slice(0, old.num_rows), check_metadata=False):
-                raise ValueError('Existing Human native values changed')
             if before != {name: digest(root/name) for name in before}:
                 raise ValueError('Human delivery changed during migration')
             root.rename(backup)

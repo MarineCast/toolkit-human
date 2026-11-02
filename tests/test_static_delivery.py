@@ -4,6 +4,7 @@ import json
 import geopandas as gpd
 import h3
 import pandas as pd
+import pyarrow.parquet as pq
 import pytest
 from shapely.geometry import box
 
@@ -62,27 +63,28 @@ def test_static_delivery_no_proxies_and_compatible_binding(tmp_path):
     assert not result.is_relative_to(output)
     static = pd.read_parquet(output/'static.parquet')
     assert static.h3_index.tolist() == [cell]
-    assert {'population_count_collected', 'population_density_per_km2_collected',
-        'population_within_25km_collected', 'population_within_50km_collected',
-        'population_within_100km_collected'} <= set(static.columns)
-    assert static.population_within_100km_collected.iloc[0] == pytest.approx(100.)
+    assert {'population_count', 'population_density_per_km2',
+        'population_within_25km', 'population_within_50km',
+        'population_within_100km'} <= set(static.columns)
+    assert static.population_within_100km.iloc[0] == pytest.approx(100.)
     for radius in (25, 50, 100):
-        assert f'population_within_{radius}km' not in static
+        assert f'population_within_{radius}km_collected' not in static
     assert not any('250km' in column for column in static)
     assert not any(column.startswith('population_0_') for column in static)
-    assert static['boat_launch_access__BOAT_LAUNCH_COUNT'].isna().all()
+    assert static['boat_launch_count'].eq(0).all()
+    assert str(static.boat_launch_count.dtype)=='int64'
     assert 'population__POPULATION' not in static
     assert not any('opportunity' in c for c in static)
-    meta = next(product for product in catalog['products'] if product['schema']=='human.study.static.v1')
-    assert meta['schema'] == 'human.study.static.v1'
+    meta = next(product for product in catalog['products'] if product['schema']=='human.study.static.v6')
+    assert meta['schema'] == 'human.study.static.v6'
     assert meta['population']['radii_km'] == [25., 50., 100.]
     assert meta['population']['method_parameters']['buffer_tolerance_m'] == 0.25
     assert not any('250km' in field for field in meta['population']['fields'])
     for radius in (25, 50, 100):
-        assert f'population_within_{radius}km' not in meta['population']['fields']
-    assert meta['population']['distance_delivery']['fields'] == [f'population_within_{r}km_collected' for r in (25, 50, 100)]
-    from human.pipelines.population.collected import DISPLAY_LABELS, PUBLIC_BASES
-    assert not set(PUBLIC_BASES) & set(static)
+        assert f'population_within_{radius}km' in meta['population']['fields']
+    assert meta['population']['distance_delivery']['fields'] == [f'population_within_{r}km' for r in (25, 50, 100)]
+    from human.pipelines.population.collected import DISPLAY_LABELS as RAW_LABELS
+    DISPLAY_LABELS = {k.removesuffix("_collected"):v for k,v in RAW_LABELS.items()}
     assert set(meta['population']['fields']) == set(DISPLAY_LABELS)
     assert {k: v['label'] for k, v in meta['population']['fields'].items()} == DISPLAY_LABELS
     assert {v['family'] for v in meta['population']['fields'].values()} == {'Population'}
@@ -90,7 +92,7 @@ def test_static_delivery_no_proxies_and_compatible_binding(tmp_path):
     assert meta['artifact'] == catalog['products'][0]['artifact']
     assert meta['artifact']['sha256'] == hashlib.sha256((output/'static.parquet').read_bytes()).hexdigest()
     calendar = pd.read_parquet(output/'dynamic-calendar.parquet')
-    assert len(calendar) == 10
+    assert len(calendar) == 4
     assert not any('effort' in c for c in calendar)
 
 
@@ -104,13 +106,17 @@ def test_collected_default_exports_partial_sources_without_nulling_sum(tmp_path)
     result=export_static_study(study_config=path,workspace=tmp_path/'work',source_manifest=manifest,
         output_dir=output,as_of='2021-07-04')
     table=pd.read_parquet(output/'static.parquet')
-    assert 'population_within_100km' not in table
-    assert table.population_within_100km_collected.iloc[0]==pytest.approx(100.)
-    assert table.population_within_100km_collected__zero_imputed.iloc[0]
+    assert 'population_within_100km_collected' not in table
+    assert table.population_within_100km.iloc[0]==pytest.approx(100.)
+    from human.pipelines.delivery.finalize import read_catalog
+    from human.pipelines.delivery.static import restore_static
+    original, _=restore_static(pq.read_table(output/'static.parquet'), read_catalog(output)['products'][0])
+    assert original.to_pandas().population_within_100km_collected__zero_imputed.iloc[0]
     assert 'population_within_100km_collected__coverage_status' not in table
-    assert table.population_within_100km__coverage_status.iloc[0]=='partial'
-    assert json.loads(result.read_text())['default_population']['field']=='population_within_100km_collected'
-    assert 'population_within_25km_collected' in table and 'population_count_collected' in table
-    assert 'population_count' not in table and 'population_density_per_km2' not in table
-    assert table.population_within_100km__unverified_geographic_support.iloc[0]
-    assert table.population_within_100km__available_source_subtotal.iloc[0] == pytest.approx(100.)
+    assert original.to_pandas().population_within_100km__coverage_status.iloc[0]=='partial'
+    assert 'population_within_100km_coverage_status' not in table
+    assert json.loads(result.read_text())['default_population']['field']=='population_within_100km'
+    assert 'population_within_25km' in table and 'population_count' in table
+    assert 'population_count_collected' not in table and 'population_density_per_km2_collected' not in table
+    assert original.to_pandas().population_within_100km__unverified_geographic_support.iloc[0]
+    assert original.to_pandas().population_within_100km__available_source_subtotal.iloc[0] == pytest.approx(100.)

@@ -43,7 +43,12 @@ def native_specification(entry, root):
     if entry.get('ports'):
         from human.pipelines.native.ports import resolve_entry
         spec['ports'] = resolve_entry(entry['ports'], root)
-    return spec, {'path':str(path),'sha256':digest(path),'path_map':mappings}
+    # Verify summary-source bindings without composing/repairing display geometry.
+    from human.pipelines.native.features import bound_input
+    receipts=[]
+    for group, key in (('launches','facilities'), ('shore_access','facilities'), ('places','catalog')):
+        bound_input(spec[group], key, receipts)
+    return spec, {'path':str(path),'sha256':digest(path),'path_map':mappings,'source_receipts':receipts}
 
 
 def _verify_raw_manifest(path):

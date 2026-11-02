@@ -31,7 +31,7 @@ def main():
             checked+=1
     config=ROOT/'config';resource=ROOT/'src/human/resources/config'
     for source in config.rglob('*'):
-        if source.is_file() and (not (resource/source.relative_to(config)).exists() or source.read_bytes()!=(resource/source.relative_to(config)).read_bytes()):
+        if source.is_file() and source.name != '.DS_Store' and (not (resource/source.relative_to(config)).exists() or source.read_bytes()!=(resource/source.relative_to(config)).read_bytes()):
             errors.append('Configuration/resource mismatch: '+source.relative_to(ROOT).as_posix())
     if (ROOT/'.env.example').read_bytes()!=(ROOT/'src/human/resources/env.example').read_bytes():errors.append('Environment example/resource mismatch')
     env=(ROOT/'.env.example').read_text()

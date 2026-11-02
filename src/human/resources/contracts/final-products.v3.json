@@ -1,0 +1,177 @@
+{
+  "schema": "human.product_contract.v3",
+  "products": {
+    "dynamic-calendar.parquet": {
+      "schema": "human.study.calendar_lookup.v2",
+      "primary_key": [
+        "date",
+        "country",
+        "timezone"
+      ],
+      "columns": [
+        {
+          "name": "date",
+          "arrow_type": "large_string"
+        },
+        {
+          "name": "country",
+          "arrow_type": "large_string"
+        },
+        {
+          "name": "timezone",
+          "arrow_type": "large_string"
+        },
+        {
+          "name": "is_weekend",
+          "arrow_type": "bool"
+        },
+        {
+          "name": "holiday_names",
+          "arrow_type": "large_string"
+        },
+        {
+          "name": "is_holiday",
+          "arrow_type": "bool"
+        },
+        {
+          "name": "iso_year",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "iso_week",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "day_of_year",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "year",
+          "arrow_type": "int64"
+        },
+        {
+          "name": "month",
+          "arrow_type": "int64"
+        }
+      ],
+      "arrow_schema_base64": "/////3gCAAAQAAAAAAAKAAwABgAFAAgACgAAAAABBAAMAAAACAAIAAAABAAIAAAABAAAAAsAAAAcAgAA4AEAALABAACAAQAATAEAABwBAADcAAAApAAAAGwAAAA4AAAABAAAACD+//8AAAECEAAAABgAAAAEAAAAAAAAAAUAAABtb250aAAAADT///8AAAABQAAAAFD+//8AAAECEAAAABgAAAAEAAAAAAAAAAQAAAB5ZWFyAAAAAGT///8AAAABQAAAAID+//8AAAECEAAAABwAAAAEAAAAAAAAAAsAAABkYXlfb2ZfeWVhcgCY////AAAAAUAAAAC0/v//AAABAhAAAAAcAAAABAAAAAAAAAAIAAAAaXNvX3dlZWsAAAAAzP///wAAAAFAAAAA6P7//wAAAQIQAAAAJAAAAAQAAAAAAAAACAAAAGlzb195ZWFyAAAAAAgADAAIAAcACAAAAAAAAAFAAAAAJP///wAAAQYQAAAAHAAAAAQAAAAAAAAACgAAAGlzX2hvbGlkYXkAABj///9Q////AAABFBAAAAAgAAAABAAAAAAAAAANAAAAaG9saWRheV9uYW1lcwAAAEj///+A////AAABBhAAAAAcAAAABAAAAAAAAAAKAAAAaXNfd2Vla2VuZAAAdP///6z///8AAAEUEAAAABwAAAAEAAAAAAAAAAgAAAB0aW1lem9uZQAAAACg////2P///wAAARQQAAAAGAAAAAQAAAAAAAAABwAAAGNvdW50cnkAyP///xAAFAAIAAYABwAMAAAAEAAQAAAAAAABFBAAAAAcAAAABAAAAAAAAAAEAAAAZGF0ZQAAAAAEAAQABAAAAA=="
+    },
+    "static.parquet": {
+      "schema": "human.study.static.v2",
+      "primary_key": [
+        "h3_index"
+      ],
+      "columns": [
+        {
+          "arrow_type": "large_string",
+          "name": "h3_index"
+        },
+        {
+          "arrow_type": "int64",
+          "name": "h3_resolution"
+        },
+        {
+          "arrow_type": "double",
+          "name": "cell_area_km2"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_count__coverage_status"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_count__unverified_geographic_support"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_25km__coverage_status"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_within_25km__unverified_geographic_support"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_50km__coverage_status"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_within_50km__unverified_geographic_support"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "population_within_100km__coverage_status"
+        },
+        {
+          "arrow_type": "bool",
+          "name": "population_within_100km__unverified_geographic_support"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_count_collected"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_within_25km_collected"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_within_50km_collected"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_within_100km_collected"
+        },
+        {
+          "arrow_type": "double",
+          "name": "population_density_per_km2_collected"
+        },
+        {
+          "arrow_type": "double",
+          "name": "boat_launch_access__BOAT_LAUNCH_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "boat_launch_access__VERIFIED_PUBLIC_BOAT_LAUNCH_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__TOTAL_MARINE_SHORELINE_M"
+        },
+        {
+          "arrow_type": "large_string",
+          "name": "public_shore_access__PUBLIC_ACCESS_EVIDENCE_STATE"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__PUBLIC_ACCESS_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__VERIFIED_PUBLIC_ACCESS_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__OSM_EXPLICIT_PUBLIC_ACCESS_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__MAPPED_ACCESS_UNKNOWN_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "public_shore_access__RESTRICTED_ACCESS_SITE_COUNT"
+        },
+        {
+          "arrow_type": "double",
+          "name": "places__CATALOG_RECORD_COUNT"
+        },
+        {
+          "arrow_type": "int64",
+          "name": "ports__SOURCE_RECORD_COUNT"
+        }
+      ],
+      "arrow_schema_base64": "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"
+    }
+  }
+}

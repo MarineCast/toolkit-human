@@ -1,7 +1,6 @@
-"""Semantic validation for the three supported Human delivery products."""
+"""Semantic validation for the two supported Human delivery products."""
 from __future__ import annotations
 
-from datetime import timezone as utc_timezone
 from importlib.resources import files
 import json
 from pathlib import Path
@@ -10,16 +9,15 @@ import h3
 import numpy as np
 import pandas as pd
 import pyarrow.parquet as pq
-import shapely
-from shapely.geometry import shape
 
 from human.pipelines.population.collected import DISPLAY_LABELS, METHOD
 from human.pipelines.delivery.finalize import read_catalog
-from human.pipelines.native.features import summary_fields
+from human.pipelines.delivery.names import STATIC_NAMES, PRESENCE_COLUMNS
+from human.pipelines.native.features import summary_fields, delivery_fields
 
 
-def product_contract():
-    return json.loads(files('human').joinpath('resources/contracts/final-products.v1.json').read_text())
+def product_contract(version=7):
+    return json.loads(files('human').joinpath(f'resources/contracts/final-products.v{version}.json').read_text())
 
 
 def _require(condition, message):
@@ -68,64 +66,22 @@ def _static(frame, info):
     for col in frame:
         if col.endswith('_COUNT') or col.startswith('boat_launch_access__BOAT_LAUNCHES_WITH_'):
             _finite_nonnegative(frame[col], col, nullable=True)
+    if info.get('ports'):
+        from human.pipelines.native.ports import STATUS, COMPLETE
+        _require(frame[STATUS].eq('partial_published_port_inventory').all() and frame[COMPLETE].eq(False).all(), 'Port inventory must remain partial')
 
 
 def _calendar(frame, info):
-    from human.pipelines.calendar.lookup import DEFAULT_JURISDICTIONS
-    from importlib.resources import files as resource_files
-    from zoneinfo import ZoneInfo
+    import holidays
+    import tzdata
+    from human.pipelines.calendar.lookup import build_calendar_lookup, compact_calendar, compact_metadata
     support = info['temporal_support']
-    dates = pd.date_range(support['start'], support['end_exclusive'], inclusive='left')
-    jurisdictions = {c+('-'+s if s else ''):(c,s,z) for c,s,z in DEFAULT_JURISDICTIONS}
-    _require(set(frame.jurisdiction)==set(jurisdictions), 'Calendar requires all five reference jurisdictions')
-    _require(frame.as_of.eq(support['as_of']).all(), 'Calendar as-of mismatch')
-    for jurisdiction, group in frame.groupby('jurisdiction'):
-        country, subdivision, timezone = jurisdictions[jurisdiction]
-        _require(group.date.tolist()==dates.strftime('%Y-%m-%d').tolist(), 'Calendar has missing, unordered or extra civil dates')
-        _require(group.country.eq(country).all() and group.subdivision.fillna('').eq(subdivision or '').all() and group.timezone.eq(timezone).all(), 'Calendar jurisdiction/reference-zone mismatch')
-        with resource_files('tzdata.zoneinfo').joinpath(*timezone.split('/')).open('rb') as handle:
-            zone = ZoneInfo.from_file(handle, key=timezone)
-        # Scalar localization honors the supplied ZoneInfo file even when pandas'
-        # vectorized timezone cache was initialized against an older OS database.
-        starts = pd.DatetimeIndex([ts.to_pydatetime().replace(tzinfo=zone).astimezone(utc_timezone.utc) for ts in dates])
-        ends = pd.DatetimeIndex([(ts+pd.Timedelta(days=1)).to_pydatetime().replace(tzinfo=zone).astimezone(utc_timezone.utc) for ts in dates])
-        _require(np.array_equal(group.local_day_start_utc.to_numpy(), starts.to_numpy()) and np.array_equal(group.local_day_end_utc.to_numpy(), ends.to_numpy()), 'Calendar local-day UTC boundaries differ from packaged rules')
-        _require(np.array_equal(group.day_of_week, dates.dayofweek) and np.array_equal(group.is_weekend, dates.dayofweek>=5), 'Calendar weekday mismatch')
-    _require(frame.rules_version.eq(info['rules_version']).all() and frame.timezone_rules_version.eq(info['timezone_rules_version']).all(), 'Calendar rule version mismatch')
-    _require(frame.is_actual_holiday.eq(frame.actual_holiday_names.ne('')).all() and frame.is_observed_holiday.eq(frame.observed_holiday_names.ne('')).all(), 'Holiday names and flags differ')
-    _require(frame.is_holiday.eq(frame.is_actual_holiday | frame.is_observed_holiday).all(), 'Holiday union mismatch')
-    basis = np.where(frame.date.gt(support['as_of']), 'rule_based_future', 'rule_based_calendar')
-    _require(np.array_equal(frame.calendar_basis, basis), 'Calendar basis/as-of mismatch')
-
-
-def _native(frame, info):
-    props = frame.properties_json.map(json.loads)
-    geometries = shapely.from_wkb(frame.geometry.to_numpy())
-    _require(not shapely.is_empty(geometries).any() and shapely.is_valid(geometries).all(), 'Invalid native display geometry')
-    bounds=shapely.bounds(geometries)
-    _require(np.isfinite(bounds).all() and (bounds[:,0]>=-180).all() and (bounds[:,2]<=180).all() and (bounds[:,1]>=-90).all() and (bounds[:,3]<=90).all(), 'Native geometry exceeds WGS84 coordinate bounds')
-    _require(all(shapely.equals_exact(g, shape(json.loads(raw)), 0) for g,raw in zip(geometries,frame.geometry_json)), 'Native JSON/WKB geometry mismatch')
-    _require({'launches','shore_access','places','access_lines'} <= set(frame.group) <= {'launches','shore_access','places','access_lines','ports'}, 'Native delivery requires four base groups and optional ports')
-    ports = frame.loc[frame.group.eq('ports')]
-    _require(all(g.geom_type == 'Point' for g in shapely.from_wkb(ports.geometry.to_numpy())), 'Ports must retain native point geometry')
-    for prop in ports.properties_json.map(json.loads):
-        attrs = prop['attributes']
-        _require(prop['record_id'] == 'nga_wpi:'+str(attrs['portNumber']) == attrs['PORT_ID'], 'Port identity differs from NGA source ID')
-        _require(attrs['SOURCE_DATASET_ID'] == 'nga_world_port_index' and attrs['SOURCE_RECORD_ID'] == str(attrs['portNumber']), 'Invalid port source identity')
-        lon, lat = prop['label_point']
-        _require(prop['h3_index'] == h3.latlng_to_cell(lat, lon, 7), 'Port R7 cell differs from original point')
-    _require(frame.role.isin(['record','source_footprint']).all(), 'Invalid native feature role')
-    _require(all(h3.is_valid_cell(c) and h3.get_resolution(c)==7 for c in frame.h3_index), 'Native labels require R7 identity')
-    records = set(frame.loc[frame.role.eq('record'),'record_id'])
-    _require(frame.loc[frame.role.eq('source_footprint'),'record_id'].isin(records).all(), 'Orphan native context footprint')
-    for col in ('record_id','group','role','name','category','location_method','h3_index','label_point'):
-        for value, prop in zip(frame[col], props):
-            if hasattr(value, 'tolist'): value=value.tolist()
-            if value is pd.NA or (not isinstance(value,(list,dict)) and pd.isna(value)): value=None
-            _require(value==prop.get(col), f'Native property projection differs: {col}')
-    for group, desc in info['groups'].items():
-        _require(int((frame.group.eq(group)&frame.role.eq('record')).sum())==desc['records'], 'Native group count mismatch')
-    _require(len(frame)==info['storage_counts']['features'], 'Native storage count mismatch')
+    _require(info['rules_version']==holidays.__version__ and info['timezone_rules_version']==tzdata.__version__, 'Calendar requires its pinned holiday/timezone rules')
+    expected_info = compact_metadata(info)
+    for key in ('jurisdictions', 'holiday_names_policy', 'calendar_fields', 'spatial_support'):
+        _require(info.get(key)==expected_info[key], 'Calendar compact policy metadata mismatch: '+key)
+    expected = compact_calendar(build_calendar_lookup(support['start'], support['end_exclusive'], as_of=support['as_of']))
+    _require(frame.equals(expected), 'Calendar values differ from the pinned country/timezone holiday union or civil-date fields')
 
 
 def validate_delivery(root, *, expected_rows=None):
@@ -138,7 +94,7 @@ def validate_delivery(root, *, expected_rows=None):
     contract = product_contract()['products']
     catalog = read_catalog(root)
     products = {p['artifact']['path']:p for p in catalog['products']}
-    _require(len(products)==len(catalog['products']) and set(products)==set(contract), 'Human requires exactly the three final products')
+    _require(len(products)==len(catalog['products']) and set(products)==set(contract), 'Human requires exactly the two final products')
     report = {}
     for name, spec in contract.items():
         info=products[name];table=pq.read_table(root/name);frame=table.to_pandas()
@@ -156,14 +112,41 @@ def validate_delivery(root, *, expected_rows=None):
             _require(actual==field['arrow_type'], f'Type contract mismatch: {name}/{field["name"]}: {actual}')
         if expected_rows and name in expected_rows:
             _require(len(frame)==expected_rows[name], f'Unexpected row count: {name}')
-        {'static.parquet':_static,'dynamic-calendar.parquet':_calendar,'static-native.parquet':_native}[name](frame,info)
+        if name == 'static.parquet':
+            from human.pipelines.delivery.static import restore_static
+            full, original_info = restore_static(table, info)
+            _static(full.to_pandas(), original_info)
+            _require(all(frame[name].notna().all() and frame[name].isin([0,1]).all() for name in PRESENCE_COLUMNS), 'Presence indicators require nonnull integer 0/1 values')
+            _require(info['infrastructure_fields']==delivery_fields(), 'Compact infrastructure dictionary mismatch')
+            _require(set(info['population']['fields'])=={STATIC_NAMES[name] for name in DISPLAY_LABELS}, 'Compact population dictionary mismatch')
+            _require({k:v['label'] for k,v in info['population']['fields'].items()}=={STATIC_NAMES[k]:v for k,v in DISPLAY_LABELS.items()}, 'Compact population labels differ')
+            for metric, definition in info['population']['fields'].items():
+                original_metric=next(raw for raw,public in STATIC_NAMES.items() if public==metric)
+                base=original_info['population']['fields'][original_metric]['base_metric']
+                _require('coverage_status' not in definition and definition.get('support_location')=='external_static_audit', 'Population support must stay in external audit')
+                _require(definition['audit_fields']['coverage_status']==base+'__coverage_status', 'Audit population coverage binding mismatch')
+                _require('unverified_geographic_support' not in definition and definition['audit_fields']['unverified_geographic_support']==base+'__unverified_geographic_support', 'Audit population geographic support binding mismatch')
+                if 'density' in metric:
+                    _require(definition['audit_fields'].get('cell_area_km2')=='cell_area_km2', 'Density denominator must stay in audit')
+                _require(definition['method']==METHOD and definition['zero_imputation_rule']=='coverage_status in [partial, unavailable]', 'Compact population method mismatch')
+        else:
+            _calendar(frame, info)
         report[name]={'rows':len(frame),'columns':table.num_columns,'sha256':info['artifact']['sha256']}
-    from human.pipelines.native.ports import COUNT, STATUS, COMPLETE, add_summary
-    static = pq.read_table(root/'static.parquet')
-    native = pq.read_table(root/'static-native.parquet').to_pylist()
-    ports = [dict(properties=json.loads(row['properties_json'])) for row in native if row['group']=='ports']
-    if ports or COUNT in static.column_names:
-        _require(bool(ports) and COUNT in static.column_names, 'Port native/static binding missing')
-        base = static.drop_columns([COUNT, STATUS, COMPLETE])
-        _require(add_summary(base, ports).equals(static, check_metadata=False), 'Port counts/status differ from native source points')
+    from human.pipelines.native.ports import COUNT
+    from human.pipelines.delivery.static import restore_static
+    static = pq.read_table(root/'static.parquet').to_pandas()
+    info = products['static.parquet']
+    if info.get('ports'):
+        from collections import Counter
+        _require(static.has_port.notna().all(), 'Invalid port counts')
+        _require(bool(info.get('ports', {}).get('sha256')), 'Port source provenance missing')
+        assignments=info.get('port_h3_by_source_id', {})
+        _require(set(assignments)==set(info['ports']['selected_source_feature_ids']), 'Port source/cell binding missing')
+        _require(all(h3.is_valid_cell(c) and h3.get_resolution(c)==7 for c in assignments.values()), 'Port source assignment requires R7 cells')
+        counts=Counter(assignments.values())
+        _require(static.has_port.tolist()==[int(counts[c]>0) for c in static.h3_index], 'Port counts differ from retained source/cell bindings')
+        full,_=restore_static(pq.read_table(root/'static.parquet'), info)
+        _require(full[COUNT].to_pylist()==[counts[c] for c in static.h3_index], 'Audited port multiplicities differ from source bindings')
+    else:
+        _require(static.has_port.eq(0).all(), 'Unprovisioned port presence must use the reviewed zero encoding')
     return report

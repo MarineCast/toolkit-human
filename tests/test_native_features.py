@@ -1,16 +1,13 @@
 """Native delivery identity, access semantics, source geometry and preservation regressions."""
-import hashlib
 import json
 from pathlib import Path
 
 import geopandas as gpd
 import pandas as pd
-import pyarrow as pa
-import pyarrow.parquet as pq
 import pytest
 from shapely.geometry import Point, Polygon, LineString
 
-from human.pipelines.native.features import compose_native_features, export_native_features, extend_static_delivery, summary_fields, checksum
+from human.pipelines.native.features import compose_native_features, summary_fields, checksum
 
 
 def specification(tmp_path):
@@ -55,33 +52,6 @@ def test_changed_source_is_rejected_before_export(tmp_path):
     spec=specification(tmp_path)
     Path(spec['places']['catalog']).write_text('[]')
     with pytest.raises(ValueError,match='checksum-bound'):compose_native_features(spec)
-
-
-def test_deterministic_export_and_exact_static_calendar_preservation(tmp_path):
-    spec=specification(tmp_path)
-    source=tmp_path/'current';source.mkdir()
-    table=pa.table({'h3_index':['8728d554effffff'],'h3_resolution':[7],'population_count_collected':[123.25], 'unknown':[None]})
-    pq.write_table(table,source/'human-r7-static.parquet')
-    old={'schema':'human.study.static.v1','artifact':{'path':'human-r7-static.parquet','sha256':checksum(source/'human-r7-static.parquet'),'rows':1}}
-    (source/'human-r7-static.metadata.json').write_text(json.dumps(old))
-    pq.write_table(pa.table({'date':['2026-01-01'],'is_holiday':[True]}),source/'calendar-temporal.parquet')
-    calendar={'schema':'human.study.calendar_lookup.v1','artifact':{'path':'calendar-temporal.parquet','sha256':checksum(source/'calendar-temporal.parquet'),'rows':1}}
-    (source/'catalog.json').write_text(json.dumps({'products':[old,calendar]}))
-    out=tmp_path/'out';receipt=extend_static_delivery(source,spec,out,metadata_dir=tmp_path/'receipts')
-    assert table.equals(pq.read_table(out/'static.parquet'),check_metadata=False)
-    assert pq.read_table(source/'calendar-temporal.parquet').equals(pq.read_table(out/'dynamic-calendar.parquet'),check_metadata=False)
-    meta=next(product for product in json.loads(receipt.read_text())['products'] if product['schema']=='human.native_features.v1')
-    assert meta['artifact']['records']==5 and meta['artifact']['features']==6 and meta['artifact']['context_features']==1
-    repeat=tmp_path/'repeat';export_native_features(spec,repeat)
-    from human.pipelines.delivery.finalize import native_payload
-    assert native_payload(out/'static-native.parquet')==json.loads((repeat/'human-native-features.geojson').read_text())
-    assert {p.name for p in out.iterdir()}=={'static.parquet','static-native.parquet','dynamic-calendar.parquet'}
-    again=tmp_path/'again'
-    extend_static_delivery(out,spec,again,metadata_dir=tmp_path/'again-receipts')
-    assert native_payload(again/'static-native.parquet')==native_payload(out/'static-native.parquet')
-    from human.pipelines.delivery.finalize import read_catalog
-    with (again/'static-native.parquet').open('ab') as stream: stream.write(b'tampered')
-    with pytest.raises(ValueError,match='checksum mismatch'): read_catalog(again)
 
 
 def test_unqualified_legacy_access_lengths_cannot_be_map_metrics():

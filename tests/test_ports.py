@@ -8,10 +8,12 @@ import yaml
 from shapely.geometry import Point
 
 from human import get_human_data
-from human.pipelines.delivery.finalize import digest, native_payload, read_catalog
+from human.pipelines.delivery.finalize import digest, read_catalog
 from human.pipelines.delivery.validation import validate_delivery
-from human.pipelines.native.ports import COUNT, port_features, migrate_delivery
+from human.pipelines.native.ports import port_features, migrate_delivery
 from tests.test_pipeline import setup_pipeline
+
+COUNT = 'has_port'
 
 
 def source_entry(tmp_path):
@@ -44,7 +46,7 @@ def test_source_ids_original_geometry_nulls_and_no_proximity_merge(tmp_path):
         port_features({**entry, 'sha256': '0'*64})
 
 
-def test_narrow_migration_preserves_all_existing_values_and_outside_points(tmp_path):
+def test_narrow_migration_preserves_all_existing_values_and_source_selection(tmp_path):
     setup_pipeline(tmp_path)
     result = get_human_data(workspace=tmp_path)
     before = {name: pq.read_table(result.directory/name) for name in result.validation}
@@ -54,12 +56,12 @@ def test_narrow_migration_preserves_all_existing_values_and_outside_points(tmp_p
     assert {p.name for p in result.directory.iterdir()} == set(before)
     for name in ('static.parquet', 'dynamic-calendar.parquet'):
         old, new = before[name], pq.read_table(result.directory/name)
-        assert new.select(old.column_names).equals(old, check_metadata=False)
-    old, new = before['static-native.parquet'], pq.read_table(result.native)
-    assert new.slice(0, old.num_rows).equals(old, check_metadata=False)
-    assert new.num_rows == old.num_rows+3
-    assert sum(pq.read_table(result.static)[COUNT].to_pylist()) == 2
-    assert 'nga_wpi:3' in {f['properties']['record_id'] for f in native_payload(result.native)['features']}
+        columns=[c for c in old.column_names if name!='static.parquet' or c!=COUNT]
+        assert new.select(columns).equals(old.select(columns), check_metadata=False)
+    assert sum(pq.read_table(result.static)[COUNT].to_pylist()) == 1
+    info = next(p for p in read_catalog(result.directory)['products'] if p['schema']=='human.study.static.v6')
+    assert info['ports']['selected_source_feature_ids'] == ['1', '2', '3']
+    assert not (result.directory/'static-native.parquet').exists()
     assert not list(result.directory.parent.glob('.Human-ports-*'))
     assert not (result.directory.parent/'.Human.human.lock').exists()
     assert entry['sha256'] == digest(entry['path'])
@@ -72,14 +74,14 @@ def test_supported_pipeline_configured_port_source_offline(tmp_path):
     recipe['native']['ports'] = source_entry(tmp_path)
     config.write_text(yaml.safe_dump(recipe))
     result = get_human_data(workspace=tmp_path, mode='offline')
-    assert result.validation['static.parquet']['columns'] == 67
+    assert result.validation['static.parquet']['columns'] == 14
     static = pq.read_table(result.static)
-    assert static[COUNT].to_pylist() == [2]
+    assert static[COUNT].to_pylist() == [1]
     catalog = read_catalog(result.directory)
-    native = next(p for p in catalog['products'] if p['schema'] == 'human.native_features.v1')
-    assert native['groups']['ports']['records'] == 3
-    assert native['groups']['places']['records'] == 1
-    assert native['groups']['ports']['regional_completeness'] == 'partial'
+    info = next(p for p in catalog['products'] if p['schema'] == 'human.study.static.v6')
+    assert info['ports']['selected_source_feature_ids'] == ['1', '2', '3']
+    assert info['ports']['sha256'] == recipe['native']['ports']['sha256']
+    assert len(catalog['products']) == 2
 
 
 def test_migration_readback_failure_restores_current(tmp_path, monkeypatch):
@@ -100,3 +102,19 @@ def test_migration_readback_failure_restores_current(tmp_path, monkeypatch):
         migrate_delivery(result.directory, source_entry(tmp_path), metadata_dir=tmp_path/'port-receipt')
     assert {p.name: digest(p) for p in result.directory.iterdir()} == before
     assert not (result.directory.parent/'.Human.human.lock').exists()
+
+
+def test_checksum_valid_port_count_tamper_is_rejected_without_native_export(tmp_path):
+    recipe, config = setup_pipeline(tmp_path)
+    recipe['native']['ports'] = source_entry(tmp_path)
+    config.write_text(yaml.safe_dump(recipe))
+    result = get_human_data(workspace=tmp_path, mode='offline')
+    table = pq.read_table(result.static)
+    column = table.column_names.index(COUNT)
+    import pyarrow as pa
+    pq.write_table(table.set_column(column, table.schema.field(COUNT), pa.array([0], type=pa.int64())), result.static)
+    catalog = json.loads(result.receipt.read_text())
+    next(p for p in catalog['products'] if p['schema']=='human.study.static.v6')['artifact']['sha256'] = digest(result.static)
+    result.receipt.write_text(json.dumps(catalog))
+    with pytest.raises(ValueError, match='transformation|Port counts differ'):
+        validate_delivery(result.directory)

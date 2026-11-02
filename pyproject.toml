@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "toolkit-human"
 version = "0.1.0"
-description = "One pipeline for Human population, calendar and native infrastructure Parquets"
+description = "One pipeline for Human population/infrastructure and compact calendar Parquets"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"

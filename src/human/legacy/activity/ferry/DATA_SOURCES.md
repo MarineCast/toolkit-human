@@ -14,3 +14,12 @@ local-hour sailings remain distinct by UTC identity. The arrival is still estima
 not an observed arrival. This does not supply actual timestamps for WSF Tableau's
 scheduled-departure ridership or BC's monthly-derived hour buckets; see
 `docs/release-readiness.md` for daily-delivery limitations.
+
+## Hyper diagnostic cleanup
+
+The legacy WSF reader gives each Hyper process a unique temporary
+`hyper-logs-*` directory inside the configured ferry cache. After the connection
+and process close, that directory and its diagnostics are removed on success
+or failure. This prevents new `hyperd.log` files in the working directory.
+Existing logs, cached TWBX/Hyper source files, Parquet outputs and provenance
+are preserved; no historical log sweep is performed.

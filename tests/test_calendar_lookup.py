@@ -43,6 +43,32 @@ def test_active_catalog_advertises_lookup_without_effort_scores():
     from importlib.resources import files
     import yaml
     catalog = yaml.safe_load(files('human').joinpath('resources/feature_catalog.yaml').read_text())
-    assert catalog['collections']['dynamic_calendar']['primary_key'] == ['date', 'jurisdiction']
+    assert catalog['collections']['dynamic_calendar']['primary_key'] == ['date', 'country', 'timezone']
     for name in ['dynamic_calendar']:
         assert not any('effort' in f['name'] for f in catalog['collections'][name]['features'])
+
+
+def test_compact_union_preserves_regional_and_coincident_observed_holidays():
+    from human.pipelines.calendar.lookup import compact_calendar
+    raw = build_calendar_lookup('2023-09-30', '2023-10-01', as_of='2023-09-30')
+    compact = compact_calendar(raw).set_index('country')
+    assert len(compact) == 2
+    assert compact.loc['CA', 'is_holiday']
+    assert 'National Day for Truth and Reconciliation' in compact.loc['CA', 'holiday_names']
+    assert not compact.loc['US', 'is_holiday']
+    assert compact.loc['US', 'holiday_names'] == ''
+    raw.loc[raw.jurisdiction.eq('CA-BC'), 'observed_holiday_names'] = 'Synthetic coincident shifted day'
+    names = compact_calendar(raw).set_index('country').loc['CA', 'holiday_names']
+    assert 'Synthetic coincident shifted day' in names and 'National Day for Truth and Reconciliation' in names
+
+
+def test_compact_iso_year_leap_day_and_deterministic_country_zone_identity():
+    from human.pipelines.calendar.lookup import compact_calendar, COMPACT_KEY
+    raw = build_calendar_lookup('2020-01-01', '2021-01-05', as_of='2020-01-01')
+    frame = compact_calendar(raw)
+    pd.testing.assert_frame_equal(frame, compact_calendar(raw.sample(frac=1, random_state=4)))
+    assert len(frame)==len(raw)//5*2 and not frame.duplicated(COMPACT_KEY).any()
+    day=frame[frame.date.eq('2021-01-01')].iloc[0]
+    assert (day.iso_year, day.iso_week, day.year, day.month, day.day_of_year)==(2020,53,2021,1,1)
+    leap=frame[frame.date.eq('2020-02-29')].iloc[0]
+    assert leap.day_of_year==60 and leap.is_weekend
